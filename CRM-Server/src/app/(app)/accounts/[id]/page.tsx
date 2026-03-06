@@ -37,7 +37,8 @@ export default async function AccountDetailPage({ params }: Props) {
     cms_star_rating: business.cms_star_rating?.toString() ?? null,
     profit_margin_pct: business.profit_margin_pct?.toString() ?? null,
     stage: business.pipelineStage?.stage ?? "Prospect",
-    businessPeople: business.businessPeople.map((bp) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    businessPeople: business.businessPeople.map((bp: any) => ({
       ...bp,
       ownership_pct: bp.ownership_pct?.toString() ?? null,
       association_date: bp.association_date?.toISOString() ?? null,
