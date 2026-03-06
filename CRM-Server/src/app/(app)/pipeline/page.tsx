@@ -550,89 +550,87 @@ export default function PipelinePage() {
     <div className="flex flex-col h-screen overflow-hidden">
       {/* ── Header ── */}
       <div className="flex-shrink-0 px-8 pt-6 pb-3 bg-white border-b border-gray-100">
-        <div className="flex items-center justify-between gap-4 mb-3">
-          {/* Title + entity tabs */}
-          <div className="flex items-center gap-4">
-            <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">Pipeline</h1>
-            <div className="flex items-center bg-gray-100 rounded-lg p-0.5">
-              <button
-                onClick={() => { setEntity("properties"); setSearch(""); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                  entity === "properties"
-                    ? "bg-white shadow-sm text-gray-900"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                <Landmark size={14} />
-                Properties
-              </button>
-              <button
-                onClick={() => { setEntity("businesses"); setSearch(""); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                  entity === "businesses"
-                    ? "bg-white shadow-sm text-gray-900"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                <Building2 size={14} />
-                Businesses
-              </button>
-            </div>
+        {/* Row 1: Title */}
+        <h1 className="text-[22px] font-bold text-gray-900 tracking-tight mb-3">Pipeline</h1>
+
+        {/* Row 2: Entity tabs + controls */}
+        <div className="flex items-center gap-3 mb-3 flex-wrap">
+          {/* Entity toggle */}
+          <div className="flex items-center bg-gray-100 rounded-lg p-0.5">
+            <button
+              onClick={() => { setEntity("properties"); setSearch(""); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                entity === "properties"
+                  ? "bg-white shadow-sm text-gray-900"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <Landmark size={14} />
+              Properties
+            </button>
+            <button
+              onClick={() => { setEntity("businesses"); setSearch(""); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                entity === "businesses"
+                  ? "bg-white shadow-sm text-gray-900"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <Building2 size={14} />
+              Businesses
+            </button>
           </div>
 
-          {/* Right controls */}
-          <div className="flex items-center gap-2">
-            {/* Summary pills */}
-            {entity === "properties" && !loading && (
-              <div className="flex items-center gap-1.5 mr-2">
-                <span className="text-xs text-gray-400">
-                  {totalProps.toLocaleString()} in pipeline
-                </span>
-                {notInterestedCount > 0 && (
-                  <span className="text-xs px-2 py-0.5 bg-red-50 text-red-400 rounded-full">
-                    {notInterestedCount.toLocaleString()} not interested
-                  </span>
-                )}
-              </div>
+          {/* Search */}
+          <div className="relative">
+            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search..."
+              autoComplete="nope"
+              className="pl-7 pr-7 py-2 text-sm border border-gray-200 rounded-lg w-52 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X size={13} />
+              </button>
             )}
-            {entity === "businesses" && !loading && (
-              <span className="text-xs text-gray-400 mr-2">{totalBiz} businesses</span>
-            )}
+          </div>
 
-            {/* Search */}
-            <div className="relative">
-              <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search..."
-                autoComplete="nope"
-                className="pl-7 pr-7 py-2 text-sm border border-gray-200 rounded-lg w-52 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400"
-              />
-              {search && (
-                <button
-                  onClick={() => setSearch("")}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  <X size={13} />
-                </button>
+          {/* FilterBuilder */}
+          <FilterBuilder
+            fields={filterFields}
+            conditions={conditions}
+            onChange={(c) => {
+              setConditions(c);
+            }}
+          />
+
+          {/* Stage selector (properties only) */}
+          {entity === "properties" && (
+            <StageSelector visibleStages={visibleStages} onChange={setVisibleStages} />
+          )}
+
+          {/* Summary pills */}
+          {entity === "properties" && !loading && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-gray-400">
+                {totalProps.toLocaleString()} in pipeline
+              </span>
+              {notInterestedCount > 0 && (
+                <span className="text-xs px-2 py-0.5 bg-red-50 text-red-400 rounded-full">
+                  {notInterestedCount.toLocaleString()} not interested
+                </span>
               )}
             </div>
-
-            {/* FilterBuilder */}
-            <FilterBuilder
-              fields={filterFields}
-              conditions={conditions}
-              onChange={(c) => {
-                setConditions(c);
-              }}
-            />
-
-            {/* Stage selector (properties only) */}
-            {entity === "properties" && (
-              <StageSelector visibleStages={visibleStages} onChange={setVisibleStages} />
-            )}
-          </div>
+          )}
+          {entity === "businesses" && !loading && (
+            <span className="text-xs text-gray-400">{totalBiz} businesses</span>
+          )}
         </div>
 
         {/* Views bar */}

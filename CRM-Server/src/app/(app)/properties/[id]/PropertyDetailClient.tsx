@@ -639,25 +639,25 @@ export function PropertyDetailClient({ property }: { property: Property }) {
   });
 
   const saveField = useCallback(async (field: string, value: string) => {
+    setFields((prev) => ({ ...prev, [field]: value }));
     const res = await fetch(`/api/properties/${property.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: value }),
     });
     if (res.ok) {
-      setFields((prev) => ({ ...prev, [field]: value }));
       showToast("Saved");
     }
   }, [property.id, showToast]);
 
   const saveBoolean = useCallback(async (field: string, value: boolean | null) => {
+    setFields((prev) => ({ ...prev, [field]: value == null ? "" : String(value) }));
     const res = await fetch(`/api/properties/${property.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: value }),
     });
     if (res.ok) {
-      setFields((prev) => ({ ...prev, [field]: value == null ? "" : String(value) }));
       showToast("Saved");
     }
   }, [property.id, showToast]);

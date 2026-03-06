@@ -229,19 +229,20 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
     const body: Record<string, unknown> = field === "pe_backed"
       ? { pe_backed: value === "true" ? true : value === "false" ? false : null }
       : { [field]: value };
+    setFields((prev) => ({ ...prev, [field]: value }));
+    setBusiness((prev) => ({ ...prev, [field]: value || null }));
     const res = await fetch(`/api/businesses/${business.business_id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
     if (res.ok) {
-      setFields((prev) => ({ ...prev, [field]: value }));
-      setBusiness((prev) => ({ ...prev, [field]: value || null }));
       showToast("Saved");
     }
   }, [business.business_id, showToast]);
 
   const handleStageChange = async (newStage: string) => {
+    setStage(newStage);
     setStageLoading(true);
     try {
       await fetch(`/api/pipeline/${business.business_id}`, {
@@ -249,7 +250,6 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stage: newStage }),
       });
-      setStage(newStage);
       showToast("Stage updated");
     } finally {
       setStageLoading(false);
