@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: homevale-crm-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: homevale
+      POSTGRES_PASSWORD: homevale_pass
+      POSTGRES_DB: homevale_crm
+    ports:
+      - "5433:5432"
+    volumes:
+      - homevale_pgdata:/var/lib/postgresql/data
+
+volumes:
+  homevale_pgdata:

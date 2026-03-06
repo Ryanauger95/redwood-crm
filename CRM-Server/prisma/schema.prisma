@@ -1,0 +1,453 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// Old tables (kept to avoid Prisma dropping them)
+// ─────────────────────────────────────────────
+
+model Agency {
+  id   Int     @id @default(autoincrement())
+
+  @@map("agencies")
+}
+
+model AgencyOwner {
+  id   Int     @id @default(autoincrement())
+
+  @@map("agency_owners")
+}
+
+model Owner {
+  id   Int     @id @default(autoincrement())
+
+  @@map("owners")
+}
+
+// ─────────────────────────────────────────────
+// Core existing tables
+// ─────────────────────────────────────────────
+
+model Business {
+  business_id              Int       @id @default(autoincrement())
+  le_name                  String?
+  lf_name                  String?
+  address                  String?
+  city                     String?
+  state_code               String?
+  zip_code                 String?
+  county                   String?
+  phone                    String?
+  email                    String?
+  license_number           String?
+  license_expires          DateTime? @db.Date
+  business_type            String?
+  services_nursing         Boolean?
+  services_pt              Boolean?
+  services_ot              Boolean?
+  services_speech          Boolean?
+  services_aide            Boolean?
+  services_social          Boolean?
+  ccn                      String?
+  cms_star_rating          Decimal?  @db.Decimal(2, 1)
+  cms_ownership_type       String?
+  cms_certification_date   DateTime? @db.Date
+  medicare_certified       Boolean   @default(false)
+  enrollment_id            String?
+  enrichment_status        String    @default("pending")
+  enrichment_date          DateTime?
+  enrichment_raw_json      Json?
+  acquisition_fit_score    Int?
+  estimated_annual_profit  BigInt?
+  created_at               DateTime  @default(now())
+  updated_at               DateTime  @default(now())
+  license_type             String?
+  business_summary         String?
+  website                  String?
+  founded_year             Int?
+  estimated_employees      Int?
+  estimated_locations      Int?
+  service_area             String?
+  primary_payor_mix        String?
+  payor_mix_notes          String?
+  estimated_annual_revenue BigInt?
+  profit_margin_pct        Decimal?  @db.Decimal(5, 2)
+  accreditation            String?
+  cms_deficiencies         String?
+  acquisition_signals      String?
+  pe_backed                Boolean?
+  recent_news              String?
+  growth_signals           String?
+  red_flags                String?
+  enrichment_error         String?
+
+  businessPeople BusinessPerson[]
+  pipelineStage  PipelineStage?
+  activities     Activity[]
+  tags           Tag[]
+  emails         CachedEmail[]
+
+  @@map("businesses")
+}
+
+model Person {
+  person_id            Int      @id @default(autoincrement())
+  first_name           String?
+  last_name            String?
+  full_name            String?
+  owner_associate_id   String?  @unique
+  freshsales_id        BigInt?  @unique
+  address              String?
+  city                 String?
+  state_code           String?
+  zip_code             String?
+  email                String?
+  phone                String?
+  job_title            String?
+  company_name         String?
+  contact_type         String?
+  asset_class          String?
+  market_focus         String?
+  relationship_status  String?
+  lead_score           Int?
+  lifecycle_stage      String?
+  contact_status       String?
+  skiptrace_url        String?
+  source               String?
+  created_at           DateTime @default(now())
+  owner_background     String?
+  other_businesses     String?
+  linkedin_url         String?
+  estimated_age        Int?
+  succession_signals       String?
+  in_active_foreclosure    Boolean?
+  associated_case_number   String?
+
+  businessPeople   BusinessPerson[]
+  personProperties PersonProperty[]
+  activities       Activity[]
+  emails           CachedEmail[]
+
+  @@map("people")
+}
+
+model PersonProperty {
+  id          Int      @id @default(autoincrement())
+  person_id   Int
+  property_id BigInt
+  is_primary  Boolean  @default(false)
+
+  person   Person   @relation(fields: [person_id], references: [person_id], onDelete: Cascade)
+  property Property @relation(fields: [property_id], references: [id], onDelete: Cascade)
+
+  @@unique([person_id, property_id])
+  @@index([person_id])
+  @@index([property_id])
+  @@map("person_property")
+}
+
+model BusinessPerson {
+  id                Int       @id @default(autoincrement())
+  business_id       Int
+  person_id         Int
+  ownership_pct     Decimal?  @db.Decimal(6, 2)
+  role_text         String?
+  association_date  DateTime? @db.Date
+  is_private_equity Boolean?
+  source            String?
+
+  business Business @relation(fields: [business_id], references: [business_id], onDelete: Cascade)
+  person   Person   @relation(fields: [person_id], references: [person_id], onDelete: Cascade)
+
+  @@unique([business_id, person_id, role_text])
+  @@index([business_id])
+  @@index([person_id])
+  @@map("business_people")
+}
+
+// ─────────────────────────────────────────────
+// New CRM tables
+// ─────────────────────────────────────────────
+
+model CrmUser {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password_hash String
+  name          String
+  role          String   @default("agent")
+  created_at    DateTime @default(now())
+
+  activities      Activity[]
+  gmailAccount    GmailAccount?
+  emailTemplates  EmailTemplate[]
+  propertyNotes   PropertyNote[]
+  preferences     UserPreference[]
+
+  @@map("crm_users")
+}
+
+model UserPreference {
+  id      Int    @id @default(autoincrement())
+  user_id Int
+  key     String
+  value   Json   @default("{}")
+
+  user CrmUser @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, key])
+  @@map("user_preferences")
+}
+
+model PipelineStage {
+  id          Int      @id @default(autoincrement())
+  business_id Int      @unique
+  stage       String   @default("Prospect")
+  assigned_to String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  business Business @relation(fields: [business_id], references: [business_id], onDelete: Cascade)
+
+  @@map("pipeline_stages")
+}
+
+model Activity {
+  id           Int       @id @default(autoincrement())
+  business_id  Int?
+  person_id    Int?
+  user_id      Int?
+  type         String
+  subject      String
+  body         String?
+  status       String    @default("open")
+  due_date     DateTime?
+  completed_at DateTime?
+  created_at   DateTime  @default(now())
+
+  business Business? @relation(fields: [business_id], references: [business_id], onDelete: Cascade)
+  person   Person?   @relation(fields: [person_id], references: [person_id], onDelete: Cascade)
+  user     CrmUser?  @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([business_id])
+  @@index([person_id])
+  @@index([user_id])
+  @@map("activities")
+}
+
+model Tag {
+  id          Int    @id @default(autoincrement())
+  business_id Int
+  tag         String
+
+  business Business @relation(fields: [business_id], references: [business_id], onDelete: Cascade)
+
+  @@index([business_id])
+  @@map("tags")
+}
+
+// ─────────────────────────────────────────────
+// Freshsales import: Properties
+// ─────────────────────────────────────────────
+
+model Property {
+  id                       BigInt    @id
+  name                     String?
+  num_employees            Int?
+  annual_revenue           Decimal?  @db.Decimal(18, 2)
+  website                  String?
+  phone                    String?
+  address                  String?
+  city                     String?
+  state                    String?
+  zipcode                  String?
+  country                  String?
+  industry_type            String?
+  business_type            String?
+  territory                String?
+  parent_id                BigInt?
+  parent_name              String?
+  sales_owner              String?
+  created_at               DateTime?
+  updated_at               DateTime?
+  last_contacted           DateTime?
+  last_activity_date       DateTime? @db.Date
+  relationship_status      String?
+  deal_stage               String?
+  asset_class              String?
+  deal_type                String?
+  property_size_estimate   String?
+  county                   String?
+  account_id               String?
+  llc_url                  String?
+  google_url               String?
+  skiptrace_url            String?
+  gis_url                  String?
+  letter_status            String?
+  last_contact_date        DateTime? @db.Date
+  next_contact_date        DateTime? @db.Date
+  communication_status     String?
+  motivation_level         String?
+  county_activity          String?
+  reonomy_id               String?
+  ownership_type           String?
+  sale_timeline            String?
+  direct_mail_address      String?
+  owner_name               String?
+  mail_bounced_back        String?
+  data_status              String?
+  offer_made               String?
+  owner_phone              String?
+  last_sale_year           Int?
+  last_sale_date           DateTime? @db.Date
+  last_sale_amount         Decimal?  @db.Decimal(18, 2)
+  last_sale_price_per_sqft Decimal?  @db.Decimal(18, 2)
+  last_sale_buyer          String?
+  tax_assessed_value       Decimal?  @db.Decimal(18, 2)
+  mortgagee_name           String?
+  mortgage_amount          Decimal?  @db.Decimal(18, 2)
+  mortgage_start_date      DateTime? @db.Date
+  mortgage_expiration_date DateTime? @db.Date
+  listing_url              String?
+  asking_price             Decimal?  @db.Decimal(18, 2)
+  asking_price_per_sqft    Decimal?  @db.Decimal(18, 2)
+  broker_names             String?
+  broker_phone             String?
+  broker_company           String?
+  lease_rate               String?
+  lease_notes              String?   @db.Text
+  lease_terms              String?
+  lease_start_date         DateTime? @db.Date
+  space_size               String?
+  length_of_lease          String?
+  lease_expiration         DateTime? @db.Date
+  lease_data_type          String?
+  leasing_broker           String?
+  links_to_original_data   String?
+  amenities                String?   @db.Text
+  tags                     String?
+
+  // Foreclosure fields
+  in_foreclosure                  Boolean?
+  foreclosure_case_number         String?
+  foreclosure_filed_date          DateTime? @db.Date
+  foreclosure_status              String?
+  foreclosure_plaintiff           String?
+  foreclosure_judgment_amount     Decimal?  @db.Decimal(18, 2)
+  foreclosure_sale_date           DateTime? @db.Date
+  court_case_url                  String?
+  tax_map_parcel_number           String?
+  foreclosure_data_last_updated   DateTime? @db.Date
+  owner_mailing_address           String?
+  owner_entity_type               String?
+
+  notes        PropertyNote[]
+  personLinks  PersonProperty[]
+
+  @@index([state])
+  @@index([asset_class])
+  @@index([deal_stage])
+  @@map("properties")
+}
+
+model PropertyNote {
+  id          BigInt    @id @default(autoincrement())
+  property_id BigInt
+  description String?   @db.Text
+  created_at  DateTime?
+  updated_at  DateTime?
+  user_id     Int?
+
+  property Property  @relation(fields: [property_id], references: [id], onDelete: Cascade)
+  user     CrmUser?  @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([property_id])
+  @@map("property_notes")
+}
+
+// ─────────────────────────────────────────────
+// Views (saved filters + columns)
+// ─────────────────────────────────────────────
+
+model SavedView {
+  id         Int      @id @default(autoincrement())
+  name       String
+  entity     String   // "businesses" | "contacts"
+  filters    Json     @default("[]")
+  columns    Json     @default("[]")
+  sort_field String?
+  sort_dir   String?  // "asc" | "desc"
+  is_default Boolean  @default(false)
+  is_hidden  Boolean  @default(false)
+  sort_order Int      @default(0)
+  created_at DateTime @default(now())
+
+  @@map("saved_views")
+}
+
+// ─────────────────────────────────────────────
+// Communications / Gmail tables
+// ─────────────────────────────────────────────
+
+model GmailAccount {
+  id            Int           @id @default(autoincrement())
+  user_id       Int           @unique
+  gmail_email   String
+  access_token  String        @db.Text
+  refresh_token String        @db.Text
+  token_expiry  DateTime?
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+
+  user   CrmUser       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  emails CachedEmail[]
+
+  @@map("gmail_accounts")
+}
+
+model EmailTemplate {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  name       String
+  subject    String
+  body       String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user CrmUser @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("email_templates")
+}
+
+model CachedEmail {
+  id               Int          @id @default(autoincrement())
+  message_id       String       @unique
+  thread_id        String
+  gmail_account_id Int
+  from_address     String
+  to_addresses     String       @db.Text
+  subject          String?
+  snippet          String?      @db.Text
+  body_text        String?      @db.Text
+  body_html        String?      @db.Text
+  sent_at          DateTime?
+  is_read          Boolean      @default(true)
+  is_sent          Boolean      @default(false)
+  business_id      Int?
+  person_id        Int?
+  synced_at        DateTime     @default(now())
+
+  gmailAccount GmailAccount @relation(fields: [gmail_account_id], references: [id], onDelete: Cascade)
+  business     Business?    @relation(fields: [business_id], references: [business_id], onDelete: SetNull)
+  person       Person?      @relation(fields: [person_id], references: [person_id], onDelete: SetNull)
+
+  @@index([thread_id])
+  @@index([gmail_account_id])
+  @@index([business_id])
+  @@index([person_id])
+  @@map("cached_emails")
+}
