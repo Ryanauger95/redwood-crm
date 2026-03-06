@@ -39,16 +39,16 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-500 mb-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 mb-4 shadow-xl shadow-blue-900/40">
             <HeartHandshake size={28} className="text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Homevale CRM</h1>
-          <p className="text-slate-400 mt-1 text-sm">Home Healthcare M&A Platform</p>
+          <h1 className="text-[22px] font-bold text-white tracking-tight">Homevale CRM</h1>
+          <p className="text-slate-400 mt-1 text-[13px]">Home Healthcare M&A Platform</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Sign in to your account</h2>
+        <div className="bg-white rounded-2xl shadow-2xl p-8 ring-1 ring-white/10">
+          <h2 className="text-[17px] font-bold text-gray-900 mb-6 tracking-tight">Sign in to your account</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input

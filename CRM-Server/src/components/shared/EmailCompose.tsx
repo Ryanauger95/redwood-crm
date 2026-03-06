@@ -177,6 +177,7 @@ export function EmailCompose({
               value={to}
               onChange={(e) => setTo(e.target.value)}
               placeholder="recipient@example.com"
+              autoComplete="nope"
             />
           </div>
 
@@ -188,6 +189,7 @@ export function EmailCompose({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Subject"
+              autoComplete="nope"
             />
           </div>
 

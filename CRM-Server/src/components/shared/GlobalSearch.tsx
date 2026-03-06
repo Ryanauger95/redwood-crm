@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Building2, User, X } from "lucide-react";
+import { Search, Building2, X } from "lucide-react";
 import { FitScoreBadge } from "@/components/shared/FitScoreBadge";
 
 interface SearchBusiness {
@@ -126,6 +126,7 @@ export function GlobalSearch() {
                 onChange={handleChange}
                 placeholder="Search businesses, people, cities..."
                 autoFocus
+                autoComplete="nope"
                 className="flex-1 text-sm text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
               />
               {query && (
@@ -195,9 +196,16 @@ export function GlobalSearch() {
                           onClick={() => navigate(`/contacts/${p.person_id}`)}
                           className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 transition-colors text-left"
                         >
-                          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                            <User size={15} className="text-gray-500" />
-                          </div>
+                          {(() => {
+                            const avatarColors = ["from-blue-400 to-indigo-500", "from-violet-400 to-purple-500", "from-emerald-400 to-teal-500", "from-amber-400 to-orange-500", "from-rose-400 to-pink-500"];
+                            const initials2 = name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+                            const color = avatarColors[name.charCodeAt(0) % avatarColors.length];
+                            return (
+                              <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${color} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                                <span className="text-[11px] font-bold text-white">{initials2}</span>
+                              </div>
+                            );
+                          })()}
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-900">{name}</p>
                             <p className="text-xs text-gray-400 truncate">

@@ -18,7 +18,8 @@ import { ActivityForm } from "@/components/shared/ActivityForm";
 import { BusinessCommunicationsPanel } from "@/components/shared/BusinessCommunicationsPanel";
 import { ActivityNotePanel } from "@/components/shared/ActivityNotePanel";
 import { useToast } from "@/components/shared/Toast";
-import { formatCurrency, formatDate, PIPELINE_STAGES } from "@/lib/utils";
+import { formatCurrency, formatDate, PIPELINE_STAGES, US_STATES } from "@/lib/utils";
+import { LICENSE_TYPE_OPTIONS, PRIMARY_PAYOR_MIX_OPTIONS } from "@/lib/fieldOptions";
 
 interface Person {
   person_id: number;
@@ -173,6 +174,7 @@ function GhostInput({
         onBlur={() => { if (local !== value) onSave(local); }}
         placeholder={placeholder}
         rows={rows}
+        autoComplete="nope"
         className={`${baseClass} resize-none`}
       />
     );
@@ -188,6 +190,7 @@ function GhostInput({
         if (e.key === "Escape") setLocal(value);
       }}
       placeholder={placeholder}
+      autoComplete="nope"
       className={baseClass}
     />
   );
@@ -214,15 +217,22 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
     city: business.city || "",
     zip_code: business.zip_code || "",
     county: business.county || "",
+    state_code: business.state_code || "",
+    license_type: business.license_type || "",
+    pe_backed: business.pe_backed == null ? "" : business.pe_backed ? "true" : "false",
+    primary_payor_mix: business.primary_payor_mix || "",
     business_summary: business.business_summary || "",
     service_area: business.service_area || "",
   });
 
   const saveField = useCallback(async (field: string, value: string) => {
+    const body: Record<string, unknown> = field === "pe_backed"
+      ? { pe_backed: value === "true" ? true : value === "false" ? false : null }
+      : { [field]: value };
     const res = await fetch(`/api/businesses/${business.business_id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [field]: value }),
+      body: JSON.stringify(body),
     });
     if (res.ok) {
       setFields((prev) => ({ ...prev, [field]: value }));
@@ -328,16 +338,16 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
           {/* Name + Score */}
           <div>
             <div className="flex items-start justify-between gap-2 mb-1.5">
-              <h2 className="text-sm font-bold text-gray-900 leading-tight">{name}</h2>
+              <h2 className="text-[13px] font-bold text-gray-900 leading-tight">{name}</h2>
               {isEnriched && <FitScoreBadge score={business.acquisition_fit_score} size="sm" />}
             </div>
             {business.city && (
-              <p className="text-xs text-gray-500 flex items-center gap-1">
-                <MapPin size={11} /> {business.city}, SC
+              <p className="text-[11px] text-gray-400 flex items-center gap-1">
+                <MapPin size={10} /> {business.city}, SC
               </p>
             )}
             {!isEnriched && (
-              <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full mt-1 inline-block">
+              <span className="text-[11px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full mt-1 inline-block font-medium">
                 Not yet enriched
               </span>
             )}
@@ -369,9 +379,9 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Financials (Est.)</p>
               {business.estimated_annual_profit && (
-                <div className="bg-green-50 rounded-lg px-3 py-2">
-                  <p className="text-xs text-green-600">Annual Profit</p>
-                  <p className="text-base font-bold text-green-800">{formatCurrency(Number(business.estimated_annual_profit))}</p>
+                <div className="bg-emerald-50 rounded-lg px-3 py-2">
+                  <p className="text-xs text-emerald-600">Annual Profit</p>
+                  <p className="text-base font-bold text-emerald-800">{formatCurrency(Number(business.estimated_annual_profit))}</p>
                 </div>
               )}
               <div className="space-y-1.5">
@@ -417,7 +427,7 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
               <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">PE Backed</span>
             )}
             {business.pe_backed === false && (
-              <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Independent</span>
+              <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">Independent</span>
             )}
             {business.cms_star_rating && (
               <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -457,6 +467,96 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
               </div>
             ))}
           </div>
+
+          {/* State */}
+          <div>
+            <label className="text-xs text-gray-400">State</label>
+            <select
+              value={fields.state_code}
+              onChange={(e) => saveField("state_code", e.target.value)}
+              className="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-blue-400 focus:bg-white focus:outline-none rounded px-1.5 py-0.5 text-[13px] text-gray-900 transition-colors cursor-pointer"
+            >
+              <option value="">—</option>
+              {US_STATES.map((s) => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Business Details */}
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Business Details</p>
+            <div>
+              <label className="text-xs text-gray-400">License Type</label>
+              <select
+                value={fields.license_type}
+                onChange={(e) => saveField("license_type", e.target.value)}
+                className="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-blue-400 focus:bg-white focus:outline-none rounded px-1.5 py-0.5 text-[13px] text-gray-900 transition-colors cursor-pointer"
+              >
+                <option value="">—</option>
+                {LICENSE_TYPE_OPTIONS.map((v) => <option key={v} value={v}>{v}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-gray-400">PE Backed</label>
+              <select
+                value={fields.pe_backed}
+                onChange={(e) => saveField("pe_backed", e.target.value)}
+                className="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-blue-400 focus:bg-white focus:outline-none rounded px-1.5 py-0.5 text-[13px] text-gray-900 transition-colors cursor-pointer"
+              >
+                <option value="">Unknown</option>
+                <option value="false">Independent</option>
+                <option value="true">PE Backed</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-gray-400">Payor Mix</label>
+              <select
+                value={fields.primary_payor_mix}
+                onChange={(e) => saveField("primary_payor_mix", e.target.value)}
+                className="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-blue-400 focus:bg-white focus:outline-none rounded px-1.5 py-0.5 text-[13px] text-gray-900 transition-colors cursor-pointer"
+              >
+                <option value="">—</option>
+                {PRIMARY_PAYOR_MIX_OPTIONS.map((v) => <option key={v} value={v}>{v}</option>)}
+              </select>
+            </div>
+          </div>
+
+          {/* Owners */}
+          {business.businessPeople.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Owners</p>
+              <div className="space-y-2.5">
+                {business.businessPeople.map((bp) => {
+                  const personName = bp.person.full_name || `${bp.person.first_name || ""} ${bp.person.last_name || ""}`.trim() || "Unknown";
+                  const initials = personName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+                  return (
+                    <div key={bp.id} className="flex items-start gap-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-[9px] font-bold text-white">{initials}</span>
+                      </div>
+                      <div className="min-w-0">
+                        <Link
+                          href={`/contacts/${bp.person_id}`}
+                          className="text-[12px] font-semibold text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-0.5"
+                        >
+                          {personName}
+                          <ExternalLink size={9} className="opacity-40 flex-shrink-0" />
+                        </Link>
+                        {bp.role_text && <p className="text-[11px] text-gray-400 leading-tight">{bp.role_text}</p>}
+                        {bp.ownership_pct && (
+                          <p className="text-[10px] text-gray-400">{bp.ownership_pct}%</p>
+                        )}
+                        {bp.person.succession_signals && (
+                          <p className="text-[11px] text-emerald-600 leading-tight mt-0.5">{bp.person.succession_signals}</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Services */}
           {services.length > 0 && (
@@ -521,11 +621,11 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
         <div className="bg-white border-b border-gray-200 px-6 pt-5 pb-0 sticky top-0 z-10">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h1 className="text-lg font-bold text-gray-900">{name}</h1>
+              <h1 className="text-[17px] font-bold text-gray-900 tracking-tight">{name}</h1>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <StageBadge stage={stage} />
                 {business.county && (
-                  <span className="text-sm text-gray-400">{business.county} County</span>
+                  <span className="text-[12px] text-gray-400">{business.county} County</span>
                 )}
               </div>
             </div>
@@ -558,16 +658,16 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-1.5 ${
+                  className={`px-4 py-2.5 text-[13px] border-b-2 transition-colors flex items-center gap-1.5 ${
                     activeTab === tab
-                      ? "border-blue-600 text-blue-600"
-                      : "border-transparent text-gray-500 hover:text-gray-800"
+                      ? "border-blue-600 text-blue-600 font-semibold"
+                      : "border-transparent text-gray-500 font-medium hover:text-gray-800 hover:border-gray-200"
                   }`}
                 >
                   {tab}
                   {count !== null && count > 0 && (
-                    <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
-                      tab === "Tasks" && openTaskCount > 0 ? "bg-orange-100 text-orange-700" : "bg-gray-100 text-gray-600"
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+                      tab === "Tasks" && openTaskCount > 0 ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200" : "bg-gray-100 text-gray-500"
                     }`}>
                       {tab === "Tasks" ? openTaskCount || count : count}
                     </span>
@@ -631,9 +731,9 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
                           </div>
                         )}
                         {business.estimated_annual_profit && (
-                          <div className="bg-green-50 rounded-lg p-3">
-                            <p className="text-xs text-green-600 mb-1">Est. Profit</p>
-                            <p className="text-lg font-bold text-green-800">{formatCurrency(Number(business.estimated_annual_profit))}</p>
+                          <div className="bg-emerald-50 rounded-lg p-3">
+                            <p className="text-xs text-emerald-600 mb-1">Est. Profit</p>
+                            <p className="text-lg font-bold text-emerald-800">{formatCurrency(Number(business.estimated_annual_profit))}</p>
                           </div>
                         )}
                         {business.profit_margin_pct && (
@@ -751,37 +851,46 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
                     </CardTitle>
                   </CardHeader>
                   <div className="divide-y divide-gray-50">
-                    {business.businessPeople.map((bp) => (
-                      <div key={bp.id} className="px-4 py-3">
+                    {business.businessPeople.map((bp) => {
+                      const personName = bp.person.full_name || `${bp.person.first_name || ""} ${bp.person.last_name || ""}`.trim() || "Unknown";
+                      const initials = personName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+                      return (
+                      <div key={bp.id} className="px-4 py-3 flex items-start gap-3">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-[10px] font-bold text-white">{initials}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
                         <Link
                           href={`/contacts/${bp.person_id}`}
-                          className="font-medium text-sm text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1"
+                          className="text-[13px] font-semibold text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1"
                         >
-                          {bp.person.full_name || `${bp.person.first_name || ""} ${bp.person.last_name || ""}`.trim()}
-                          <ExternalLink size={10} className="opacity-40" />
+                          {personName}
+                          <ExternalLink size={9} className="opacity-40" />
                         </Link>
                         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                          {bp.role_text && <span className="text-xs text-gray-500">{bp.role_text}</span>}
+                          {bp.role_text && <span className="text-[11px] text-gray-500">{bp.role_text}</span>}
                           {bp.ownership_pct && (
-                            <span className="text-xs font-medium bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">
+                            <span className="text-[10px] font-semibold bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
                               {bp.ownership_pct}%
                             </span>
                           )}
                           {bp.is_private_equity && (
-                            <span className="text-xs bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded">PE</span>
+                            <span className="text-[10px] font-semibold bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded">PE</span>
                           )}
                         </div>
                         {bp.person.city && (
-                          <p className="text-xs text-gray-400 mt-0.5">{bp.person.city}, {bp.person.state_code || "SC"}</p>
+                          <p className="text-[11px] text-gray-400 mt-0.5">{bp.person.city}, {bp.person.state_code || "SC"}</p>
                         )}
                         {bp.person.estimated_age && (
-                          <p className="text-xs text-gray-400">Age ~{bp.person.estimated_age}</p>
+                          <p className="text-[11px] text-gray-400">Age ~{bp.person.estimated_age}</p>
                         )}
                         {bp.person.succession_signals && (
-                          <p className="text-xs text-green-600 mt-1 leading-relaxed">{bp.person.succession_signals}</p>
+                          <p className="text-[11px] text-emerald-600 mt-1 leading-relaxed">{bp.person.succession_signals}</p>
                         )}
+                        </div>
                       </div>
-                    ))}
+                    );
+                    })}
                     {business.businessPeople.length === 0 && (
                       <div className="px-4 py-6 text-center text-sm text-gray-400">No owners found</div>
                     )}

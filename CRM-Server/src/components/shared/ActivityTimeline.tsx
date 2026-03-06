@@ -25,11 +25,11 @@ const typeIcons: Record<string, React.ReactNode> = {
 };
 
 const typeColors: Record<string, string> = {
-  call: "bg-blue-100 text-blue-600",
-  email: "bg-purple-100 text-purple-600",
-  note: "bg-gray-100 text-gray-600",
-  task: "bg-green-100 text-green-600",
-  sms: "bg-yellow-100 text-yellow-600",
+  call:  "bg-blue-50 text-blue-600",
+  email: "bg-violet-50 text-violet-600",
+  note:  "bg-amber-50 text-amber-600",
+  task:  "bg-emerald-50 text-emerald-600",
+  sms:   "bg-pink-50 text-pink-600",
 };
 
 const typeLabels: Record<string, string> = {
@@ -161,17 +161,17 @@ export function ActivityTimeline({ activities, onUpdate }: ActivityTimelineProps
         return (
           <div
             key={activity.id}
-            className={`group flex gap-3 px-2 py-3 rounded-lg transition-colors relative ${
-              i % 2 === 0 ? "" : "bg-gray-50/60"
-            } ${isOverdue ? "bg-red-50/40" : ""} hover:bg-blue-50/30`}
+            className={`group flex gap-3 px-2 py-2.5 rounded-lg transition-colors relative ${
+              isOverdue ? "bg-red-50/30" : ""
+            } hover:bg-gray-50/80`}
           >
             {/* Timeline icon */}
             <div className="flex flex-col items-center flex-shrink-0">
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center ${typeColors[activity.type] || "bg-gray-100 text-gray-600"}`}>
+              <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${typeColors[activity.type] || "bg-gray-50 text-gray-500"}`}>
                 {typeIcons[activity.type] || <FileText size={13} />}
               </div>
               {i < localActivities.length - 1 && (
-                <div className="w-px flex-1 mt-1 bg-gray-200 min-h-3" />
+                <div className="w-px flex-1 mt-1 bg-gray-100 min-h-3" />
               )}
             </div>
 
@@ -182,6 +182,7 @@ export function ActivityTimeline({ activities, onUpdate }: ActivityTimelineProps
                   <input
                     value={editSubject}
                     onChange={(e) => setEditSubject(e.target.value)}
+                    autoComplete="nope"
                     className="w-full text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Subject"
                   />
@@ -189,6 +190,7 @@ export function ActivityTimeline({ activities, onUpdate }: ActivityTimelineProps
                     value={editBody}
                     onChange={(e) => setEditBody(e.target.value)}
                     rows={2}
+                    autoComplete="nope"
                     className="w-full text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     placeholder="Notes..."
                   />
@@ -197,6 +199,7 @@ export function ActivityTimeline({ activities, onUpdate }: ActivityTimelineProps
                       type="datetime-local"
                       value={editDueDate}
                       onChange={(e) => setEditDueDate(e.target.value)}
+                      autoComplete="nope"
                       className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   )}
@@ -221,15 +224,15 @@ export function ActivityTimeline({ activities, onUpdate }: ActivityTimelineProps
                 <>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide shrink-0">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider shrink-0">
                         {typeLabels[activity.type] || activity.type}
                       </span>
-                      <p className="text-sm font-medium text-gray-900 truncate">{activity.subject}</p>
+                      <p className="text-[13px] font-semibold text-gray-900 truncate">{activity.subject}</p>
                       {isTask && (
-                        <span className={`shrink-0 text-xs font-medium px-1.5 py-0.5 rounded-full ${
-                          activity.status === "completed" ? "bg-green-100 text-green-700"
-                          : isOverdue ? "bg-red-100 text-red-700"
-                          : "bg-orange-100 text-orange-700"
+                        <span className={`shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ring-1 ${
+                          activity.status === "completed" ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                          : isOverdue ? "bg-red-50 text-red-700 ring-red-200"
+                          : "bg-amber-50 text-amber-700 ring-amber-200"
                         }`}>
                           {activity.status === "completed" ? "Done" : isOverdue ? "Overdue" : "Open"}
                         </span>
@@ -268,17 +271,17 @@ export function ActivityTimeline({ activities, onUpdate }: ActivityTimelineProps
                   </div>
 
                   {activity.body && (
-                    <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap leading-relaxed">
+                    <p className="text-[13px] text-gray-500 mt-0.5 whitespace-pre-wrap leading-relaxed">
                       {activity.body}
                     </p>
                   )}
 
-                  <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                  <div className="flex items-center gap-2.5 mt-1 flex-wrap">
                     {activity.user && (
-                      <span className="text-xs text-gray-400">by <span className="font-medium text-gray-600">{activity.user.name}</span></span>
+                      <span className="text-[11px] text-gray-400">by <span className="font-medium text-gray-500">{activity.user.name}</span></span>
                     )}
                     {isTask && activity.due_date && (
-                      <span className={`text-xs ${isOverdue ? "text-red-500 font-medium" : "text-gray-400"}`}>
+                      <span className={`text-[11px] ${isOverdue ? "text-red-500 font-semibold" : "text-gray-400"}`}>
                         Due {formatDate(activity.due_date)}
                       </span>
                     )}
@@ -286,10 +289,10 @@ export function ActivityTimeline({ activities, onUpdate }: ActivityTimelineProps
                       <button
                         onClick={() => handleComplete(activity.id)}
                         disabled={completing === activity.id}
-                        className="text-xs flex items-center gap-1 text-green-600 hover:text-green-700 font-medium transition-colors disabled:opacity-50 ml-auto"
+                        className="text-[12px] flex items-center gap-1 text-emerald-600 hover:text-emerald-700 font-semibold transition-colors disabled:opacity-50 ml-auto"
                       >
-                        <Check size={12} />
-                        {completing === activity.id ? "Saving..." : "Mark complete"}
+                        <Check size={11} />
+                        {completing === activity.id ? "Saving…" : "Mark complete"}
                       </button>
                     )}
                   </div>

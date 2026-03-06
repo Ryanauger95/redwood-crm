@@ -66,10 +66,16 @@ export async function PATCH(
   }
 
   // Business field updates
-  const ALLOWED_FIELDS = ["phone", "email", "website", "address", "city", "zip_code", "county", "business_summary", "service_area"] as const;
+  const ALLOWED_FIELDS = ["phone", "email", "website", "address", "city", "zip_code", "county", "business_summary", "service_area", "state_code", "license_type", "primary_payor_mix"] as const;
   const updateData: Record<string, unknown> = {};
   for (const field of ALLOWED_FIELDS) {
     if (field in body) updateData[field] = body[field] || null;
+  }
+  // pe_backed is boolean
+  if ("pe_backed" in body) {
+    updateData["pe_backed"] = body.pe_backed === true || body.pe_backed === "true" ? true
+      : body.pe_backed === false || body.pe_backed === "false" ? false
+      : null;
   }
 
   if (Object.keys(updateData).length > 0) {

@@ -468,6 +468,7 @@ export default function QueryPage() {
             <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
             <input value={colSearch} onChange={(e) => setColSearch(e.target.value)}
               placeholder="Filter columns..."
+              autoComplete="nope"
               className="w-full pl-7 pr-2 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
@@ -501,6 +502,7 @@ export default function QueryPage() {
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)}
               placeholder={`Search ${tableConfig.label.toLowerCase()}...`}
+              autoComplete="nope"
               className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {search && (
@@ -582,6 +584,7 @@ export default function QueryPage() {
                     ) : (
                       <input value={filters[col] || ""} onChange={(e) => { setFilters((p) => ({ ...p, [col]: e.target.value })); setPage(1); }}
                         placeholder={meta.type === "number" ? "≥ value" : "contains..."}
+                        autoComplete="nope"
                         className="text-xs border border-blue-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 w-32"
                       />
                     )}

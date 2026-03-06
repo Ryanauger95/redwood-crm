@@ -28314,3 +28314,579 @@
 2026-03-05 23:54:50,797 [INFO] Retrying request to /v1/messages in 0.993206 seconds
 2026-03-05 23:54:51,912 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
 2026-03-05 23:54:51,914 [WARNING]   -> Rate limited, waiting 480s...
+2026-03-06 00:02:51,916 [INFO] Researching: CAPITAL CARE RESOURCES OF SOUTH CAROLINA LLC (417)
+2026-03-06 00:02:52,171 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:02:52,172 [INFO] Retrying request to /v1/messages in 0.436694 seconds
+2026-03-06 00:02:52,728 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:02:52,729 [INFO] Retrying request to /v1/messages in 0.854737 seconds
+2026-03-06 00:02:53,711 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:02:53,713 [ERROR]   -> Giving up after rate limit retries for CAPITAL CARE RESOURCES OF SOUTH CAROLINA LLC
+2026-03-06 00:02:53,717 [INFO]   Waiting 65s before next request...
+2026-03-06 00:03:58,722 [INFO] [219/1365] CAPITAL CARE RESOURCES OF SOUTH CAROLINA LLC
+2026-03-06 00:03:58,726 [INFO] Researching: CAPITAL CARE RESOURCES OF SOUTH CAROLINA LLC (418)
+2026-03-06 00:03:58,947 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:03:58,948 [INFO] Retrying request to /v1/messages in 0.429735 seconds
+2026-03-06 00:03:59,495 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:03:59,496 [INFO] Retrying request to /v1/messages in 0.844655 seconds
+2026-03-06 00:04:00,477 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:04:00,479 [WARNING]   -> Rate limited, waiting 120s...
+2026-03-06 00:06:00,534 [INFO] Researching: CAPITAL CARE RESOURCES OF SOUTH CAROLINA LLC (418)
+2026-03-06 00:06:00,826 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:06:00,827 [INFO] Retrying request to /v1/messages in 0.481253 seconds
+2026-03-06 00:06:01,429 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:06:01,431 [INFO] Retrying request to /v1/messages in 0.858874 seconds
+2026-03-06 00:06:02,406 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:06:02,408 [WARNING]   -> Rate limited, waiting 240s...
+2026-03-06 00:06:32,556 [ERROR] Another enrichment process is already running. Exiting.
+2026-03-06 00:06:35,571 [INFO] Found 1 businesses to enrich
+2026-03-06 00:06:35,571 [INFO] [1/1] ACE OF CARING LLC
+2026-03-06 00:06:35,573 [INFO] [DRY RUN] Would research: ACE OF CARING LLC
+2026-03-06 00:06:35,573 [INFO] Enrichment complete.
+2026-03-06 00:06:49,254 [INFO] Found 77 businesses to enrich
+2026-03-06 00:06:49,254 [INFO] [1/77] CENTERWELL CERTIFIED HEALTHCARE CORPORATION
+2026-03-06 00:06:49,257 [INFO] Researching: CENTERWELL CERTIFIED HEALTHCARE CORPORATION (492)
+2026-03-06 00:06:49,614 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:06:49,616 [INFO] Retrying request to /v1/messages in 0.421328 seconds
+2026-03-06 00:06:50,165 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:06:50,166 [INFO] Retrying request to /v1/messages in 0.885277 seconds
+2026-03-06 00:06:51,171 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:06:51,173 [WARNING]   -> Rate limited, waiting 120s...
+2026-03-06 00:08:51,175 [INFO] Researching: CENTERWELL CERTIFIED HEALTHCARE CORPORATION (492)
+2026-03-06 00:08:51,452 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:08:51,453 [INFO] Retrying request to /v1/messages in 0.495835 seconds
+2026-03-06 00:08:52,080 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:08:52,081 [INFO] Retrying request to /v1/messages in 0.756014 seconds
+2026-03-06 00:08:52,976 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:08:52,978 [WARNING]   -> Rate limited, waiting 240s...
+2026-03-06 00:10:02,420 [INFO] Researching: CAPITAL CARE RESOURCES OF SOUTH CAROLINA LLC (418)
+2026-03-06 00:10:02,635 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:10:02,636 [INFO] Retrying request to /v1/messages in 0.384758 seconds
+2026-03-06 00:10:03,177 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:10:03,179 [INFO] Retrying request to /v1/messages in 0.853421 seconds
+2026-03-06 00:10:04,192 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:10:04,193 [WARNING]   -> Rate limited, waiting 480s...
+2026-03-06 00:12:52,990 [INFO] Researching: CENTERWELL CERTIFIED HEALTHCARE CORPORATION (492)
+2026-03-06 00:12:53,246 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:12:53,247 [INFO] Retrying request to /v1/messages in 0.405171 seconds
+2026-03-06 00:12:53,783 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:12:53,784 [INFO] Retrying request to /v1/messages in 0.869598 seconds
+2026-03-06 00:12:54,792 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:12:54,793 [WARNING]   -> Rate limited, waiting 480s...
+2026-03-06 00:14:51,937 [INFO] Found 77 businesses to enrich
+2026-03-06 00:14:51,937 [INFO] [1/77] CENTERWELL CERTIFIED HEALTHCARE CORPORATION
+2026-03-06 00:14:51,940 [INFO] Researching: CENTERWELL CERTIFIED HEALTHCARE CORPORATION (492)
+2026-03-06 00:14:52,189 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:14:52,191 [INFO] Retrying request to /v1/messages in 0.380330 seconds
+2026-03-06 00:14:52,720 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:14:52,722 [INFO] Retrying request to /v1/messages in 0.921551 seconds
+2026-03-06 00:14:53,769 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:14:53,770 [WARNING]   -> Rate limited, waiting 120s...
+2026-03-06 00:16:53,780 [INFO] Researching: CENTERWELL CERTIFIED HEALTHCARE CORPORATION (492)
+2026-03-06 00:16:54,168 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:16:54,168 [INFO] Retrying request to /v1/messages in 0.429739 seconds
+2026-03-06 00:16:54,787 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:16:54,788 [INFO] Retrying request to /v1/messages in 0.946067 seconds
+2026-03-06 00:16:55,866 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:16:55,868 [WARNING]   -> Rate limited, waiting 240s...
+2026-03-06 00:20:55,874 [INFO] Researching: CENTERWELL CERTIFIED HEALTHCARE CORPORATION (492)
+2026-03-06 00:20:56,116 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:20:56,117 [INFO] Retrying request to /v1/messages in 0.496319 seconds
+2026-03-06 00:20:56,750 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:20:56,751 [INFO] Retrying request to /v1/messages in 0.997041 seconds
+2026-03-06 00:20:57,893 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:20:57,894 [WARNING]   -> Rate limited, waiting 480s...
+2026-03-06 00:28:57,899 [INFO] Researching: CENTERWELL CERTIFIED HEALTHCARE CORPORATION (492)
+2026-03-06 00:28:58,203 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:28:58,204 [INFO] Retrying request to /v1/messages in 0.415763 seconds
+2026-03-06 00:28:58,753 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:28:58,753 [INFO] Retrying request to /v1/messages in 0.860068 seconds
+2026-03-06 00:28:59,773 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:28:59,773 [ERROR]   -> Giving up after rate limit retries for CENTERWELL CERTIFIED HEALTHCARE CORPORATION
+2026-03-06 00:28:59,778 [INFO]   Waiting 65s before next request...
+2026-03-06 00:30:04,768 [INFO] [2/77] CHESTERFIELD VISITING NURSES SERVICE INC
+2026-03-06 00:30:04,775 [INFO] Researching: CHESTERFIELD VISITING NURSES SERVICE INC (497)
+2026-03-06 00:30:04,981 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:30:04,982 [INFO] Retrying request to /v1/messages in 0.474041 seconds
+2026-03-06 00:30:05,594 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:30:05,595 [INFO] Retrying request to /v1/messages in 0.787028 seconds
+2026-03-06 00:30:06,506 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:30:06,507 [WARNING]   -> Rate limited, waiting 120s...
+2026-03-06 00:32:06,515 [INFO] Researching: CHESTERFIELD VISITING NURSES SERVICE INC (497)
+2026-03-06 00:32:07,047 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:32:07,048 [INFO] Retrying request to /v1/messages in 0.397518 seconds
+2026-03-06 00:32:07,568 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:32:07,569 [INFO] Retrying request to /v1/messages in 0.959620 seconds
+2026-03-06 00:32:08,671 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:32:08,672 [WARNING]   -> Rate limited, waiting 240s...
+2026-03-06 00:36:08,676 [INFO] Researching: CHESTERFIELD VISITING NURSES SERVICE INC (497)
+2026-03-06 00:36:09,006 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:36:09,007 [INFO] Retrying request to /v1/messages in 0.404945 seconds
+2026-03-06 00:36:09,939 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:36:09,941 [INFO] Retrying request to /v1/messages in 0.966053 seconds
+2026-03-06 00:36:11,044 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:36:11,046 [WARNING]   -> Rate limited, waiting 480s...
+2026-03-06 00:44:11,051 [INFO] Researching: CHESTERFIELD VISITING NURSES SERVICE INC (497)
+2026-03-06 00:44:11,321 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:44:11,323 [INFO] Retrying request to /v1/messages in 0.389606 seconds
+2026-03-06 00:44:11,874 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:44:11,875 [INFO] Retrying request to /v1/messages in 0.935344 seconds
+2026-03-06 00:44:12,925 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:44:12,926 [ERROR]   -> Giving up after rate limit retries for CHESTERFIELD VISITING NURSES SERVICE INC
+2026-03-06 00:44:12,931 [INFO]   Waiting 65s before next request...
+2026-03-06 00:45:17,933 [INFO] [3/77] COASTAL HEALTH LLC
+2026-03-06 00:45:17,937 [INFO] Researching: COASTAL HEALTH LLC (480)
+2026-03-06 00:45:18,189 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:45:18,190 [INFO] Retrying request to /v1/messages in 0.480328 seconds
+2026-03-06 00:45:18,790 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:45:18,791 [INFO] Retrying request to /v1/messages in 0.828792 seconds
+2026-03-06 00:45:19,767 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:45:19,768 [WARNING]   -> Rate limited, waiting 120s...
+2026-03-06 00:47:19,772 [INFO] Researching: COASTAL HEALTH LLC (480)
+2026-03-06 00:47:20,022 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:47:20,023 [INFO] Retrying request to /v1/messages in 0.433486 seconds
+2026-03-06 00:47:20,763 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:47:20,764 [INFO] Retrying request to /v1/messages in 0.758629 seconds
+2026-03-06 00:47:21,702 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:47:21,704 [WARNING]   -> Rate limited, waiting 240s...
+2026-03-06 00:51:21,752 [INFO] Researching: COASTAL HEALTH LLC (480)
+2026-03-06 00:51:22,260 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:51:22,261 [INFO] Retrying request to /v1/messages in 0.482298 seconds
+2026-03-06 00:51:23,182 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:51:23,183 [INFO] Retrying request to /v1/messages in 0.808148 seconds
+2026-03-06 00:51:24,126 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:51:24,128 [WARNING]   -> Rate limited, waiting 480s...
+2026-03-06 00:59:24,139 [INFO] Researching: COASTAL HEALTH LLC (480)
+2026-03-06 00:59:24,671 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:59:24,673 [INFO] Retrying request to /v1/messages in 35.000000 seconds
+2026-03-06 00:59:59,895 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 429 Too Many Requests"
+2026-03-06 00:59:59,897 [INFO] Retrying request to /v1/messages in 0.935067 seconds
+2026-03-06 01:01:23,260 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:01:23,342 [INFO]   -> Score: 5/10 | Status: complete (after rate limit retry)
+2026-03-06 01:01:23,343 [INFO]   Waiting 65s before next request...
+2026-03-06 01:02:28,354 [INFO] [4/77] COMPASSUS BSMH ST FRANCIS HHA LLC
+2026-03-06 01:02:28,358 [INFO] Researching: COMPASSUS BSMH ST FRANCIS HHA LLC (493)
+2026-03-06 01:04:02,696 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:04:02,754 [INFO]   -> Score: 1/10 | Est. profit: $600,000 | Status: complete
+2026-03-06 01:04:02,755 [INFO]   Waiting 65s before next request...
+2026-03-06 01:05:07,763 [INFO] [5/77] CORAM ALTERNATE SITE SERVICES INC
+2026-03-06 01:05:07,767 [INFO] Researching: CORAM ALTERNATE SITE SERVICES INC (501)
+2026-03-06 01:05:45,298 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:05:45,338 [INFO]   -> Score: 1/10 | Est. profit: unknown | Status: complete
+2026-03-06 01:05:45,338 [INFO]   Waiting 65s before next request...
+2026-03-06 01:06:50,344 [INFO] [6/77] CYPRESS CLUB INC
+2026-03-06 01:06:50,347 [INFO] Researching: CYPRESS CLUB INC (424)
+2026-03-06 01:08:04,052 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:08:04,096 [INFO]   -> Score: 1/10 | Est. profit: $300,000 | Status: complete
+2026-03-06 01:08:04,097 [INFO]   Waiting 65s before next request...
+2026-03-06 01:09:09,108 [INFO] [7/77] EXCEL HOME CARE LLC
+2026-03-06 01:09:09,115 [INFO] Researching: EXCEL HOME CARE LLC (484)
+2026-03-06 01:11:34,691 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:11:34,779 [INFO]   -> Score: 2/10 | Est. profit: $90,000 | Status: complete
+2026-03-06 01:11:34,780 [INFO]   Waiting 65s before next request...
+2026-03-06 01:12:39,783 [INFO] [8/77] FIRST PRIORITY HOME CARE LLC
+2026-03-06 01:12:39,787 [INFO] Researching: FIRST PRIORITY HOME CARE LLC (472)
+2026-03-06 01:13:51,294 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:13:51,342 [INFO]   -> Score: 2/10 | Est. profit: $75,000 | Status: complete
+2026-03-06 01:13:51,342 [INFO]   Waiting 65s before next request...
+2026-03-06 01:14:56,343 [INFO] [9/77] FIVE POINTS HEALTHCARE OF GA LLC
+2026-03-06 01:14:56,348 [INFO] Researching: FIVE POINTS HEALTHCARE OF GA LLC (491)
+2026-03-06 01:16:19,059 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:16:19,127 [INFO]   -> Score: 1/10 | Est. profit: unknown | Status: complete
+2026-03-06 01:16:19,127 [INFO]   Waiting 65s before next request...
+2026-03-06 01:17:24,134 [INFO] [10/77] FLORENCE HOME CARE SERVICES LLC
+2026-03-06 01:17:24,138 [INFO] Researching: FLORENCE HOME CARE SERVICES LLC (430)
+2026-03-06 01:18:52,252 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:18:52,324 [INFO]   -> Score: 1/10 | Est. profit: unknown | Status: complete
+2026-03-06 01:18:52,324 [INFO]   Waiting 65s before next request...
+2026-03-06 01:19:57,327 [INFO] [11/77] FUTURESMITH INC
+2026-03-06 01:19:57,333 [INFO] Researching: FUTURESMITH INC (477)
+2026-03-06 01:21:29,234 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:21:29,284 [INFO]   -> Score: 2/10 | Est. profit: $75,000 | Status: complete
+2026-03-06 01:21:29,284 [INFO]   Waiting 65s before next request...
+2026-03-06 01:22:34,295 [INFO] [12/77] FUTURESMITH INC
+2026-03-06 01:22:34,298 [INFO] Researching: FUTURESMITH INC (515)
+2026-03-06 01:23:27,407 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:23:27,457 [INFO]   -> Score: 2/10 | Est. profit: $70,000 | Status: complete
+2026-03-06 01:23:27,457 [INFO]   Waiting 65s before next request...
+2026-03-06 01:24:32,461 [INFO] [13/77] GEORGETOWN HOSPITAL HOME HEALTH LLC
+2026-03-06 01:24:32,465 [INFO] Researching: GEORGETOWN HOSPITAL HOME HEALTH LLC (437)
+2026-03-06 01:25:32,540 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:25:32,590 [INFO]   -> Score: 1/10 | Est. profit: unknown | Status: complete
+2026-03-06 01:25:32,590 [INFO]   Waiting 65s before next request...
+2026-03-06 01:26:37,592 [INFO] [14/77] GEORGETOWN HOSPITAL HOME HEALTH LLC
+2026-03-06 01:26:37,596 [INFO] Researching: GEORGETOWN HOSPITAL HOME HEALTH LLC (438)
+2026-03-06 01:28:16,073 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:28:16,143 [INFO]   -> Score: 1/10 | Est. profit: unknown | Status: complete
+2026-03-06 01:28:16,143 [INFO]   Waiting 65s before next request...
+2026-03-06 01:29:21,154 [INFO] [15/77] GEORGETOWN HOSPITAL HOME HEALTH LLC
+2026-03-06 01:29:21,159 [INFO] Researching: GEORGETOWN HOSPITAL HOME HEALTH LLC (449)
+2026-03-06 01:30:59,607 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:30:59,679 [INFO]   -> Score: 1/10 | Est. profit: $350,000 | Status: complete
+2026-03-06 01:30:59,679 [INFO]   Waiting 65s before next request...
+2026-03-06 01:32:04,690 [INFO] [16/77] GRACEFUL JOURNEY HOME HEALTH OF SC LLC
+2026-03-06 01:32:04,694 [INFO] Researching: GRACEFUL JOURNEY HOME HEALTH OF SC LLC (509)
+2026-03-06 01:32:45,443 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:32:45,485 [ERROR] Could not extract JSON for GRACEFUL JOURNEY HOME HEALTH OF SC LLC
+2026-03-06 01:32:45,485 [ERROR] stop_reason=pause_turn snippet='Let me try more targeted searches using the CMS CASPER/OSCAR database approach and the specific enrollment ID.'
+2026-03-06 01:32:45,485 [INFO]   Waiting 65s before next request...
+2026-03-06 01:33:50,496 [INFO] [17/77] GREENWOOD COUNTY HOSPITAL BOARD DBA SELF REGIONAL HEALTHCARE
+2026-03-06 01:33:50,499 [INFO] Researching: GREENWOOD COUNTY HOSPITAL BOARD DBA SELF REGIONAL HEALTHCARE (504)
+2026-03-06 01:35:04,448 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:35:04,743 [INFO]   -> Score: 2/10 | Est. profit: $600,000 | Status: complete
+2026-03-06 01:35:04,743 [INFO]   Waiting 65s before next request...
+2026-03-06 01:36:09,752 [INFO] [18/77] GROVE PARK PHARMACY HOME CARE LLC
+2026-03-06 01:36:09,755 [INFO] Researching: GROVE PARK PHARMACY HOME CARE LLC (479)
+2026-03-06 01:37:09,481 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:37:09,753 [INFO]   -> Score: 4/10 | Est. profit: $300,000 | Status: complete
+2026-03-06 01:37:09,753 [INFO]   Waiting 65s before next request...
+2026-03-06 01:38:14,755 [INFO] [19/77] HEDGEMARK BRENTWOOD MEDICAL SERVICES INC
+2026-03-06 01:38:14,760 [INFO] Researching: HEDGEMARK BRENTWOOD MEDICAL SERVICES INC (428)
+2026-03-06 01:39:28,747 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:39:28,795 [INFO]   -> Score: 3/10 | Est. profit: $350,000 | Status: complete
+2026-03-06 01:39:28,796 [INFO]   Waiting 65s before next request...
+2026-03-06 01:40:33,798 [INFO] [20/77] INCARE HOME HEALTH INC
+2026-03-06 01:40:33,803 [INFO] Researching: INCARE HOME HEALTH INC (452)
+2026-03-06 01:42:26,723 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:42:26,791 [INFO]   -> Score: 2/10 | Est. profit: $600,000 | Status: complete
+2026-03-06 01:42:26,791 [INFO]   Waiting 65s before next request...
+2026-03-06 01:43:31,801 [INFO] [21/77] INSPIRIUM IHC UPSTATE LLC
+2026-03-06 01:43:31,805 [INFO] Researching: INSPIRIUM IHC UPSTATE LLC (490)
+2026-03-06 01:45:38,085 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:45:38,147 [INFO]   -> Score: 1/10 | Est. profit: $4,500,000 | Status: complete
+2026-03-06 01:45:38,148 [INFO]   Waiting 65s before next request...
+2026-03-06 01:46:43,154 [INFO] [22/77] INTEGRAL HOME HEALTH LLC
+2026-03-06 01:46:43,158 [INFO] Researching: INTEGRAL HOME HEALTH LLC (511)
+2026-03-06 01:48:01,651 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 01:48:01,699 [INFO]   -> Score: 3/10 | Est. profit: unknown | Status: complete
+2026-03-06 01:48:01,699 [INFO]   Waiting 65s before next request...
+2026-03-06 01:49:06,704 [INFO] [23/77] INTERIM HEALTHCARE OF THE TRIAD INC
+2026-03-06 01:49:06,707 [INFO] Researching: INTERIM HEALTHCARE OF THE TRIAD INC (427)
+2026-03-06 01:49:06,904 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:49:06,905 [ERROR] API error for INTERIM HEALTHCARE OF THE TRIAD INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmP2CyuuAD7jpvuTG7Fz'}
+2026-03-06 01:49:06,906 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmP2CyuuAD7jpvuTG7Fz'}
+2026-03-06 01:49:06,909 [INFO]   Waiting 65s before next request...
+2026-03-06 01:50:11,914 [INFO] [24/77] INTRAMED PLUS LLC
+2026-03-06 01:50:11,918 [INFO] Researching: INTRAMED PLUS LLC (499)
+2026-03-06 01:50:12,077 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:50:12,078 [ERROR] API error for INTRAMED PLUS LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmP71dg2UrfPZ2Cfp54S'}
+2026-03-06 01:50:12,078 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmP71dg2UrfPZ2Cfp54S'}
+2026-03-06 01:50:12,082 [INFO]   Waiting 65s before next request...
+2026-03-06 01:51:17,088 [INFO] [25/77] INTRATHECAL CARE SOLUTIONS LLC
+2026-03-06 01:51:17,092 [INFO] Researching: INTRATHECAL CARE SOLUTIONS LLC (482)
+2026-03-06 01:51:17,281 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:51:17,282 [ERROR] API error for INTRATHECAL CARE SOLUTIONS LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPBpQdmYombL9h7m8ry'}
+2026-03-06 01:51:17,283 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPBpQdmYombL9h7m8ry'}
+2026-03-06 01:51:17,286 [INFO]   Waiting 65s before next request...
+2026-03-06 01:52:22,297 [INFO] [26/77] KABAFUSION SC LLC
+2026-03-06 01:52:22,300 [INFO] Researching: KABAFUSION SC LLC (513)
+2026-03-06 01:52:22,566 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:52:22,567 [ERROR] API error for KABAFUSION SC LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPGd49mTsMnp48qfSfo'}
+2026-03-06 01:52:22,567 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPGd49mTsMnp48qfSfo'}
+2026-03-06 01:52:22,570 [INFO]   Waiting 65s before next request...
+2026-03-06 01:53:27,577 [INFO] [27/77] KIDSCARE HOME HEALTH OF SOUTH CAROLINA LLC
+2026-03-06 01:53:27,581 [INFO] Researching: KIDSCARE HOME HEALTH OF SOUTH CAROLINA LLC (486)
+2026-03-06 01:53:27,742 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:53:27,743 [ERROR] API error for KIDSCARE HOME HEALTH OF SOUTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPMS9xHVWKudteg5Gu9'}
+2026-03-06 01:53:27,744 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPMS9xHVWKudteg5Gu9'}
+2026-03-06 01:53:27,747 [INFO]   Waiting 65s before next request...
+2026-03-06 01:54:32,755 [INFO] [28/77] LANCASTER HOME CARE SERVICES LLC
+2026-03-06 01:54:32,758 [INFO] Researching: LANCASTER HOME CARE SERVICES LLC (423)
+2026-03-06 01:54:32,940 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:54:32,941 [ERROR] API error for LANCASTER HOME CARE SERVICES LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPSEvunqfXsq1hQ9AAi'}
+2026-03-06 01:54:32,941 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPSEvunqfXsq1hQ9AAi'}
+2026-03-06 01:54:32,945 [INFO]   Waiting 65s before next request...
+2026-03-06 01:55:37,949 [INFO] [29/77] LHCG CLXVI LLC
+2026-03-06 01:55:37,955 [INFO] Researching: LHCG CLXVI LLC (483)
+2026-03-06 01:55:38,253 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:55:38,254 [ERROR] API error for LHCG CLXVI LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPX3kbFnJdkPCzTqKfB'}
+2026-03-06 01:55:38,254 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPX3kbFnJdkPCzTqKfB'}
+2026-03-06 01:55:38,259 [INFO]   Waiting 65s before next request...
+2026-03-06 01:56:43,264 [INFO] [30/77] LIBERTY HOME CARE LLC
+2026-03-06 01:56:43,269 [INFO] Researching: LIBERTY HOME CARE LLC (451)
+2026-03-06 01:56:43,468 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:56:43,469 [ERROR] API error for LIBERTY HOME CARE LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPbrzaX9CRLVopRU5rZ'}
+2026-03-06 01:56:43,469 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPbrzaX9CRLVopRU5rZ'}
+2026-03-06 01:56:43,473 [INFO]   Waiting 65s before next request...
+2026-03-06 01:57:48,481 [INFO] [31/77] LOWCOUNTRY NURSING GROUP LLC
+2026-03-06 01:57:48,485 [INFO] Researching: LOWCOUNTRY NURSING GROUP LLC (456)
+2026-03-06 01:57:48,640 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 502 Bad Gateway"
+2026-03-06 01:57:48,642 [INFO] Retrying request to /v1/messages in 0.388947 seconds
+2026-03-06 01:57:49,113 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:57:49,114 [ERROR] API error for LOWCOUNTRY NURSING GROUP LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPghduEVjhdEHMHtPfj'}
+2026-03-06 01:57:49,115 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPghduEVjhdEHMHtPfj'}
+2026-03-06 01:57:49,118 [INFO]   Waiting 65s before next request...
+2026-03-06 01:58:54,121 [INFO] [32/77] MASTERS INFUSION LLC
+2026-03-06 01:58:54,124 [INFO] Researching: MASTERS INFUSION LLC (502)
+2026-03-06 01:58:54,453 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:58:54,454 [ERROR] API error for MASTERS INFUSION LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPmWJQcZ6gpHe9W4vKv'}
+2026-03-06 01:58:54,455 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPmWJQcZ6gpHe9W4vKv'}
+2026-03-06 01:58:54,459 [INFO]   Waiting 65s before next request...
+2026-03-06 01:59:59,469 [INFO] [33/77] MCLEOD REGIONAL MEDICAL CENTER OF THE PEE DEE INC
+2026-03-06 01:59:59,474 [INFO] Researching: MCLEOD REGIONAL MEDICAL CENTER OF THE PEE DEE INC (429)
+2026-03-06 01:59:59,675 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 01:59:59,677 [ERROR] API error for MCLEOD REGIONAL MEDICAL CENTER OF THE PEE DEE INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPrKqzgKafE7kgnmiM6'}
+2026-03-06 01:59:59,677 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPrKqzgKafE7kgnmiM6'}
+2026-03-06 01:59:59,681 [INFO]   Waiting 65s before next request...
+2026-03-06 02:01:04,692 [INFO] [34/77] MEDICAL UNIVERSITY HOSPITAL AUTHORITY
+2026-03-06 02:01:04,696 [INFO] Researching: MEDICAL UNIVERSITY HOSPITAL AUTHORITY (485)
+2026-03-06 02:01:04,853 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:01:04,854 [ERROR] API error for MEDICAL UNIVERSITY HOSPITAL AUTHORITY: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPw8WktssqqEegUTuJB'}
+2026-03-06 02:01:04,855 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmPw8WktssqqEegUTuJB'}
+2026-03-06 02:01:04,858 [INFO]   Waiting 65s before next request...
+2026-03-06 02:02:09,868 [INFO] [35/77] MPS HEALTHCARE INC
+2026-03-06 02:02:09,872 [INFO] Researching: MPS HEALTHCARE INC (495)
+2026-03-06 02:02:10,048 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:02:10,050 [ERROR] API error for MPS HEALTHCARE INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQ1wFUin5HRjS4CGnCJ'}
+2026-03-06 02:02:10,050 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQ1wFUin5HRjS4CGnCJ'}
+2026-03-06 02:02:10,054 [INFO]   Waiting 65s before next request...
+2026-03-06 02:03:15,060 [INFO] [36/77] NHC HOMECARE-SOUTH CAROLINA LLC
+2026-03-06 02:03:15,063 [INFO] Researching: NHC HOMECARE-SOUTH CAROLINA LLC (450)
+2026-03-06 02:03:15,231 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:03:15,232 [ERROR] API error for NHC HOMECARE-SOUTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQ6jvEVa48C3JMkDwxX'}
+2026-03-06 02:03:15,232 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQ6jvEVa48C3JMkDwxX'}
+2026-03-06 02:03:15,235 [INFO]   Waiting 65s before next request...
+2026-03-06 02:04:20,240 [INFO] [37/77] NHC HOMECARE-SOUTH CAROLINA LLC
+2026-03-06 02:04:20,243 [INFO] Researching: NHC HOMECARE-SOUTH CAROLINA LLC (415)
+2026-03-06 02:04:20,418 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:04:20,419 [ERROR] API error for NHC HOMECARE-SOUTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQBYbje2Zfo4Gbqkj9V'}
+2026-03-06 02:04:20,419 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQBYbje2Zfo4Gbqkj9V'}
+2026-03-06 02:04:20,423 [INFO]   Waiting 65s before next request...
+2026-03-06 02:05:25,400 [INFO] [38/77] NHC HOMECARE-SOUTH CAROLINA LLC
+2026-03-06 02:05:25,403 [INFO] Researching: NHC HOMECARE-SOUTH CAROLINA LLC (460)
+2026-03-06 02:05:25,647 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:05:25,648 [ERROR] API error for NHC HOMECARE-SOUTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQGMgYuH9Tud7sKg9Em'}
+2026-03-06 02:05:25,648 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQGMgYuH9Tud7sKg9Em'}
+2026-03-06 02:05:25,652 [INFO]   Waiting 65s before next request...
+2026-03-06 02:06:30,656 [INFO] [39/77] NHC/OP LP
+2026-03-06 02:06:30,660 [INFO] Researching: NHC/OP LP (448)
+2026-03-06 02:06:30,912 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:06:30,913 [ERROR] API error for NHC/OP LP: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQMAMoQQqDSqwP9Cyto'}
+2026-03-06 02:06:30,913 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQMAMoQQqDSqwP9Cyto'}
+2026-03-06 02:06:30,918 [INFO]   Waiting 65s before next request...
+2026-03-06 02:07:35,919 [INFO] [40/77] NHC/OP LP
+2026-03-06 02:07:35,922 [INFO] Researching: NHC/OP LP (433)
+2026-03-06 02:07:36,147 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:07:36,149 [ERROR] API error for NHC/OP LP: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQRyVLTeSLL5eiLU1cE'}
+2026-03-06 02:07:36,149 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQRyVLTeSLL5eiLU1cE'}
+2026-03-06 02:07:36,153 [INFO]   Waiting 65s before next request...
+2026-03-06 02:08:41,154 [INFO] [41/77] NHC/OP LP
+2026-03-06 02:08:41,157 [INFO] Researching: NHC/OP LP (434)
+2026-03-06 02:08:41,308 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:08:41,310 [ERROR] API error for NHC/OP LP: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQWnEZUQoqFGA97So6r'}
+2026-03-06 02:08:41,310 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQWnEZUQoqFGA97So6r'}
+2026-03-06 02:08:41,313 [INFO]   Waiting 65s before next request...
+2026-03-06 02:09:46,323 [INFO] [42/77] OPEN HEARTS HOME HEALTHCARE
+2026-03-06 02:09:46,327 [INFO] Researching: OPEN HEARTS HOME HEALTHCARE (496)
+2026-03-06 02:09:46,495 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:09:46,496 [ERROR] API error for OPEN HEARTS HOME HEALTHCARE: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQbawJKEscQa823be58'}
+2026-03-06 02:09:46,496 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQbawJKEscQa823be58'}
+2026-03-06 02:09:46,500 [INFO]   Waiting 65s before next request...
+2026-03-06 02:10:51,510 [INFO] [43/77] OPTUM WOMEN'S AND CHILDREN'S HEALTH LLC
+2026-03-06 02:10:51,514 [INFO] Researching: OPTUM WOMEN'S AND CHILDREN'S HEALTH LLC (498)
+2026-03-06 02:10:51,706 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:10:51,707 [ERROR] API error for OPTUM WOMEN'S AND CHILDREN'S HEALTH LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQgPkjnJmrVhZeVXatF'}
+2026-03-06 02:10:51,707 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQgPkjnJmrVhZeVXatF'}
+2026-03-06 02:10:51,711 [INFO]   Waiting 65s before next request...
+2026-03-06 02:11:56,716 [INFO] [44/77] PALMETTO INFUSION SERVICES LLC
+2026-03-06 02:11:56,719 [INFO] Researching: PALMETTO INFUSION SERVICES LLC (475)
+2026-03-06 02:11:56,906 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:11:56,907 [ERROR] API error for PALMETTO INFUSION SERVICES LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQmCVxM8TBbTufaPHdL'}
+2026-03-06 02:11:56,907 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQmCVxM8TBbTufaPHdL'}
+2026-03-06 02:11:56,911 [INFO]   Waiting 65s before next request...
+2026-03-06 02:13:01,920 [INFO] [45/77] PERSONAL HOME CARE OF NORTH CAROLINA LLC
+2026-03-06 02:13:01,924 [INFO] Researching: PERSONAL HOME CARE OF NORTH CAROLINA LLC (471)
+2026-03-06 02:13:02,083 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:13:02,084 [ERROR] API error for PERSONAL HOME CARE OF NORTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQr18yeFxZvfHnVQLgV'}
+2026-03-06 02:13:02,085 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQr18yeFxZvfHnVQLgV'}
+2026-03-06 02:13:02,089 [INFO]   Waiting 65s before next request...
+2026-03-06 02:14:07,094 [INFO] [46/77] PRECIOUS JEWELS MEDICAL & HEALTH SERVICES LLC
+2026-03-06 02:14:07,098 [INFO] Researching: PRECIOUS JEWELS MEDICAL & HEALTH SERVICES LLC (516)
+2026-03-06 02:14:07,256 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:14:07,257 [ERROR] API error for PRECIOUS JEWELS MEDICAL & HEALTH SERVICES LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQvopE27MaUb6xPLuuH'}
+2026-03-06 02:14:07,257 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmQvopE27MaUb6xPLuuH'}
+2026-03-06 02:14:07,261 [INFO]   Waiting 65s before next request...
+2026-03-06 02:15:12,265 [INFO] [47/77] PRESBYTERIAN COMMUNITIES OF SOUTH CAROLINA
+2026-03-06 02:15:12,269 [INFO] Researching: PRESBYTERIAN COMMUNITIES OF SOUTH CAROLINA (457)
+2026-03-06 02:15:12,462 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:15:12,463 [ERROR] API error for PRESBYTERIAN COMMUNITIES OF SOUTH CAROLINA: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmR1cbvrEykZy5y6Xu9J'}
+2026-03-06 02:15:12,464 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmR1cbvrEykZy5y6Xu9J'}
+2026-03-06 02:15:12,467 [INFO]   Waiting 65s before next request...
+2026-03-06 02:16:17,475 [INFO] [48/77] PRISMA HEALTH - MIDLANDS
+2026-03-06 02:16:17,479 [INFO] Researching: PRISMA HEALTH - MIDLANDS (508)
+2026-03-06 02:16:17,671 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:16:17,672 [ERROR] API error for PRISMA HEALTH - MIDLANDS: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmR6RQcuFa4cxVkRLWa3'}
+2026-03-06 02:16:17,673 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmR6RQcuFa4cxVkRLWa3'}
+2026-03-06 02:16:17,677 [INFO]   Waiting 65s before next request...
+2026-03-06 02:17:22,677 [INFO] [49/77] PRISMA HEALTH-MIDLANDS
+2026-03-06 02:17:22,680 [INFO] Researching: PRISMA HEALTH-MIDLANDS (422)
+2026-03-06 02:17:22,886 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:17:22,887 [ERROR] API error for PRISMA HEALTH-MIDLANDS: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRBEE4Q3kYHgrx8bsHE'}
+2026-03-06 02:17:22,887 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRBEE4Q3kYHgrx8bsHE'}
+2026-03-06 02:17:22,891 [INFO]   Waiting 65s before next request...
+2026-03-06 02:18:27,892 [INFO] [50/77] PRISMA HEALTH-UPSTATE
+2026-03-06 02:18:27,895 [INFO] Researching: PRISMA HEALTH-UPSTATE (466)
+2026-03-06 02:18:28,059 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:18:28,060 [ERROR] API error for PRISMA HEALTH-UPSTATE: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRG2r5qQeCnwjRcCJtn'}
+2026-03-06 02:18:28,060 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRG2r5qQeCnwjRcCJtn'}
+2026-03-06 02:18:28,064 [INFO]   Waiting 65s before next request...
+2026-03-06 02:19:33,074 [INFO] [51/77] PROVIDENCE HOME HEALTH LLC
+2026-03-06 02:19:33,080 [INFO] Researching: PROVIDENCE HOME HEALTH LLC (503)
+2026-03-06 02:19:33,233 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:19:33,234 [ERROR] API error for PROVIDENCE HOME HEALTH LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRLqXLhbRNLUrckUPLb'}
+2026-03-06 02:19:33,234 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRLqXLhbRNLUrckUPLb'}
+2026-03-06 02:19:33,238 [INFO]   Waiting 65s before next request...
+2026-03-06 02:20:38,244 [INFO] [52/77] PRUITTHEALTH HOME HEALTH INC
+2026-03-06 02:20:38,248 [INFO] Researching: PRUITTHEALTH HOME HEALTH INC (462)
+2026-03-06 02:20:38,449 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:20:38,450 [ERROR] API error for PRUITTHEALTH HOME HEALTH INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRReL2dpi5fxnc99C5N'}
+2026-03-06 02:20:38,450 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRReL2dpi5fxnc99C5N'}
+2026-03-06 02:20:38,454 [INFO]   Waiting 65s before next request...
+2026-03-06 02:21:43,460 [INFO] [53/77] PRUITTHEALTH HOME HEALTH INC
+2026-03-06 02:21:43,463 [INFO] Researching: PRUITTHEALTH HOME HEALTH INC (463)
+2026-03-06 02:21:43,651 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:21:43,652 [ERROR] API error for PRUITTHEALTH HOME HEALTH INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRWT6jhTYy6RsxMuogK'}
+2026-03-06 02:21:43,652 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRWT6jhTYy6RsxMuogK'}
+2026-03-06 02:21:43,656 [INFO]   Waiting 65s before next request...
+2026-03-06 02:22:48,666 [INFO] [54/77] PRUITTHEALTH HOME HEALTH INC
+2026-03-06 02:22:48,670 [INFO] Researching: PRUITTHEALTH HOME HEALTH INC (459)
+2026-03-06 02:22:48,832 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:22:48,833 [ERROR] API error for PRUITTHEALTH HOME HEALTH INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRbFnz52m9kCHfeRdH8'}
+2026-03-06 02:22:48,833 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRbFnz52m9kCHfeRdH8'}
+2026-03-06 02:22:48,837 [INFO]   Waiting 65s before next request...
+2026-03-06 02:23:53,847 [INFO] [55/77] ROLLING GREEN VILLAGE
+2026-03-06 02:23:53,850 [INFO] Researching: ROLLING GREEN VILLAGE (458)
+2026-03-06 02:23:54,065 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:23:54,066 [ERROR] API error for ROLLING GREEN VILLAGE: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRg4SkPwJ7PxfscuwXs'}
+2026-03-06 02:23:54,066 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRg4SkPwJ7PxfscuwXs'}
+2026-03-06 02:23:54,071 [INFO]   Waiting 65s before next request...
+2026-03-06 02:24:59,081 [INFO] [56/77] ROPER HOSPITAL INC
+2026-03-06 02:24:59,085 [INFO] Researching: ROPER HOSPITAL INC (441)
+2026-03-06 02:24:59,240 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:24:59,241 [ERROR] API error for ROPER HOSPITAL INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRksMeCSn5My1cUFAUC'}
+2026-03-06 02:24:59,242 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRksMeCSn5My1cUFAUC'}
+2026-03-06 02:24:59,246 [INFO]   Waiting 65s before next request...
+2026-03-06 02:26:04,249 [INFO] [57/77] ROPER ST FRANCIS ANCILLARY SERVICES
+2026-03-06 02:26:04,252 [INFO] Researching: ROPER ST FRANCIS ANCILLARY SERVICES (507)
+2026-03-06 02:26:04,449 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:26:04,451 [ERROR] API error for ROPER ST FRANCIS ANCILLARY SERVICES: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRqg8MJsE2ANxWJh2Fc'}
+2026-03-06 02:26:04,451 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRqg8MJsE2ANxWJh2Fc'}
+2026-03-06 02:26:04,454 [INFO]   Waiting 65s before next request...
+2026-03-06 02:27:09,465 [INFO] [58/77] ROPHEKA CARES LLC
+2026-03-06 02:27:09,468 [INFO] Researching: ROPHEKA CARES LLC (510)
+2026-03-06 02:27:09,660 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:27:09,661 [ERROR] API error for ROPHEKA CARES LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRvUpqmxJsv3BZMeaAF'}
+2026-03-06 02:27:09,661 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmRvUpqmxJsv3BZMeaAF'}
+2026-03-06 02:27:09,665 [INFO]   Waiting 65s before next request...
+2026-03-06 02:28:14,673 [INFO] [59/77] SCHHA LLC
+2026-03-06 02:28:14,677 [INFO] Researching: SCHHA LLC (467)
+2026-03-06 02:28:14,865 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:28:14,866 [ERROR] API error for SCHHA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmS1HijgGH4qVajmMJdj'}
+2026-03-06 02:28:14,867 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmS1HijgGH4qVajmMJdj'}
+2026-03-06 02:28:14,870 [INFO]   Waiting 65s before next request...
+2026-03-06 02:29:19,872 [INFO] [60/77] SCHHA LLC
+2026-03-06 02:29:19,874 [INFO] Researching: SCHHA LLC (469)
+2026-03-06 02:29:20,029 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:29:20,030 [ERROR] API error for SCHHA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmS66NFmV8BJK1rLbRK2'}
+2026-03-06 02:29:20,030 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmS66NFmV8BJK1rLbRK2'}
+2026-03-06 02:29:20,034 [INFO]   Waiting 65s before next request...
+2026-03-06 02:30:25,043 [INFO] [61/77] SEABROOK OF HILTON HEAD INC
+2026-03-06 02:30:25,046 [INFO] Researching: SEABROOK OF HILTON HEAD INC (432)
+2026-03-06 02:30:25,212 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:30:25,213 [ERROR] API error for SEABROOK OF HILTON HEAD INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSAu2GLUzgVsFC8A5di'}
+2026-03-06 02:30:25,213 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSAu2GLUzgVsFC8A5di'}
+2026-03-06 02:30:25,217 [INFO]   Waiting 65s before next request...
+2026-03-06 02:31:30,226 [INFO] [62/77] SOUTH CAROLINA BAPTIST MINISTRIES FOR THE AGING INC
+2026-03-06 02:31:30,231 [INFO] Researching: SOUTH CAROLINA BAPTIST MINISTRIES FOR THE AGING INC (416)
+2026-03-06 02:31:30,411 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:31:30,412 [ERROR] API error for SOUTH CAROLINA BAPTIST MINISTRIES FOR THE AGING INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSFhrCg6ZeXQ6NxUZQG'}
+2026-03-06 02:31:30,412 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSFhrCg6ZeXQ6NxUZQG'}
+2026-03-06 02:31:30,416 [INFO]   Waiting 65s before next request...
+2026-03-06 02:32:35,417 [INFO] [63/77] SOUTH CAROLINA EPISCOPAL HOME AT STILL HOPES INC
+2026-03-06 02:32:35,420 [INFO] Researching: SOUTH CAROLINA EPISCOPAL HOME AT STILL HOPES INC (443)
+2026-03-06 02:32:35,579 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:32:35,581 [ERROR] API error for SOUTH CAROLINA EPISCOPAL HOME AT STILL HOPES INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSLWTVGPKDkLJDXoEu9'}
+2026-03-06 02:32:35,581 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSLWTVGPKDkLJDXoEu9'}
+2026-03-06 02:32:35,585 [INFO]   Waiting 65s before next request...
+2026-03-06 02:33:40,592 [INFO] [64/77] SOUTH CAROLINA IN-HOME PARTNER-I LLC
+2026-03-06 02:33:40,596 [INFO] Researching: SOUTH CAROLINA IN-HOME PARTNER-I LLC (474)
+2026-03-06 02:33:40,833 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:33:40,835 [ERROR] API error for SOUTH CAROLINA IN-HOME PARTNER-I LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSRKHAdCeG89dZ7NVAH'}
+2026-03-06 02:33:40,835 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSRKHAdCeG89dZ7NVAH'}
+2026-03-06 02:33:40,838 [INFO]   Waiting 65s before next request...
+2026-03-06 02:34:45,848 [INFO] [65/77] SPARTANBURG REGIONAL HEALTH SERVICES DISTRICT INC
+2026-03-06 02:34:45,852 [INFO] Researching: SPARTANBURG REGIONAL HEALTH SERVICES DISTRICT INC (439)
+2026-03-06 02:34:46,008 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:34:46,009 [ERROR] API error for SPARTANBURG REGIONAL HEALTH SERVICES DISTRICT INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSW87MGjoG7o1Faz6YS'}
+2026-03-06 02:34:46,009 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSW87MGjoG7o1Faz6YS'}
+2026-03-06 02:34:46,013 [INFO]   Waiting 65s before next request...
+2026-03-06 02:35:51,023 [INFO] [66/77] SS&J ASSOCIATES LLC
+2026-03-06 02:35:51,027 [INFO] Researching: SS&J ASSOCIATES LLC (464)
+2026-03-06 02:35:51,566 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:35:51,568 [ERROR] API error for SS&J ASSOCIATES LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSavw2hUbx3sxpkzfVX'}
+2026-03-06 02:35:51,568 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSavw2hUbx3sxpkzfVX'}
+2026-03-06 02:35:51,572 [INFO]   Waiting 65s before next request...
+2026-03-06 02:36:56,580 [INFO] [67/77] SUMTER OPCO LLC
+2026-03-06 02:36:56,584 [INFO] Researching: SUMTER OPCO LLC (487)
+2026-03-06 02:36:56,745 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:36:56,746 [ERROR] API error for SUMTER OPCO LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSfm4MPzHktWChgJFxA'}
+2026-03-06 02:36:56,746 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSfm4MPzHktWChgJFxA'}
+2026-03-06 02:36:56,749 [INFO]   Waiting 65s before next request...
+2026-03-06 02:38:01,749 [INFO] [68/77] TOTAL CARE HOME HEALTH OF NORTH CAROLINA LLC
+2026-03-06 02:38:01,754 [INFO] Researching: TOTAL CARE HOME HEALTH OF NORTH CAROLINA LLC (425)
+2026-03-06 02:38:01,945 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:38:01,946 [ERROR] API error for TOTAL CARE HOME HEALTH OF NORTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSkZpojwJ3DhruJ5NL3'}
+2026-03-06 02:38:01,946 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSkZpojwJ3DhruJ5NL3'}
+2026-03-06 02:38:01,950 [INFO]   Waiting 65s before next request...
+2026-03-06 02:39:06,960 [INFO] [69/77] TOTAL CARE HOME HEALTH OF SOUTH CAROLINA LLC
+2026-03-06 02:39:06,964 [INFO] Researching: TOTAL CARE HOME HEALTH OF SOUTH CAROLINA LLC (453)
+2026-03-06 02:39:07,153 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:39:07,154 [ERROR] API error for TOTAL CARE HOME HEALTH OF SOUTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSqNdW7Xo5q2ecPApn3'}
+2026-03-06 02:39:07,154 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSqNdW7Xo5q2ecPApn3'}
+2026-03-06 02:39:07,158 [INFO]   Waiting 65s before next request...
+2026-03-06 02:40:12,168 [INFO] [70/77] TRI-COUNTY HOME HEALTH CARE & SERVICES INC
+2026-03-06 02:40:12,174 [INFO] Researching: TRI-COUNTY HOME HEALTH CARE & SERVICES INC (426)
+2026-03-06 02:40:12,396 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:40:12,398 [ERROR] API error for TRI-COUNTY HOME HEALTH CARE & SERVICES INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSvBa8SsjeiwmrPfXZL'}
+2026-03-06 02:40:12,398 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSvBa8SsjeiwmrPfXZL'}
+2026-03-06 02:40:12,402 [INFO]   Waiting 65s before next request...
+2026-03-06 02:41:17,411 [INFO] [71/77] TRUSTED ALLY HOME CARE- SOUTH CAROLINA LLC
+2026-03-06 02:41:17,415 [INFO] Researching: TRUSTED ALLY HOME CARE- SOUTH CAROLINA LLC (506)
+2026-03-06 02:41:17,595 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:41:17,596 [ERROR] API error for TRUSTED ALLY HOME CARE- SOUTH CAROLINA LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSzzFsq17XpF16Y3FyU'}
+2026-03-06 02:41:17,596 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmSzzFsq17XpF16Y3FyU'}
+2026-03-06 02:41:17,599 [INFO]   Waiting 65s before next request...
+2026-03-06 02:42:22,606 [INFO] [72/77] TSI SOUTH LLC
+2026-03-06 02:42:22,609 [INFO] Researching: TSI SOUTH LLC (517)
+2026-03-06 02:42:22,763 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:42:22,764 [ERROR] API error for TSI SOUTH LLC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmT5nx7oYuzgDdmBT7eG'}
+2026-03-06 02:42:22,765 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmT5nx7oYuzgDdmBT7eG'}
+2026-03-06 02:42:22,768 [INFO]   Waiting 65s before next request...
+2026-03-06 02:43:27,778 [INFO] [73/77] UNITED METHODIST MANOR OF THE PEE DEE
+2026-03-06 02:43:27,782 [INFO] Researching: UNITED METHODIST MANOR OF THE PEE DEE (455)
+2026-03-06 02:43:27,983 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:43:27,984 [ERROR] API error for UNITED METHODIST MANOR OF THE PEE DEE: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTAbjpaQCaaiBrsVLiH'}
+2026-03-06 02:43:27,984 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTAbjpaQCaaiBrsVLiH'}
+2026-03-06 02:43:27,988 [INFO]   Waiting 65s before next request...
+2026-03-06 02:44:32,998 [INFO] [74/77] WELL CARE HOME HEALTH OF THE LOWCOUNTRY INC
+2026-03-06 02:44:33,002 [INFO] Researching: WELL CARE HOME HEALTH OF THE LOWCOUNTRY INC (470)
+2026-03-06 02:44:33,158 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:44:33,159 [ERROR] API error for WELL CARE HOME HEALTH OF THE LOWCOUNTRY INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTFQRpFTNBdHDm3VfYE'}
+2026-03-06 02:44:33,160 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTFQRpFTNBdHDm3VfYE'}
+2026-03-06 02:44:33,163 [INFO]   Waiting 65s before next request...
+2026-03-06 02:45:38,173 [INFO] [75/77] WELL CARE HOME HEALTH OF THE UPSTATE INC
+2026-03-06 02:45:38,177 [INFO] Researching: WELL CARE HOME HEALTH OF THE UPSTATE INC (478)
+2026-03-06 02:45:38,395 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:45:38,396 [ERROR] API error for WELL CARE HOME HEALTH OF THE UPSTATE INC: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTLDHEot7Nw42EXAtRx'}
+2026-03-06 02:45:38,397 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTLDHEot7Nw42EXAtRx'}
+2026-03-06 02:45:38,401 [INFO]   Waiting 65s before next request...
+2026-03-06 02:46:43,408 [INFO] [76/77] WESLEY COMMONS
+2026-03-06 02:46:43,411 [INFO] Researching: WESLEY COMMONS (445)
+2026-03-06 02:46:43,803 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2026-03-06 02:46:43,804 [ERROR] API error for WESLEY COMMONS: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTR2tYoGWVnN8EZGBBi'}
+2026-03-06 02:46:43,805 [ERROR]   -> FAILED: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CYmTR2tYoGWVnN8EZGBBi'}
+2026-03-06 02:46:43,809 [INFO]   Waiting 65s before next request...
+2026-03-06 02:47:48,810 [INFO] [77/77] WESTMINSTER PRESBYTERIAN CENTER INC
+2026-03-06 02:47:48,813 [INFO] Researching: WESTMINSTER PRESBYTERIAN CENTER INC (444)
+2026-03-06 02:48:58,612 [INFO] HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-03-06 02:48:58,662 [INFO]   -> Score: 2/10 | Est. profit: $2,902,447 | Status: complete
+2026-03-06 02:48:58,662 [INFO] Enrichment complete.

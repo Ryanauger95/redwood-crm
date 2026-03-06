@@ -140,6 +140,7 @@ export function ViewsBar({
                 if (e.key === "Enter") commitRename(v.id);
                 if (e.key === "Escape") { setRenamingId(null); setRenameValue(""); }
               }}
+              autoComplete="nope"
               className="text-sm border border-blue-400 rounded px-1.5 py-0.5 w-36 focus:outline-none focus:ring-1 focus:ring-blue-400"
             />
             <button onClick={() => commitRename(v.id)} className="text-blue-600 p-0.5"><Check size={13} /></button>
@@ -148,14 +149,14 @@ export function ViewsBar({
         ) : (
           <button
             onClick={() => onSelectView(v)}
-            className={`px-3 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+            className={`px-3 py-2.5 text-[13px] border-b-2 transition-colors whitespace-nowrap ${
               isActive
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+                ? "border-blue-600 text-blue-600 font-semibold"
+                : "border-transparent text-gray-500 font-medium hover:text-gray-800 hover:border-gray-300"
             }`}
           >
             {v.name}
-            {isActive && isDirty && <span className="ml-1.5 text-xs text-orange-500">●</span>}
+            {isActive && isDirty && <span className="ml-1.5 text-xs text-orange-400">●</span>}
           </button>
         )}
 
@@ -201,7 +202,7 @@ export function ViewsBar({
   };
 
   return (
-    <div className="sticky top-14 z-10 bg-white border-b border-gray-200 shadow-sm">
+    <div className="sticky top-[54px] z-10 bg-white border-b border-gray-200 shadow-[0_1px_3px_0_rgb(0_0_0/0.04)]">
       {/* Tab row */}
       <div className="flex items-center px-6">
         {/* Tabs */}
@@ -294,11 +295,11 @@ export function ViewsBar({
 
       {/* Saving / Saved feedback */}
       {(saveStatus === "saving" || saveStatus === "saved") && (
-        <div className="flex items-center gap-2 px-6 py-2 bg-green-50 border-t border-green-100 text-xs">
+        <div className="flex items-center gap-2 px-6 py-2 bg-emerald-50 border-t border-emerald-100 text-xs">
           {saveStatus === "saving" ? (
-            <span className="text-green-700">Saving…</span>
+            <span className="text-emerald-700">Saving…</span>
           ) : (
-            <span className="text-green-700 flex items-center gap-1.5 font-medium">
+            <span className="text-emerald-700 flex items-center gap-1.5 font-medium">
               <Check size={13} /> Saved
             </span>
           )}
@@ -318,6 +319,7 @@ export function ViewsBar({
               if (e.key === "Escape") setShowSaveAsNew(false);
             }}
             placeholder="My custom view..."
+            autoComplete="nope"
             className="text-xs border border-blue-300 rounded px-2 py-1 w-52 focus:outline-none focus:ring-1 focus:ring-blue-400"
           />
           <button

@@ -10,7 +10,18 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DEAL_STAGES } from "@/lib/views";
+import {
+  PROPERTY_DEAL_STAGE_OPTIONS,
+  PROPERTY_ASSET_CLASS_OPTIONS,
+  PROPERTY_DEAL_TYPE_OPTIONS,
+  PROPERTY_RELATIONSHIP_STATUS_OPTIONS,
+  PROPERTY_MOTIVATION_LEVEL_OPTIONS,
+  PROPERTY_SALE_TIMELINE_OPTIONS,
+  PROPERTY_OWNERSHIP_TYPE_OPTIONS,
+  PROPERTY_LETTER_STATUS_OPTIONS,
+  PROPERTY_COMMUNICATION_STATUS_OPTIONS,
+  PROPERTY_LEASE_DATA_TYPE_OPTIONS,
+} from "@/lib/fieldOptions";
 import { useToast } from "@/components/shared/Toast";
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
@@ -68,7 +79,7 @@ interface Property {
 interface FieldDef {
   key: string; label: string; type?: string;
   isUrl?: boolean; isAddress?: boolean; isPhone?: boolean; multiline?: boolean;
-  isBoolean?: boolean;
+  isBoolean?: boolean; isSelect?: boolean; options?: string[];
 }
 
 // ─── Section & Field Definitions ──────────────────────────────────────────────
@@ -89,18 +100,20 @@ const SECTION_FIELDS: Record<string, FieldDef[]> = {
   basic_information: [
     { key: "address", label: "Address", isAddress: true },
     { key: "city", label: "City" },
-    { key: "state", label: "State" },
+    { key: "state", label: "State", isSelect: true, options: ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"] },
     { key: "zipcode", label: "ZIP Code" },
     { key: "county", label: "County" },
     { key: "territory", label: "Territory" },
     { key: "property_size_estimate", label: "Size Estimate" },
     { key: "industry_type", label: "Industry Type" },
     { key: "business_type", label: "Business Type" },
+    { key: "asset_class", label: "Asset Class", isSelect: true, options: [...PROPERTY_ASSET_CLASS_OPTIONS] },
+    { key: "deal_type", label: "Deal Type", isSelect: true, options: [...PROPERTY_DEAL_TYPE_OPTIONS] },
     { key: "num_employees", label: "Employees", type: "number" },
     { key: "annual_revenue", label: "Annual Revenue", type: "number" },
     { key: "website", label: "Website", isUrl: true },
     { key: "phone", label: "Phone", isPhone: true },
-    { key: "sales_owner", label: "Sales Owner" },
+    { key: "sales_owner", label: "Sales Owner", isSelect: true, options: [] }, // populated dynamically from crmUsers
     { key: "reonomy_id", label: "Reonomy ID" },
     { key: "tax_map_parcel_number", label: "Parcel Number" },
   ],
@@ -139,7 +152,7 @@ const SECTION_FIELDS: Record<string, FieldDef[]> = {
     { key: "length_of_lease", label: "Length of Lease" },
     { key: "lease_start_date", label: "Start Date", type: "date" },
     { key: "lease_expiration", label: "Expiration", type: "date" },
-    { key: "lease_data_type", label: "Data Type" },
+    { key: "lease_data_type", label: "Data Type", isSelect: true, options: [...PROPERTY_LEASE_DATA_TYPE_OPTIONS] },
     { key: "leasing_broker", label: "Leasing Broker" },
     { key: "lease_notes", label: "Lease Notes", multiline: true },
   ],
@@ -151,12 +164,12 @@ const SECTION_FIELDS: Record<string, FieldDef[]> = {
     { key: "links_to_original_data", label: "Original Data", isUrl: true },
   ],
   crm_status: [
-    { key: "relationship_status", label: "Relationship" },
-    { key: "communication_status", label: "Communication" },
-    { key: "motivation_level", label: "Motivation" },
-    { key: "sale_timeline", label: "Sale Timeline" },
+    { key: "relationship_status", label: "Relationship", isSelect: true, options: [...PROPERTY_RELATIONSHIP_STATUS_OPTIONS] },
+    { key: "communication_status", label: "Communication", isSelect: true, options: [...PROPERTY_COMMUNICATION_STATUS_OPTIONS] },
+    { key: "motivation_level", label: "Motivation", isSelect: true, options: [...PROPERTY_MOTIVATION_LEVEL_OPTIONS] },
+    { key: "sale_timeline", label: "Sale Timeline", isSelect: true, options: [...PROPERTY_SALE_TIMELINE_OPTIONS] },
     { key: "offer_made", label: "Offer Made" },
-    { key: "letter_status", label: "Letter Status" },
+    { key: "letter_status", label: "Letter Status", isSelect: true, options: [...PROPERTY_LETTER_STATUS_OPTIONS] },
     { key: "data_status", label: "Data Status" },
     { key: "last_contact_date", label: "Last Contact", type: "date" },
     { key: "next_contact_date", label: "Next Contact", type: "date" },
@@ -165,8 +178,8 @@ const SECTION_FIELDS: Record<string, FieldDef[]> = {
   owner_contact: [
     { key: "owner_name", label: "Owner Name" },
     { key: "owner_phone", label: "Owner Phone", isPhone: true },
-    { key: "ownership_type", label: "Ownership Type" },
-    { key: "owner_entity_type", label: "Entity Type" },
+    { key: "ownership_type", label: "Ownership Type", isSelect: true, options: [...PROPERTY_OWNERSHIP_TYPE_OPTIONS] },
+    { key: "owner_entity_type", label: "Entity Type", isSelect: true, options: [...PROPERTY_OWNERSHIP_TYPE_OPTIONS] },
     { key: "owner_mailing_address", label: "Mailing Address", isAddress: true },
     { key: "direct_mail_address", label: "Direct Mail", isAddress: true },
     { key: "mail_bounced_back", label: "Mail Bounced" },
@@ -187,6 +200,25 @@ const SECTION_SUBHEADINGS: Record<string, { afterKey: string; label: string }[]>
 
 const DEFAULT_SECTION_ORDER = SECTION_META.map((s) => s.key);
 
+// ─── GhostSelect ─────────────────────────────────────────────────────────────
+
+function GhostSelect({
+  value, options, onSave, placeholder = "—",
+}: {
+  value: string; options: string[]; onSave: (v: string) => void; placeholder?: string;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onSave(e.target.value)}
+      className="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-blue-400 focus:bg-white focus:outline-none rounded px-1.5 py-0.5 text-sm text-gray-900 transition-colors cursor-pointer appearance-none"
+    >
+      <option value="">{placeholder}</option>
+      {options.map((o) => <option key={o} value={o}>{o}</option>)}
+    </select>
+  );
+}
+
 // ─── GhostInput ───────────────────────────────────────────────────────────────
 
 function GhostInput({
@@ -202,7 +234,7 @@ function GhostInput({
     return (
       <textarea value={local} onChange={(e) => setLocal(e.target.value)}
         onBlur={() => { if (local !== value) onSave(local); }}
-        placeholder={placeholder} rows={3} className={`${base} resize-none`} />
+        placeholder={placeholder} rows={3} autoComplete="nope" className={`${base} resize-none`} />
     );
   }
   return (
@@ -212,17 +244,18 @@ function GhostInput({
         if (e.key === "Enter") (e.target as HTMLInputElement).blur();
         if (e.key === "Escape") setLocal(value);
       }}
-      placeholder={placeholder} className={base} />
+      placeholder={placeholder} autoComplete="nope" className={base} />
   );
 }
 
 // ─── Field Row ────────────────────────────────────────────────────────────────
 
-function Field({ def, value, allFields, onSave, onSaveBoolean }: {
+function Field({ def, value, allFields, onSave, onSaveBoolean, selectOptions }: {
   def: FieldDef; value: string;
   allFields: Record<string, string>;
   onSave: (field: string, v: string) => void;
   onSaveBoolean: (field: string, v: boolean | null) => void;
+  selectOptions?: Record<string, string[]>;
 }) {
   let labelHref: string | null = null;
   if (def.isUrl && value) labelHref = value;
@@ -260,6 +293,18 @@ function Field({ def, value, allFields, onSave, onSaveBoolean }: {
           />
           <span className="text-sm text-gray-600">{checked ? "Yes" : "No"}</span>
         </label>
+      </div>
+    );
+  }
+
+  if (def.isSelect) {
+    const opts = selectOptions?.[def.key] ?? def.options ?? [];
+    return (
+      <div className="flex items-center gap-2 py-0.5">
+        {labelEl}
+        <div className="flex-1 min-w-0">
+          <GhostSelect value={value} options={opts} onSave={(v) => onSave(def.key, v)} />
+        </div>
       </div>
     );
   }
@@ -334,11 +379,12 @@ function FieldPicker({ sectionKey, allFields, hiddenFields, onChange }: {
 // ─── Section Card ─────────────────────────────────────────────────────────────
 // Defined OUTSIDE PropertyDetailClient so React doesn't remount it on re-renders
 
-function SectionCard({ sectionKey, title, icon, hiddenFields, onUpdateHidden, allFields, onSaveField, onSaveBoolean }: {
+function SectionCard({ sectionKey, title, icon, hiddenFields, onUpdateHidden, allFields, onSaveField, onSaveBoolean, selectOptions }: {
   sectionKey: string; title: string; icon?: React.ReactNode;
   hiddenFields: string[]; onUpdateHidden: (sectionKey: string, hidden: string[]) => void;
   allFields: Record<string, string>; onSaveField: (field: string, v: string) => void;
   onSaveBoolean: (field: string, v: boolean | null) => void;
+  selectOptions?: Record<string, string[]>;
 }) {
   const defs = SECTION_FIELDS[sectionKey] ?? [];
   const subheadings = SECTION_SUBHEADINGS[sectionKey] ?? [];
@@ -364,7 +410,7 @@ function SectionCard({ sectionKey, title, icon, hiddenFields, onUpdateHidden, al
                 </div>
               )}
               <Field def={def} value={allFields[def.key] ?? ""} allFields={allFields}
-                onSave={onSaveField} onSaveBoolean={onSaveBoolean} />
+                onSave={onSaveField} onSaveBoolean={onSaveBoolean} selectOptions={selectOptions} />
             </div>
           );
         })}
@@ -475,6 +521,13 @@ export function PropertyDetailClient({ property }: { property: Property }) {
 
   const [hiddenFields, setHiddenFields] = useState<Record<string, string[]>>({});
   const [sectionOrder, setSectionOrder] = useState<string[]>(DEFAULT_SECTION_ORDER);
+  const [crmUsers, setCrmUsers] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("/api/users").then((r) => r.json()).then((users: { name: string }[]) => {
+      setCrmUsers(users.map((u) => u.name).filter(Boolean));
+    }).catch(() => {});
+  }, []);
 
   // Load preferences
   useEffect(() => {
@@ -669,7 +722,7 @@ export function PropertyDetailClient({ property }: { property: Property }) {
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Deal Stage</p>
             <select value={fields.deal_stage} onChange={(e) => saveField("deal_stage", e.target.value)}
               className="w-full border border-gray-200 hover:border-gray-300 focus:border-blue-400 focus:outline-none rounded-lg px-2 py-1.5 text-sm text-gray-900 bg-white transition-colors cursor-pointer">
-              {DEAL_STAGES.map((s) => <option key={s} value={s}>{s}</option>)}
+              {PROPERTY_DEAL_STAGE_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
           {(property.address || location) && (
@@ -686,6 +739,36 @@ export function PropertyDetailClient({ property }: { property: Property }) {
               </a>
             </div>
           )}
+
+          {/* Owner & Contact */}
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Owner &amp; Contact</p>
+            <div className="space-y-3">
+              <div>
+                <GhostInput
+                  value={fields.owner_name}
+                  placeholder="Owner name"
+                  onSave={(v) => saveField("owner_name", v)}
+                />
+                <p className="text-[10px] text-gray-400 px-1.5 mt-0.5">Owner Name</p>
+              </div>
+              <div>
+                <div className="flex items-center gap-1">
+                  <GhostInput
+                    value={fields.owner_phone}
+                    placeholder="Phone number"
+                    onSave={(v) => saveField("owner_phone", v)}
+                  />
+                  {fields.owner_phone && (
+                    <a href={`tel:${fields.owner_phone}`} className="text-blue-500 flex-shrink-0">
+                      <Phone size={12} />
+                    </a>
+                  )}
+                </div>
+                <p className="text-[10px] text-gray-400 px-1.5 mt-0.5">Owner Phone</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -763,6 +846,7 @@ export function PropertyDetailClient({ property }: { property: Property }) {
                     allFields={fields}
                     onSaveField={saveField}
                     onSaveBoolean={saveBoolean}
+                    selectOptions={{ sales_owner: crmUsers }}
                   />
                 );
               })}

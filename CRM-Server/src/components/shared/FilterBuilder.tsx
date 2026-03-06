@@ -185,6 +185,7 @@ export function FilterBuilder({ fields, conditions, onChange }: Props) {
                             value={cond.value}
                             onChange={(e) => updateCondition(idx, { value: e.target.value })}
                             placeholder="Value..."
+                            autoComplete="nope"
                             className="text-sm border border-gray-200 rounded px-2 py-1.5 text-gray-700 flex-1 min-w-0 focus:outline-none focus:ring-1 focus:ring-blue-400"
                           />
                         )}

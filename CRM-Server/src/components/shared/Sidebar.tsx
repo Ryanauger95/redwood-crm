@@ -13,65 +13,77 @@ import {
   HeartHandshake,
   Mail,
   MapPin,
+  Activity,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 const navItems = [
-  { href: "/dashboard",       label: "Dashboard",       icon: LayoutDashboard },
-  { href: "/accounts",        label: "Accounts",        icon: Building2 },
-  { href: "/properties",      label: "Properties",      icon: MapPin },
-  { href: "/contacts",        label: "Contacts",        icon: Users },
-  { href: "/pipeline",        label: "Pipeline",        icon: GitBranch },
-  { href: "/query",           label: "Query",           icon: Database },
-  { href: "/communications",  label: "Communications",  icon: Mail },
+  { href: "/dashboard",      label: "Dashboard",  icon: LayoutDashboard },
+  { href: "/accounts",       label: "Businesses", icon: Building2 },
+  { href: "/properties",     label: "Properties", icon: MapPin },
+  { href: "/contacts",       label: "Contacts",   icon: Users },
+  { href: "/pipeline",       label: "Pipeline",   icon: GitBranch },
+  { href: "/activities",     label: "Activities", icon: Activity },
+  { href: "/communications", label: "Outreach",   icon: Mail },
+  { href: "/query",          label: "Query",      icon: Database },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-60 bg-[#0F172A] flex flex-col z-30">
+    <aside className="fixed left-0 top-0 h-full w-14 bg-[#0d1526] flex flex-col z-30 border-r border-white/[0.06]">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-        <div className="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center flex-shrink-0">
-          <HeartHandshake size={20} className="text-white" />
-        </div>
-        <div>
-          <p className="text-white font-bold text-sm leading-tight">Homevale</p>
-          <p className="text-blue-400 text-xs">M&A CRM</p>
+      <div className="flex items-center justify-center py-[18px]">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-900/40">
+          <HeartHandshake size={16} className="text-white" strokeWidth={2.5} />
         </div>
       </div>
 
+      <div className="mx-3 h-px bg-white/[0.06] mb-2" />
+
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 flex flex-col items-center py-2 gap-0.5">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link
               key={href}
               href={href}
+              title={label}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "group relative flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-150",
                 isActive
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-400 hover:text-white hover:bg-white/10"
+                  ? "bg-white/[0.10] text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]"
               )}
             >
-              <Icon size={18} />
-              {label}
+              {isActive && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue-400 rounded-r-full -ml-px" />
+              )}
+              <Icon size={17} className={isActive ? "text-blue-400" : ""} strokeWidth={isActive ? 2.5 : 2} />
+
+              {/* Tooltip */}
+              <span className="pointer-events-none absolute left-full ml-3 px-2 py-1 rounded-md bg-gray-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 shadow-lg z-50">
+                {label}
+              </span>
             </Link>
           );
         })}
       </nav>
 
       {/* Bottom */}
-      <div className="px-3 py-4 border-t border-white/10">
+      <div className="mx-3 h-px bg-white/[0.06] mb-2" />
+      <div className="flex items-center justify-center py-3">
         <button
+          title="Sign Out"
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="group relative flex items-center justify-center w-10 h-10 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/[0.05] transition-all"
         >
-          <LogOut size={18} />
-          Sign Out
+          <LogOut size={16} strokeWidth={2} />
+          <span className="pointer-events-none absolute left-full ml-3 px-2 py-1 rounded-md bg-gray-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 shadow-lg z-50">
+            Sign Out
+          </span>
         </button>
       </div>
     </aside>

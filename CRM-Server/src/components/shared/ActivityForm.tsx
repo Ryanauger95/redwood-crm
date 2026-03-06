@@ -7,11 +7,11 @@ import { Select } from "@/components/ui/select";
 import { Phone, Mail, FileText, CheckSquare, MessageSquare } from "lucide-react";
 
 const ACTIVITY_TYPES = [
-  { value: "call", label: "📞 Call" },
-  { value: "email", label: "✉️ Email" },
-  { value: "note", label: "📝 Note" },
-  { value: "task", label: "✅ Task" },
-  { value: "sms", label: "💬 SMS" },
+  { value: "call", label: "Call" },
+  { value: "email", label: "Email" },
+  { value: "note", label: "Note" },
+  { value: "task", label: "Task" },
+  { value: "sms", label: "SMS" },
 ];
 
 const TYPE_QUICK = [
@@ -99,14 +99,14 @@ export function ActivityForm({ businessId, personId, defaultType = "note", onSuc
             key={value}
             type="button"
             onClick={() => setType(value)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
               type === value
-                ? value === "call" ? "bg-blue-100 text-blue-700 ring-1 ring-blue-400"
-                  : value === "email" ? "bg-purple-100 text-purple-700 ring-1 ring-purple-400"
-                  : value === "note" ? "bg-gray-200 text-gray-700 ring-1 ring-gray-400"
-                  : value === "task" ? "bg-green-100 text-green-700 ring-1 ring-green-400"
-                  : "bg-yellow-100 text-yellow-700 ring-1 ring-yellow-400"
-                : "bg-gray-50 text-gray-500 hover:bg-gray-100"
+                ? value === "call" ? "bg-blue-50 text-blue-700 ring-1 ring-blue-300"
+                  : value === "email" ? "bg-violet-50 text-violet-700 ring-1 ring-violet-300"
+                  : value === "note" ? "bg-amber-50 text-amber-700 ring-1 ring-amber-300"
+                  : value === "task" ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-300"
+                  : "bg-pink-50 text-pink-700 ring-1 ring-pink-300"
+                : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
             }`}
           >
             <Icon size={12} />
@@ -154,7 +154,8 @@ export function ActivityForm({ businessId, personId, defaultType = "note", onSuc
           : "Details..."
         }
         rows={3}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-colors"
+        autoComplete="nope"
+        className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[13px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400 shadow-sm resize-none transition-colors"
       />
 
       {type === "task" && (
@@ -166,8 +167,8 @@ export function ActivityForm({ businessId, personId, defaultType = "note", onSuc
         />
       )}
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      {success && <p className="text-sm text-green-600 font-medium">✓ Activity logged</p>}
+      {error && <p className="text-[13px] text-red-600">{error}</p>}
+      {success && <p className="text-[13px] text-emerald-600 font-medium">Activity logged</p>}
 
       <div className="flex justify-end">
         <Button type="submit" loading={loading} size="sm">

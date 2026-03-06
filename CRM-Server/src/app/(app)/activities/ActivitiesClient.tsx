@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Phone, Mail, FileText, CheckSquare, MessageSquare, Activity as ActivityIcon, X } from "lucide-react";
+import { Phone, Mail, FileText, CheckSquare, MessageSquare, Activity as ActivityIcon, X, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -32,11 +32,11 @@ const typeIcons: Record<string, React.ReactNode> = {
 };
 
 const typeColors: Record<string, string> = {
-  call: "bg-blue-100 text-blue-600",
-  email: "bg-purple-100 text-purple-600",
-  note: "bg-gray-100 text-gray-600",
-  task: "bg-green-100 text-green-600",
-  sms: "bg-yellow-100 text-yellow-600",
+  call:  "bg-blue-50 text-blue-600",
+  email: "bg-violet-50 text-violet-600",
+  note:  "bg-amber-50 text-amber-600",
+  task:  "bg-emerald-50 text-emerald-600",
+  sms:   "bg-pink-50 text-pink-600",
 };
 
 const TYPE_FILTER_OPTIONS = [
@@ -116,8 +116,8 @@ export default function ActivitiesClient() {
   return (
     <div className="p-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Activities</h1>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">Activities</h1>
+        <p className="text-[13px] text-gray-400 mt-0.5">
           {loading ? "Loading..." : `${total.toLocaleString()} ${hasFilters ? "matching" : "total"} activities`}
         </p>
       </div>
@@ -179,45 +179,48 @@ export default function ActivitiesClient() {
               const isOverdue = isOpen && act.due_date && new Date(act.due_date) < new Date();
 
               return (
-                <div key={act.id} className={`flex items-start gap-4 px-6 py-4 ${isOverdue ? "bg-red-50/30" : ""}`}>
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5 ${typeColors[act.type] || "bg-gray-100 text-gray-600"}`}>
+                <div key={act.id} className={`flex items-start gap-4 px-6 py-3.5 hover:bg-gray-50/60 transition-colors ${isOverdue ? "bg-red-50/20" : ""}`}>
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-0.5 ${typeColors[act.type] || "bg-gray-50 text-gray-500"}`}>
                     {typeIcons[act.type] || <ActivityIcon size={14} />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{act.subject}</p>
+                        <p className="text-[13px] font-semibold text-gray-900 truncate">{act.subject}</p>
                         {isTask && (
-                          <span className={`shrink-0 text-xs font-medium px-1.5 py-0.5 rounded-full ${
-                            act.status === "completed" ? "bg-green-100 text-green-700"
-                            : isOverdue ? "bg-red-100 text-red-700"
-                            : "bg-orange-100 text-orange-700"
+                          <span className={`shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+                            act.status === "completed" ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                            : isOverdue ? "bg-red-50 text-red-700 ring-1 ring-red-200"
+                            : "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
                           }`}>
                             {act.status === "completed" ? "Done" : isOverdue ? "Overdue" : "Open"}
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(act.created_at)}</span>
+                      <span className="text-[11px] text-gray-400 flex-shrink-0 mt-0.5">{formatDate(act.created_at)}</span>
                     </div>
                     {act.body && (
-                      <p className="text-sm text-gray-600 mt-1 line-clamp-2">{act.body}</p>
+                      <p className="text-[13px] text-gray-500 mt-0.5 line-clamp-2 leading-relaxed">{act.body}</p>
                     )}
-                    <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                    <div className="flex items-center gap-2.5 mt-1 flex-wrap">
                       {act.business && (
-                        <Link href={`/accounts/${act.business.business_id}`} className="text-xs text-blue-600 hover:underline">
+                        <Link href={`/accounts/${act.business.business_id}`} className="text-[12px] text-blue-600 hover:underline font-medium">
                           {act.business.le_name || act.business.lf_name}
                         </Link>
                       )}
                       {act.person && (
-                        <Link href={`/contacts/${act.person.person_id}`} className="text-xs text-blue-600 hover:underline">
-                          {act.person.full_name}
-                        </Link>
+                        <>
+                          {act.business && <span className="text-gray-300 text-[11px]">·</span>}
+                          <Link href={`/contacts/${act.person.person_id}`} className="text-[12px] text-blue-600 hover:underline">
+                            {act.person.full_name}
+                          </Link>
+                        </>
                       )}
                       {act.user && (
-                        <span className="text-xs text-gray-400">by {act.user.name}</span>
+                        <span className="text-[11px] text-gray-400">by {act.user.name}</span>
                       )}
                       {isTask && act.due_date && (
-                        <span className={`text-xs ${isOverdue ? "text-red-500 font-medium" : "text-gray-400"}`}>
+                        <span className={`text-[11px] ${isOverdue ? "text-red-500 font-semibold" : "text-gray-400"}`}>
                           Due {formatDate(act.due_date)}
                         </span>
                       )}
@@ -225,9 +228,9 @@ export default function ActivitiesClient() {
                         <button
                           onClick={() => handleComplete(act.id)}
                           disabled={completing === act.id}
-                          className="text-xs text-green-600 hover:text-green-700 font-medium disabled:opacity-50 ml-auto"
+                          className="text-[12px] text-emerald-600 hover:text-emerald-700 font-semibold disabled:opacity-50 ml-auto"
                         >
-                          {completing === act.id ? "Saving..." : "✓ Mark complete"}
+                          {completing === act.id ? "Saving…" : <><Check size={11} className="inline mr-0.5" />Mark complete</>}
                         </button>
                       )}
                     </div>
@@ -239,8 +242,8 @@ export default function ActivitiesClient() {
         )}
 
         {pages > 1 && (
-          <div className="flex items-center justify-between px-6 py-3 border-t border-gray-100 bg-gray-50/50">
-            <p className="text-sm text-gray-500">Page {page} of {pages} · {total.toLocaleString()} results</p>
+          <div className="flex items-center justify-between px-6 py-3 border-t border-gray-100 bg-[#f8fafc]">
+            <p className="text-[13px] text-gray-400">Page {page} of {pages} · {total.toLocaleString()} results</p>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={() => updateParam("page", String(page - 1))} disabled={page <= 1}>
                 ← Previous

@@ -1,4 +1,15 @@
 import { Prisma } from "@prisma/client";
+import {
+  LICENSE_TYPE_OPTIONS,
+  PIPELINE_STAGE_OPTIONS,
+  ENRICHMENT_STATUS_OPTIONS,
+  PRIMARY_PAYOR_MIX_OPTIONS,
+  PROPERTY_DEAL_STAGE_OPTIONS,
+  PROPERTY_ASSET_CLASS_OPTIONS,
+  PROPERTY_DEAL_TYPE_OPTIONS,
+  PROPERTY_RELATIONSHIP_STATUS_OPTIONS,
+  toSelectOptions,
+} from "./fieldOptions";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -56,31 +67,8 @@ export const BUSINESS_FILTER_FIELDS: FilterField[] = [
   { key: "name", label: "Name", type: "text", operators: TEXT_OPS },
   { key: "city", label: "City", type: "text", operators: TEXT_OPS },
   { key: "county", label: "County", type: "text", operators: TEXT_OPS },
-  {
-    key: "license_type",
-    label: "License Type",
-    type: "select",
-    operators: SELECT_OPS,
-    options: [
-      { value: "HHA", label: "HHA" },
-      { value: "IHCP", label: "IHCP" },
-    ],
-  },
-  {
-    key: "stage",
-    label: "Stage",
-    type: "select",
-    operators: SELECT_OPS,
-    options: [
-      "Prospect",
-      "Research",
-      "Outreach",
-      "Conversation",
-      "LOI Sent",
-      "Under Contract",
-      "Closed",
-    ].map((s) => ({ value: s, label: s })),
-  },
+  { key: "license_type", label: "License Type", type: "select", operators: SELECT_OPS, options: toSelectOptions(LICENSE_TYPE_OPTIONS) },
+  { key: "stage", label: "Stage", type: "select", operators: SELECT_OPS, options: toSelectOptions(PIPELINE_STAGE_OPTIONS) },
   {
     key: "enrichment_status",
     label: "Enrichment",
@@ -90,6 +78,7 @@ export const BUSINESS_FILTER_FIELDS: FilterField[] = [
       { value: "completed", label: "Enriched" },
       { value: "pending", label: "Pending" },
       { value: "failed", label: "Failed" },
+      { value: "rate_limit_exhausted", label: "Rate Limited" },
     ],
   },
   {
@@ -124,64 +113,18 @@ export const BUSINESS_FILTER_FIELDS: FilterField[] = [
   },
 ];
 
-export const DEAL_STAGES = [
-  "Not Contacted",
-  "Attempting to Contact",
-  "Needs Contact Enrichment",
-  "Marketed Listing - Not Contacted",
-  "Pursuing Owner Via Another Property",
-  "Information Gathering",
-  "Following Up - No Relationship",
-  "Following Up - Warm Relationship",
-  "Needs Underwriting",
-  "Underwriting",
-  "Needs Offer - No Info / Cold Offer",
-  "Needs Offer",
-  "Negotiating",
-  "Negotiating - Long Process / Strong Relationship",
-  "Need to Visit - Post Offer",
-  "Under Contract",
-  "Broker Disclosed - Check Notes",
-  "Acquired",
-  "Not Interested",
-  "Not Interested - Unlikely Seller",
-  "Not Interested - Private Equity / Large Corporation",
-  "Not Interested - Too Small",
-  "Not Interested - Sold Elsewhere",
-  "Not Interested - Too Class-C",
-  "Not Interested - Sophisticated",
-  "Not Interested - Priced too High",
-  "Not Interested - Boat / RV Rural",
-  "Not Interested - Too Rural",
-  "Not Interested - Office",
-  "Not Interested - Too Nice",
-  "Not Interested - Retail",
-  "Not Interested - \"Do Not Call\" List",
-  "Not Interested - Too Complex",
-  "Not Interested - Redevelopment",
-  "Not Interested - Industrial - Not functional",
-  "Not Interested - 2020 Build",
-  "Not Interested - 2021 Build",
-  "Not Interested - Sports Facility",
-  "Not Interested - Bad Area",
-  "Not Interested - Too Urban",
-  "Not really interested - maybe later",
-] as const;
+// Re-export from fieldOptions so legacy imports still work
+export { PROPERTY_DEAL_STAGE_OPTIONS as DEAL_STAGES } from "./fieldOptions";
 
 export const PROPERTY_FILTER_FIELDS: FilterField[] = [
   { key: "name", label: "Name", type: "text", operators: TEXT_OPS },
   { key: "city", label: "City", type: "text", operators: TEXT_OPS },
   { key: "state", label: "State", type: "text", operators: ["equals"] },
   { key: "county", label: "County", type: "text", operators: TEXT_OPS },
-  { key: "asset_class", label: "Asset Class", type: "text", operators: TEXT_OPS },
-  {
-    key: "deal_stage",
-    label: "Deal Stage",
-    type: "select",
-    operators: SELECT_OPS,
-    options: DEAL_STAGES.map((s) => ({ value: s, label: s })),
-  },
-  { key: "relationship_status", label: "Relationship Status", type: "text", operators: TEXT_OPS },
+  { key: "asset_class", label: "Asset Class", type: "select", operators: SELECT_OPS, options: toSelectOptions(PROPERTY_ASSET_CLASS_OPTIONS) },
+  { key: "deal_stage", label: "Deal Stage", type: "select", operators: SELECT_OPS, options: toSelectOptions(PROPERTY_DEAL_STAGE_OPTIONS) },
+  { key: "deal_type", label: "Deal Type", type: "select", operators: SELECT_OPS, options: toSelectOptions(PROPERTY_DEAL_TYPE_OPTIONS) },
+  { key: "relationship_status", label: "Relationship Status", type: "select", operators: SELECT_OPS, options: toSelectOptions(PROPERTY_RELATIONSHIP_STATUS_OPTIONS) },
   { key: "asking_price", label: "Asking Price", type: "number", operators: ["gte", "lte"] },
   { key: "sales_owner", label: "Sales Owner", type: "text", operators: TEXT_OPS },
 ];
@@ -449,12 +392,25 @@ export function buildPropertyWhere(
     if (field === "city") { applyTextFilter(where, "city", operator, value); continue; }
     if (field === "state") { applyTextFilter(where, "state", operator, value); continue; }
     if (field === "county") { applyTextFilter(where, "county", operator, value); continue; }
-    if (field === "asset_class") { applyTextFilter(where, "asset_class", operator, value); continue; }
-    if (field === "relationship_status") { applyTextFilter(where, "relationship_status", operator, value); continue; }
+    if (field === "asset_class") {
+      where.asset_class = operator === "is_not" ? { not: value } : value;
+      continue;
+    }
+
+    if (field === "deal_type") {
+      where.deal_type = operator === "is_not" ? { not: value } : value;
+      continue;
+    }
+
+    if (field === "relationship_status") {
+      where.relationship_status = operator === "is_not" ? { not: value } : value;
+      continue;
+    }
+
     if (field === "sales_owner") { applyTextFilter(where, "sales_owner", operator, value); continue; }
 
     if (field === "deal_stage") {
-      where.deal_stage = operator === "is" ? value : { not: value };
+      where.deal_stage = operator === "is_not" ? { not: value } : value;
       continue;
     }
 

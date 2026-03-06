@@ -218,8 +218,8 @@ export default function ContactsClient() {
 
       <div className="p-8 space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Contacts</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">Contacts</h1>
+          <p className="text-[13px] text-gray-400 mt-0.5">
             {loading ? "Loading..." : `${total.toLocaleString()} business owners`}
           </p>
         </div>
@@ -250,28 +250,28 @@ export default function ContactsClient() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Name</th>
+                <tr className="border-b border-gray-100 bg-[#f8fafc]">
+                  <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Name</th>
                   {columns.includes("location") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Location</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Location</th>
                   )}
                   {columns.includes("businesses") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Businesses</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Businesses</th>
                   )}
                   {columns.includes("top_fit_score") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Top Fit Score</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Fit Score</th>
                   )}
                   {columns.includes("activities") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Activities</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Activities</th>
                   )}
                   {columns.includes("estimated_age") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Age</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Age</th>
                   )}
                   {columns.includes("succession_signals") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Succession Signals</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Succession Signals</th>
                   )}
                   {columns.includes("linkedin_url") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">LinkedIn</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">LinkedIn</th>
                   )}
                 </tr>
               </thead>
@@ -280,7 +280,7 @@ export default function ContactsClient() {
                   Array.from({ length: 6 }).map((_, i) => (
                     <tr key={i}>
                       {Array.from({ length: columns.length + 1 }).map((_, j) => (
-                        <td key={j} className="px-4 py-3">
+                        <td key={j} className="px-4 py-2.5">
                           <div className="h-4 bg-gray-100 rounded animate-pulse" style={{ width: `${40 + ((i * 11 + j * 9) % 55)}%` }} />
                         </td>
                       ))}
@@ -300,21 +300,24 @@ export default function ContactsClient() {
                       0
                     );
                     const name = p.full_name || `${p.first_name || ""} ${p.last_name || ""}`.trim() || "Unknown";
+                    const initials = name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+                    const avatarColors = ["from-blue-400 to-indigo-500", "from-violet-400 to-purple-500", "from-emerald-400 to-teal-500", "from-amber-400 to-orange-500", "from-rose-400 to-pink-500"];
+                    const colorIdx = name.charCodeAt(0) % avatarColors.length;
                     return (
-                      <tr key={p.person_id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-3">
+                      <tr key={p.person_id} className="hover:bg-[#f8fafc] transition-colors group">
+                        <td className="px-4 py-2.5">
                           <Link
                             href={`/contacts/${p.person_id}`}
-                            className="flex items-center gap-2 font-medium text-gray-900 hover:text-blue-600 transition-colors text-sm"
+                            className="flex items-center gap-2.5 group/link"
                           >
-                            <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                              <User size={13} className="text-gray-500" />
+                            <div className={`w-7 h-7 rounded-full bg-gradient-to-br ${avatarColors[colorIdx]} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                              <span className="text-[10px] font-bold text-white">{initials}</span>
                             </div>
-                            {name}
+                            <span className="text-[13px] font-semibold text-gray-900 group-hover/link:text-blue-600 transition-colors">{name}</span>
                           </Link>
                         </td>
                         {columns.includes("location") && (
-                          <td className="px-4 py-3 text-sm text-gray-600">
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">
                             {editingCell?.id === p.person_id && editingCell.field === "city" ? (
                               <input
                                 autoFocus
@@ -338,7 +341,7 @@ export default function ContactsClient() {
                           </td>
                         )}
                         {columns.includes("businesses") && (
-                          <td className="px-4 py-3 text-sm text-gray-600">
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">
                             <span className="font-medium text-gray-900">{p._count.businessPeople}</span>
                             {p.businessPeople.length > 0 && (
                               <p className="text-xs text-gray-400 truncate max-w-40">
@@ -348,27 +351,27 @@ export default function ContactsClient() {
                           </td>
                         )}
                         {columns.includes("top_fit_score") && (
-                          <td className="px-4 py-3">
+                          <td className="px-4 py-2.5">
                             <FitScoreBadge score={topScore || null} size="sm" />
                           </td>
                         )}
                         {columns.includes("activities") && (
-                          <td className="px-4 py-3 text-sm text-gray-600">{p._count.activities}</td>
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p._count.activities}</td>
                         )}
                         {columns.includes("estimated_age") && (
-                          <td className="px-4 py-3 text-sm text-gray-600">
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">
                             {p.estimated_age ?? <span className="text-gray-300">—</span>}
                           </td>
                         )}
                         {columns.includes("succession_signals") && (
-                          <td className="px-4 py-3 text-sm text-gray-600 max-w-xs">
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600 max-w-xs">
                             {p.succession_signals
                               ? <span className="truncate block text-xs">{p.succession_signals}</span>
                               : <span className="text-gray-300">—</span>}
                           </td>
                         )}
                         {columns.includes("linkedin_url") && (
-                          <td className="px-4 py-3 text-sm">
+                          <td className="px-4 py-2.5 text-[13px]">
                             {p.linkedin_url
                               ? <a href={p.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-xs">LinkedIn</a>
                               : <span className="text-gray-300">—</span>}
@@ -383,8 +386,8 @@ export default function ContactsClient() {
           </div>
 
           {pages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-              <p className="text-sm text-gray-500">Page {page} of {pages}</p>
+            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-[#f8fafc]">
+              <p className="text-[13px] text-gray-400">Page {page} of {pages}</p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setPage(page - 1)} disabled={page <= 1}>Previous</Button>
                 <Button variant="outline" size="sm" onClick={() => setPage(page + 1)} disabled={page >= pages}>Next</Button>

@@ -117,8 +117,8 @@ export default function PipelinePage() {
     <div className="p-8 space-y-6 min-h-screen">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pipeline</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">Pipeline</h1>
+          <p className="text-[13px] text-gray-400 mt-0.5">
             {totalInPipeline} businesses tracked — drag cards to move stages
           </p>
         </div>
@@ -154,8 +154,8 @@ export default function PipelinePage() {
             >
               {/* Column Header */}
               <div className={`px-3 py-2 rounded-lg mb-3 flex items-center justify-between ${colorClass}`}>
-                <span className="text-xs font-bold uppercase tracking-wide">{stage}</span>
-                <span className="text-xs font-bold bg-white/30 px-1.5 py-0.5 rounded-full">
+                <span className="text-[11px] font-bold uppercase tracking-wider">{stage}</span>
+                <span className="text-[11px] font-bold bg-white/40 px-2 py-0.5 rounded-full tabular-nums">
                   {search && cards.length !== totalCards ? `${cards.length}/${totalCards}` : cards.length}
                 </span>
               </div>
@@ -171,35 +171,35 @@ export default function PipelinePage() {
                     key={card.business_id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, card.business_id, stage)}
-                    className="bg-white rounded-lg border border-gray-200 p-3 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
+                    className="bg-white rounded-lg border border-gray-200/80 p-3 shadow-[0_1px_3px_0_rgb(0_0_0/0.05)] cursor-grab active:cursor-grabbing hover:shadow-[0_4px_12px_0_rgb(0_0_0/0.08)] hover:border-gray-300 transition-all"
                   >
                     <Link href={`/accounts/${card.business_id}`} onClick={(e) => e.stopPropagation()}>
-                      <p className="text-xs font-semibold text-gray-900 leading-tight hover:text-blue-600 transition-colors line-clamp-2">
+                      <p className="text-[12px] font-semibold text-gray-900 leading-tight hover:text-blue-600 transition-colors line-clamp-2">
                         {card.le_name || card.lf_name || "Unknown"}
                       </p>
                     </Link>
                     {card.city && (
-                      <p className="text-xs text-gray-400 mt-0.5">{card.city}</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5">{card.city}</p>
                     )}
                     <div className="flex items-center justify-between mt-2">
                       <FitScoreBadge score={card.acquisition_fit_score} size="sm" />
                       {card.cms_star_rating && (
-                        <span className="text-xs text-gray-500 flex items-center gap-0.5">
-                          <Star size={10} className="text-yellow-500" />
+                        <span className="text-[11px] text-amber-600 flex items-center gap-0.5">
+                          <Star size={9} className="fill-amber-400 text-amber-400" />
                           {card.cms_star_rating}
                         </span>
                       )}
                     </div>
                     {card.estimated_annual_profit && (
-                      <p className="text-xs font-semibold text-green-700 mt-1.5">
+                      <p className="text-[11px] font-semibold text-emerald-700 mt-1.5">
                         {formatCurrency(Number(card.estimated_annual_profit))}
                       </p>
                     )}
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 mt-2 pt-2 border-t border-gray-50">
                       {card.phone && (
                         <a
                           href={`tel:${card.phone}`}
-                          className="text-gray-400 hover:text-blue-600 transition-colors"
+                          className="text-gray-300 hover:text-blue-500 transition-colors"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Phone size={12} />
@@ -208,7 +208,7 @@ export default function PipelinePage() {
                       {card.email && (
                         <a
                           href={`mailto:${card.email}`}
-                          className="text-gray-400 hover:text-blue-600 transition-colors"
+                          className="text-gray-300 hover:text-blue-500 transition-colors"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Mail size={12} />

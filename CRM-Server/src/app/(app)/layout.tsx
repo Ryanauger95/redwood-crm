@@ -10,24 +10,24 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1 ml-60 flex flex-col min-h-screen">
+      <div className="flex-1 ml-14 flex flex-col min-h-screen">
         {/* Top Header Bar */}
-        <header className="h-14 bg-white border-b border-gray-200 flex items-center px-6 gap-4 sticky top-0 z-20 flex-shrink-0">
-          <div className="flex-1 max-w-md">
+        <header className="h-[54px] bg-white/80 backdrop-blur-sm border-b border-gray-200/80 flex items-center px-6 gap-4 sticky top-0 z-20 flex-shrink-0">
+          <div className="flex-1 max-w-xs">
             <GlobalSearch />
           </div>
-          <div className="ml-auto flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
+          <div className="ml-auto flex items-center gap-2">
+            <div className="flex items-center gap-2.5 pl-3 border-l border-gray-200">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-[11px] font-bold shadow-sm">
                 {initials}
               </div>
-              <span className="text-sm font-medium text-gray-700 hidden sm:block">{userName}</span>
+              <span className="text-[13px] font-medium text-gray-600 hidden sm:block">{userName}</span>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 bg-gray-50">
+        <main className="flex-1 bg-[#f8fafc]">
           {children}
         </main>
       </div>

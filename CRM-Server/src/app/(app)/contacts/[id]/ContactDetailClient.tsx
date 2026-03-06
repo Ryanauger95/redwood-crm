@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, User, MapPin, Linkedin, ExternalLink, Check } from "lucide-react";
+import { US_STATES } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FitScoreBadge } from "@/components/shared/FitScoreBadge";
 import { StageBadge } from "@/components/shared/StageBadge";
@@ -85,6 +86,7 @@ function GhostInput({
         onBlur={() => { if (local !== value) onSave(local); }}
         placeholder={placeholder}
         rows={rows}
+        autoComplete="nope"
         className={`${baseClass} resize-none`}
       />
     );
@@ -99,6 +101,7 @@ function GhostInput({
         if (e.key === "Escape") setLocal(value);
       }}
       placeholder={placeholder}
+      autoComplete="nope"
       className={baseClass}
     />
   );
@@ -118,6 +121,7 @@ export function ContactDetailClient({ person: initialPerson }: { person: Person 
   const [fields, setFields] = useState({
     linkedin_url: initialPerson.linkedin_url || "",
     city: initialPerson.city || "",
+    state_code: initialPerson.state_code || "",
     email: initialPerson.email || "",
     owner_background: initialPerson.owner_background || "",
     succession_signals: initialPerson.succession_signals || "",
@@ -179,24 +183,32 @@ export function ContactDetailClient({ person: initialPerson }: { person: Person 
 
         {/* Header */}
         <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0 text-white font-bold text-lg">
-            {name.charAt(0).toUpperCase()}
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 text-white font-bold text-[18px] shadow-md shadow-blue-200">
+            {name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)}
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">{name}</h1>
+            <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">{name}</h1>
             <div className="flex items-center gap-3 mt-1 flex-wrap">
-              {/* City — inline editable */}
+              {/* City + State — inline editable */}
               <div className="flex items-center gap-1">
                 <MapPin size={13} className="text-gray-400 flex-shrink-0" />
                 <GhostInput
                   value={fields.city}
                   placeholder="City"
                   onSave={(v) => saveField("city", v)}
-                  className="w-32"
+                  className="w-28"
                 />
-                {fields.city && person.state_code && (
-                  <span className="text-sm text-gray-500">, {person.state_code}</span>
-                )}
+                <span className="text-sm text-gray-400">,</span>
+                <select
+                  value={fields.state_code}
+                  onChange={(e) => saveField("state_code", e.target.value)}
+                  className="bg-transparent border border-transparent hover:border-gray-200 focus:border-blue-400 focus:bg-white focus:outline-none rounded px-1 py-0.5 text-sm text-gray-600 transition-colors cursor-pointer w-20"
+                >
+                  <option value="">State</option>
+                  {US_STATES.map((s) => (
+                    <option key={s.value} value={s.value}>{s.value}</option>
+                  ))}
+                </select>
               </div>
               {person.estimated_age && (
                 <span className="text-sm text-gray-500">Age ~{person.estimated_age}</span>
@@ -296,17 +308,17 @@ export function ContactDetailClient({ person: initialPerson }: { person: Person 
                   <Link
                     key={bp.id}
                     href={`/accounts/${bp.business.business_id}`}
-                    className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-between px-4 py-3 hover:bg-[#f8fafc] transition-colors group"
                   >
                     <div>
-                      <p className="text-sm font-medium text-gray-900 flex items-center gap-1">
+                      <p className="text-[13px] font-semibold text-gray-900 group-hover:text-blue-600 transition-colors flex items-center gap-1">
                         {bp.business.le_name || bp.business.lf_name}
-                        <ExternalLink size={11} className="opacity-40" />
+                        <ExternalLink size={10} className="opacity-40" />
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        {bp.role_text && <span className="text-xs text-gray-500">{bp.role_text}</span>}
-                        {bp.ownership_pct && <span className="text-xs text-gray-500">{bp.ownership_pct}% ownership</span>}
-                        {bp.business.city && <span className="text-xs text-gray-400">{bp.business.city}</span>}
+                        {bp.role_text && <span className="text-[11px] text-gray-500">{bp.role_text}</span>}
+                        {bp.ownership_pct && <span className="text-[11px] text-gray-500">{bp.ownership_pct}% ownership</span>}
+                        {bp.business.city && <span className="text-[11px] text-gray-400">{bp.business.city}</span>}
                       </div>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">

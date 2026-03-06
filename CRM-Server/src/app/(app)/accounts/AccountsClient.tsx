@@ -45,10 +45,22 @@ interface Business {
 
 function EnrichmentBadge({ status }: { status: string }) {
   if (status === "completed")
-    return <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700">Enriched</span>;
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />Enriched
+      </span>
+    );
   if (status === "failed")
-    return <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700">Failed</span>;
-  return <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">Pending</span>;
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-600 ring-1 ring-red-200">
+        <span className="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />Failed
+      </span>
+    );
+  return (
+    <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-gray-50 text-gray-500 ring-1 ring-gray-200">
+      <span className="w-1.5 h-1.5 rounded-full bg-gray-300 flex-shrink-0" />Pending
+    </span>
+  );
 }
 
 function conditionsEqual(a: FilterCondition[], b: FilterCondition[]) {
@@ -65,6 +77,8 @@ export default function AccountsClient() {
 
   // Inline editing
   const [editingStageId, setEditingStageId] = useState<number | null>(null);
+  const [editingCityId, setEditingCityId] = useState<number | null>(null);
+  const [editingCityValue, setEditingCityValue] = useState("");
 
   // Views state
   const [views, setViews] = useState<SavedViewData[]>([]);
@@ -214,6 +228,19 @@ export default function AccountsClient() {
     setPage(1);
   };
 
+  const patchCity = useCallback(async (businessId: number, city: string) => {
+    const res = await fetch(`/api/businesses/${businessId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ city }),
+    });
+    if (res.ok) {
+      setBusinesses((prev) => prev.map((b) => b.business_id === businessId ? { ...b, city } : b));
+      showToast("Saved");
+    }
+    setEditingCityId(null);
+  }, [showToast]);
+
   const patchStage = useCallback(async (businessId: number, stage: string) => {
     const res = await fetch(`/api/businesses/${businessId}`, {
       method: "PATCH",
@@ -255,8 +282,8 @@ export default function AccountsClient() {
 
       <div className="p-8 space-y-5">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Accounts</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">Businesses</h1>
+          <p className="text-[13px] text-gray-400 mt-0.5">
             {loading ? "Loading..." : `${total.toLocaleString()} ${hasFilters ? "matching" : "total"} businesses`}
           </p>
         </div>
@@ -290,65 +317,65 @@ export default function AccountsClient() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50/50">
+                <tr className="border-b border-gray-100 bg-[#f8fafc]">
                   {/* Name is always on */}
                   <th
-                    className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                    className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-600 transition-colors"
                     onClick={() => toggleSort("le_name")}
                   >
-                    <span className="flex items-center">Name <SortIcon field="le_name" /></span>
+                    <span className="flex items-center gap-0.5">Name <SortIcon field="le_name" /></span>
                   </th>
                   {columns.includes("location") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Location</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Location</th>
                   )}
                   {columns.includes("license_type") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Type</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Type</th>
                   )}
                   {columns.includes("acquisition_fit_score") && (
                     <th
-                      className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                      className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-600 transition-colors"
                       onClick={() => toggleSort("acquisition_fit_score")}
                     >
-                      <span className="flex items-center">Fit Score <SortIcon field="acquisition_fit_score" /></span>
+                      <span className="flex items-center gap-0.5">Score <SortIcon field="acquisition_fit_score" /></span>
                     </th>
                   )}
                   {columns.includes("estimated_annual_profit") && (
                     <th
-                      className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                      className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-600 transition-colors"
                       onClick={() => toggleSort("estimated_annual_profit")}
                     >
-                      <span className="flex items-center">Est. Profit <SortIcon field="estimated_annual_profit" /></span>
+                      <span className="flex items-center gap-0.5">Est. Profit <SortIcon field="estimated_annual_profit" /></span>
                     </th>
                   )}
                   {columns.includes("estimated_annual_revenue") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Est. Revenue</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Revenue</th>
                   )}
                   {columns.includes("profit_margin_pct") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Margin</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Margin</th>
                   )}
                   {columns.includes("estimated_employees") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Employees</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Employees</th>
                   )}
                   {columns.includes("founded_year") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Founded</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Founded</th>
                   )}
                   {columns.includes("cms_star_rating") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">CMS Stars</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Stars</th>
                   )}
                   {columns.includes("medicare_certified") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Medicare</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Medicare</th>
                   )}
                   {columns.includes("pe_backed") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">PE</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">PE</th>
                   )}
                   {columns.includes("county") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">County</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">County</th>
                   )}
                   {columns.includes("stage") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Stage</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Stage</th>
                   )}
                   {columns.includes("enrichment_status") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Status</th>
                   )}
                 </tr>
               </thead>
@@ -357,7 +384,7 @@ export default function AccountsClient() {
                   Array.from({ length: 8 }).map((_, i) => (
                     <tr key={i}>
                       {Array.from({ length: columns.length + 1 }).map((_, j) => (
-                        <td key={j} className="px-4 py-3">
+                        <td key={j} className="px-4 py-2.5">
                           <div className="h-4 bg-gray-100 rounded animate-pulse" style={{ width: `${50 + ((i * 13 + j * 7) % 50)}%` }} />
                         </td>
                       ))}
@@ -376,70 +403,90 @@ export default function AccountsClient() {
                   </tr>
                 ) : (
                   businesses.map((b) => (
-                    <tr key={b.business_id} className="hover:bg-blue-50/30 transition-colors">
+                    <tr key={b.business_id} className="hover:bg-[#f8fafc] transition-colors group">
                       {/* Name — always on */}
-                      <td className="px-4 py-3">
-                        <Link href={`/accounts/${b.business_id}`} className="font-medium text-gray-900 hover:text-blue-600 transition-colors text-sm">
+                      <td className="px-4 py-2.5">
+                        <Link href={`/accounts/${b.business_id}`} className="text-[13px] font-semibold text-gray-900 hover:text-blue-600 transition-colors">
                           {b.le_name || b.lf_name || "Unknown"}
                         </Link>
                         <div className="flex items-center gap-2 mt-0.5">
-                          {b.medicare_certified && <span className="text-xs text-blue-600">Medicare</span>}
-                          {b.pe_backed === false && <span className="text-xs text-green-600">Independent</span>}
+                          {b.medicare_certified && <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-1.5 py-px rounded-full">Medicare</span>}
+                          {b.pe_backed === false && <span className="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-px rounded-full">Indep.</span>}
                           {b.cms_star_rating && (
-                            <span className="text-xs text-yellow-600 flex items-center gap-0.5">
-                              <Star size={10} className="fill-yellow-400 text-yellow-400" />{b.cms_star_rating}
+                            <span className="text-[11px] text-amber-600 flex items-center gap-0.5">
+                              <Star size={9} className="fill-amber-400 text-amber-400" />{b.cms_star_rating}
                             </span>
                           )}
                         </div>
                       </td>
                       {columns.includes("location") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
-                          <div>{b.city || "—"}</div>
+                        <td className="px-4 py-2.5 text-[13px] text-gray-600">
+                          {editingCityId === b.business_id ? (
+                            <input
+                              autoFocus
+                              value={editingCityValue}
+                              onChange={(e) => setEditingCityValue(e.target.value)}
+                              onBlur={() => patchCity(b.business_id, editingCityValue)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") patchCity(b.business_id, editingCityValue);
+                                if (e.key === "Escape") setEditingCityId(null);
+                              }}
+                              autoComplete="nope"
+                              className="border border-blue-400 rounded px-1.5 py-0.5 text-[13px] focus:outline-none w-28"
+                            />
+                          ) : (
+                            <div
+                              className="cursor-text hover:text-blue-600 transition-colors"
+                              onClick={() => { setEditingCityId(b.business_id); setEditingCityValue(b.city || ""); }}
+                            >
+                              {b.city || <span className="text-gray-300 hover:text-gray-400">—</span>}
+                            </div>
+                          )}
                         </td>
                       )}
                       {columns.includes("license_type") && (
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2.5">
                           {b.license_type ? (
-                            <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{b.license_type}</span>
-                          ) : "—"}
+                            <span className="text-[11px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">{b.license_type}</span>
+                          ) : <span className="text-gray-300">—</span>}
                         </td>
                       )}
                       {columns.includes("acquisition_fit_score") && (
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2.5">
                           <FitScoreBadge score={b.acquisition_fit_score} size="sm" />
                         </td>
                       )}
                       {columns.includes("estimated_annual_profit") && (
-                        <td className="px-4 py-3 text-sm font-semibold text-green-700">
+                        <td className="px-4 py-2.5 text-[13px] font-semibold text-emerald-700">
                           {b.estimated_annual_profit
                             ? formatCurrency(Number(b.estimated_annual_profit))
                             : <span className="text-gray-300 font-normal">—</span>}
                         </td>
                       )}
                       {columns.includes("estimated_annual_revenue") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-2.5 text-[13px] text-gray-600">
                           {b.estimated_annual_revenue
                             ? formatCurrency(Number(b.estimated_annual_revenue))
                             : <span className="text-gray-300">—</span>}
                         </td>
                       )}
                       {columns.includes("profit_margin_pct") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-2.5 text-[13px] text-gray-600">
                           {b.profit_margin_pct ? `${b.profit_margin_pct}%` : <span className="text-gray-300">—</span>}
                         </td>
                       )}
                       {columns.includes("estimated_employees") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-2.5 text-[13px] text-gray-600">
                           {b.estimated_employees ?? <span className="text-gray-300">—</span>}
                         </td>
                       )}
                       {columns.includes("founded_year") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-2.5 text-[13px] text-gray-600">
                           {b.founded_year ?? <span className="text-gray-300">—</span>}
                         </td>
                       )}
                       {columns.includes("cms_star_rating") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-2.5 text-[13px] text-gray-600">
                           {b.cms_star_rating ? (
                             <span className="flex items-center gap-0.5">
                               <Star size={11} className="fill-yellow-400 text-yellow-400" />{b.cms_star_rating}
@@ -448,28 +495,28 @@ export default function AccountsClient() {
                         </td>
                       )}
                       {columns.includes("medicare_certified") && (
-                        <td className="px-4 py-3 text-sm">
+                        <td className="px-4 py-2.5 text-[13px]">
                           {b.medicare_certified
                             ? <span className="text-blue-600 text-xs font-medium">Yes</span>
                             : <span className="text-gray-300 text-xs">No</span>}
                         </td>
                       )}
                       {columns.includes("pe_backed") && (
-                        <td className="px-4 py-3 text-sm">
+                        <td className="px-4 py-2.5 text-[13px]">
                           {b.pe_backed === null
                             ? <span className="text-gray-300 text-xs">—</span>
                             : b.pe_backed
                             ? <span className="text-orange-500 text-xs font-medium">PE</span>
-                            : <span className="text-green-600 text-xs font-medium">Indep.</span>}
+                            : <span className="text-emerald-600 text-xs font-medium">Indep.</span>}
                         </td>
                       )}
                       {columns.includes("county") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-2.5 text-[13px] text-gray-600">
                           {b.county ?? <span className="text-gray-300">—</span>}
                         </td>
                       )}
                       {columns.includes("stage") && (
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2.5">
                           {editingStageId === b.business_id ? (
                             <select
                               autoFocus
@@ -491,7 +538,7 @@ export default function AccountsClient() {
                         </td>
                       )}
                       {columns.includes("enrichment_status") && (
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-2.5">
                           <EnrichmentBadge status={b.enrichment_status} />
                         </td>
                       )}
@@ -503,8 +550,8 @@ export default function AccountsClient() {
           </div>
 
           {pages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50/50">
-              <p className="text-sm text-gray-500">Page {page} of {pages} &middot; {total.toLocaleString()} results</p>
+            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-[#f8fafc]">
+              <p className="text-[13px] text-gray-400">Page {page} of {pages} &middot; {total.toLocaleString()} results</p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setPage(page - 1)} disabled={page <= 1}>&larr; Previous</Button>
                 <Button variant="outline" size="sm" onClick={() => setPage(page + 1)} disabled={page >= pages}>Next &rarr;</Button>
