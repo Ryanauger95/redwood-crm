@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import {
   Building2, Sparkles, ChevronRight, Star,
@@ -43,24 +42,29 @@ const ACTIVITY_LABELS: Record<string, string> = {
   call: "Call", email: "Email", note: "Note", task: "Task", sms: "SMS",
 };
 
-type TopTarget = Prisma.BusinessGetPayload<{
-  select: {
-    business_id: true; le_name: true; lf_name: true;
-    city: true; state_code: true;
-    acquisition_fit_score: true; estimated_annual_profit: true;
-    cms_star_rating: true; pe_backed: true;
-    pipelineStage: { select: { stage: true } };
-  };
-}>;
+interface TopTarget {
+  business_id: number;
+  le_name: string | null;
+  lf_name: string | null;
+  city: string | null;
+  state_code: string | null;
+  acquisition_fit_score: number | null;
+  estimated_annual_profit: { toString(): string } | null;
+  cms_star_rating: { toString(): string } | null;
+  pe_backed: boolean | null;
+  pipelineStage: { stage: string } | null;
+}
 
-type RecentActivity = Prisma.ActivityGetPayload<{
-  select: {
-    id: true; type: true; subject: true; status: true;
-    created_at: true; due_date: true;
-    business: { select: { business_id: true; le_name: true; lf_name: true } };
-    person: { select: { person_id: true; full_name: true } };
-  };
-}>;
+interface RecentActivity {
+  id: number;
+  type: string;
+  subject: string;
+  status: string;
+  created_at: Date;
+  due_date: Date | null;
+  business: { business_id: number; le_name: string | null; lf_name: string | null } | null;
+  person: { person_id: number; full_name: string | null } | null;
+}
 
 async function getDashboardData(): Promise<{
   totalBusinesses: number;
