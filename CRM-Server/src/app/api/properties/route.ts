@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
   ]);
 
   return NextResponse.json({
-    data: properties.map((p) => ({
+    data: properties.map((p: typeof properties[number]) => ({
       ...p,
       id: p.id.toString(),
       asking_price: p.asking_price?.toString() ?? null,

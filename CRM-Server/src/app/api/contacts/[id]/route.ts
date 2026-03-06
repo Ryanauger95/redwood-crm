@@ -43,7 +43,7 @@ export async function GET(
 
   return NextResponse.json({
     ...person,
-    activities: person.activities.map((a) => ({
+    activities: person.activities.map((a: typeof person.activities[number]) => ({
       ...a,
       created_at: a.created_at.toISOString(),
       due_date: a.due_date?.toISOString() ?? null,

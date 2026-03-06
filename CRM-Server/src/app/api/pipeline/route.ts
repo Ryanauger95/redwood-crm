@@ -104,7 +104,7 @@ async function getPropertiesPipeline(stages: string[], search: string, filterCon
   const grouped: Record<string, { cards: unknown[]; total: number }> = {};
   for (const { stage, cards, total } of results) {
     grouped[stage] = {
-      cards: cards.map((p) => ({
+      cards: cards.map((p: typeof cards[number]) => ({
         ...p,
         id: p.id.toString(),
         asking_price: p.asking_price?.toString() ?? null,

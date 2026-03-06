@@ -93,14 +93,14 @@ export async function GET(req: NextRequest) {
   ]);
 
   return NextResponse.json({
-    data: businesses.map((b) => ({
+    data: businesses.map((b: typeof businesses[number]) => ({
       ...b,
       estimated_annual_profit: b.estimated_annual_profit?.toString() ?? null,
       estimated_annual_revenue: b.estimated_annual_revenue?.toString() ?? null,
       profit_margin_pct: b.profit_margin_pct?.toString() ?? null,
       cms_star_rating: b.cms_star_rating?.toString() ?? null,
       stage: b.pipelineStage?.stage ?? null,
-      tags: b.tags.map((t) => t.tag),
+      tags: b.tags.map((t: typeof b.tags[number]) => t.tag),
     })),
     total,
     page,

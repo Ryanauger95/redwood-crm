@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
-  const serialized = people.map((p) => ({
+  const serialized = people.map((p: typeof people[number]) => ({
     ...p,
     freshsales_id: p.freshsales_id?.toString() ?? null,
   }));

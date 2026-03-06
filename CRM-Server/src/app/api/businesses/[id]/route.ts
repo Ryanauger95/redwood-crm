@@ -38,7 +38,7 @@ export async function GET(
     cms_star_rating: business.cms_star_rating?.toString() ?? null,
     profit_margin_pct: business.profit_margin_pct?.toString() ?? null,
     stage: business.pipelineStage?.stage ?? "Prospect",
-    businessPeople: business.businessPeople.map((bp) => ({
+    businessPeople: business.businessPeople.map((bp: typeof business.businessPeople[number]) => ({
       ...bp,
       ownership_pct: bp.ownership_pct?.toString() ?? null,
     })),

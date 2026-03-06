@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import {
   Building2, Sparkles, ChevronRight, Star,
@@ -42,7 +43,35 @@ const ACTIVITY_LABELS: Record<string, string> = {
   call: "Call", email: "Email", note: "Note", task: "Task", sms: "SMS",
 };
 
-async function getDashboardData() {
+type TopTarget = Prisma.BusinessGetPayload<{
+  select: {
+    business_id: true; le_name: true; lf_name: true;
+    city: true; state_code: true;
+    acquisition_fit_score: true; estimated_annual_profit: true;
+    cms_star_rating: true; pe_backed: true;
+    pipelineStage: { select: { stage: true } };
+  };
+}>;
+
+type RecentActivity = Prisma.ActivityGetPayload<{
+  select: {
+    id: true; type: true; subject: true; status: true;
+    created_at: true; due_date: true;
+    business: { select: { business_id: true; le_name: true; lf_name: true } };
+    person: { select: { person_id: true; full_name: true } };
+  };
+}>;
+
+async function getDashboardData(): Promise<{
+  totalBusinesses: number;
+  enriched: number;
+  inPipeline: number;
+  totalContacts: number;
+  topTargets: TopTarget[];
+  recentActivities: RecentActivity[];
+  pipelineMap: Record<string, number>;
+  enrichMap: Record<string, number>;
+}> {
   const [
     totalBusinesses,
     enrichmentCounts,

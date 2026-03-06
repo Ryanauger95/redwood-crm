@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
     enrichedCount,
     stageCounts,
     recentActivities,
-    topTargets: topTargets.map((b) => ({
+    topTargets: topTargets.map((b: typeof topTargets[number]) => ({
       ...b,
       estimated_annual_profit: b.estimated_annual_profit?.toString() ?? null,
       cms_star_rating: b.cms_star_rating?.toString() ?? null,

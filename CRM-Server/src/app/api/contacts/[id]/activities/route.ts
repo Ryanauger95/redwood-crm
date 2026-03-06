@@ -20,7 +20,7 @@ export async function GET(
   });
 
   return NextResponse.json(
-    activities.map((a) => ({
+    activities.map((a: typeof activities[number]) => ({
       ...a,
       created_at: a.created_at.toISOString(),
       due_date: a.due_date?.toISOString() ?? null,
