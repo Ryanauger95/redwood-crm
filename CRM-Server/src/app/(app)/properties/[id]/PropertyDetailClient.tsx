@@ -640,22 +640,38 @@ export function PropertyDetailClient({ property }: { property: Property }) {
 
   const saveField = useCallback(async (field: string, value: string) => {
     setFields((prev) => ({ ...prev, [field]: value }));
-    await fetch(`/api/properties/${property.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [field]: value }),
-    });
-    showToast("Saved");
+    try {
+      const res = await fetch(`/api/properties/${property.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [field]: value }),
+      });
+      if (res.ok) {
+        showToast("Saved");
+      } else {
+        showToast("Failed to save");
+      }
+    } catch {
+      showToast("Failed to save");
+    }
   }, [property.id, showToast]);
 
   const saveBoolean = useCallback(async (field: string, value: boolean | null) => {
     setFields((prev) => ({ ...prev, [field]: value == null ? "" : String(value) }));
-    await fetch(`/api/properties/${property.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [field]: value }),
-    });
-    showToast("Saved");
+    try {
+      const res = await fetch(`/api/properties/${property.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [field]: value }),
+      });
+      if (res.ok) {
+        showToast("Saved");
+      } else {
+        showToast("Failed to save");
+      }
+    } catch {
+      showToast("Failed to save");
+    }
   }, [property.id, showToast]);
 
   const addNote = async () => {

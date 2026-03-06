@@ -134,10 +134,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     }
   }
 
-  await prisma.property.update({
-    where: { id: BigInt(id) },
-    data: { ...data, updated_at: new Date() },
-  });
-
-  return NextResponse.json({ success: true });
+  try {
+    await prisma.property.update({
+      where: { id: BigInt(id) },
+      data: { ...data, updated_at: new Date() },
+    });
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("PATCH /api/properties/[id] error:", err);
+    return NextResponse.json({ error: "Failed to update property" }, { status: 500 });
+  }
 }

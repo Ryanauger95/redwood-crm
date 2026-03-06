@@ -231,12 +231,20 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
       : { [field]: value };
     setFields((prev) => ({ ...prev, [field]: value }));
     setBusiness((prev) => ({ ...prev, [field]: value || null }));
-    await fetch(`/api/businesses/${business.business_id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    showToast("Saved");
+    try {
+      const res = await fetch(`/api/businesses/${business.business_id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        showToast("Saved");
+      } else {
+        showToast("Failed to save");
+      }
+    } catch {
+      showToast("Failed to save");
+    }
   }, [business.business_id, showToast]);
 
   const handleStageChange = async (newStage: string) => {
