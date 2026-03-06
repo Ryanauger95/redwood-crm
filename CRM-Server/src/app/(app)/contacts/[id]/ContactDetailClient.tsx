@@ -138,9 +138,7 @@ export function ContactDetailClient({ person: initialPerson }: { person: Person 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: value }),
     });
-    if (res.ok) {
-      showToast("Saved");
-    }
+    if (res.ok) showToast("Saved");
   }, [person.person_id, showToast]);
 
   const refreshActivities = useCallback(async () => {

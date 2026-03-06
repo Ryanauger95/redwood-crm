@@ -645,9 +645,7 @@ export function PropertyDetailClient({ property }: { property: Property }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: value }),
     });
-    if (res.ok) {
-      showToast("Saved");
-    }
+    if (res.ok) showToast("Saved");
   }, [property.id, showToast]);
 
   const saveBoolean = useCallback(async (field: string, value: boolean | null) => {
@@ -657,9 +655,7 @@ export function PropertyDetailClient({ property }: { property: Property }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: value }),
     });
-    if (res.ok) {
-      showToast("Saved");
-    }
+    if (res.ok) showToast("Saved");
   }, [property.id, showToast]);
 
   const addNote = async () => {

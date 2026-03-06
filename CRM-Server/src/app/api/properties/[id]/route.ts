@@ -8,6 +8,7 @@ const STRING_FIELDS = [
   "letter_status", "ownership_type", "direct_mail_address", "mail_bounced_back",
   "county_activity", "reonomy_id", "address", "city", "state", "zipcode", "county",
   "territory", "property_size_estimate", "industry_type", "business_type", "sales_owner",
+  "asset_class", "deal_type",
   "website", "phone", "last_sale_buyer", "mortgagee_name", "listing_url",
   "broker_names", "broker_phone", "broker_company", "lease_rate", "lease_terms",
   "lease_notes", "space_size", "length_of_lease", "lease_data_type", "leasing_broker",

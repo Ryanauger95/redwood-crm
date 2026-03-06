@@ -236,21 +236,19 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    if (res.ok) {
-      showToast("Saved");
-    }
+    if (res.ok) showToast("Saved");
   }, [business.business_id, showToast]);
 
   const handleStageChange = async (newStage: string) => {
     setStage(newStage);
     setStageLoading(true);
     try {
-      await fetch(`/api/pipeline/${business.business_id}`, {
+      const res = await fetch(`/api/pipeline/${business.business_id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stage: newStage }),
       });
-      showToast("Stage updated");
+      if (res.ok) showToast("Stage updated");
     } finally {
       setStageLoading(false);
     }
