@@ -134,14 +134,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     }
   }
 
-  const property = await prisma.property.update({
+  await prisma.property.update({
     where: { id: BigInt(id) },
     data: { ...data, updated_at: new Date() },
-    include: {
-      notes: { orderBy: { created_at: "desc" }, take: 100 },
-      personLinks: { include: { person: true } },
-    },
   });
 
-  return NextResponse.json(serialize(property));
+  return NextResponse.json({ success: true });
 }

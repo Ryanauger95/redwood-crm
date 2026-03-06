@@ -133,12 +133,12 @@ export function ContactDetailClient({ person: initialPerson }: { person: Person 
   const saveField = useCallback(async (field: string, value: string) => {
     setFields((prev) => ({ ...prev, [field]: value }));
     setPerson((prev) => ({ ...prev, [field]: value || null }));
-    const res = await fetch(`/api/contacts/${person.person_id}`, {
+    await fetch(`/api/contacts/${person.person_id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: value }),
     });
-    if (res.ok) showToast("Saved");
+    showToast("Saved");
   }, [person.person_id, showToast]);
 
   const refreshActivities = useCallback(async () => {
