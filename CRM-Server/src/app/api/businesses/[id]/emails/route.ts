@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     where: { business_id: businessId },
     select: { person_id: true },
   });
-  const personIds = businessPeople.map((bp) => bp.person_id);
+  const personIds = businessPeople.map((bp: typeof businessPeople[number]) => bp.person_id);
 
   const emails = await prisma.cachedEmail.findMany({
     where: {
