@@ -41,11 +41,13 @@ export default async function ContactDetailPage({ params }: Props) {
 
   const serialized = {
     ...person,
-    businessPeople: person.businessPeople.map((bp) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    businessPeople: person.businessPeople.map((bp: any) => ({
       ...bp,
       ownership_pct: bp.ownership_pct?.toString() ?? null,
     })),
-    activities: person.activities.map((a) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    activities: person.activities.map((a: any) => ({
       ...a,
       created_at: a.created_at.toISOString(),
       due_date: a.due_date?.toISOString() ?? null,

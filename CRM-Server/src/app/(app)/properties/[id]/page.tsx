@@ -58,7 +58,8 @@ export default async function PropertyDetailPage({ params }: Props) {
     foreclosure_filed_date: toDate(property.foreclosure_filed_date),
     foreclosure_sale_date: toDate(property.foreclosure_sale_date),
     foreclosure_data_last_updated: toDate(property.foreclosure_data_last_updated),
-    notes: property.notes.map((n) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    notes: property.notes.map((n: any) => ({
       ...n,
       id: toStr(n.id)!,
       property_id: toStr(n.property_id)!,
@@ -66,7 +67,8 @@ export default async function PropertyDetailPage({ params }: Props) {
       updated_at: toISO(n.updated_at),
       user: n.user ?? null,
     })),
-    personLinks: property.personLinks.map((pl) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    personLinks: property.personLinks.map((pl: any) => ({
       ...pl,
       property_id: toStr(pl.property_id)!,
     })),

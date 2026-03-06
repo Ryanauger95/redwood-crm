@@ -43,7 +43,8 @@ export default async function AccountDetailPage({ params }: Props) {
       ownership_pct: bp.ownership_pct?.toString() ?? null,
       association_date: bp.association_date?.toISOString() ?? null,
     })),
-    activities: business.activities.map((a) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    activities: business.activities.map((a: any) => ({
       ...a,
       created_at: a.created_at.toISOString(),
       due_date: a.due_date?.toISOString() ?? null,
