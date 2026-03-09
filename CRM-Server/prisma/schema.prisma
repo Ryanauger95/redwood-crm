@@ -345,8 +345,9 @@ model Property {
   owner_mailing_address           String?
   owner_entity_type               String?
 
-  notes        PropertyNote[]
-  personLinks  PersonProperty[]
+  notes              PropertyNote[]
+  personLinks        PersonProperty[]
+  foreclosureCases   ForeclosureCase[]
 
   @@index([state])
   @@index([asset_class])
@@ -387,6 +388,160 @@ model SavedView {
   created_at DateTime @default(now())
 
   @@map("saved_views")
+}
+
+// ─────────────────────────────────────────────
+// Foreclosure data
+// ─────────────────────────────────────────────
+
+model ForeclosureCase {
+  id                        Int       @id @default(autoincrement())
+  case_number               String    @unique
+  detail_url                String?
+  scraped_at                DateTime?
+
+  // case_info
+  court_agency              String?
+  filed_date                DateTime? @db.Date
+  case_type                 String?
+  case_sub_type             String?
+  file_type                 String?
+  status                    String?
+  assigned_judge            String?
+  disposition               String?
+  disposition_date          DateTime? @db.Date
+  disposition_judge         String?
+  caption                   String?
+
+  // financials summary
+  fine_costs                Decimal?  @db.Decimal(12, 2)
+  total_paid_for_fine_costs Decimal?  @db.Decimal(12, 2)
+  balance_due               Decimal?  @db.Decimal(12, 2)
+
+  // tax_map
+  tax_map_agency            String?
+  tax_map_number            String?
+  tax_map_description       String?
+
+  // CRM link (set later via parcel matching)
+  property_id               BigInt?
+
+  created_at                DateTime  @default(now())
+  updated_at                DateTime  @default(now())
+
+  property         Property?                    @relation(fields: [property_id], references: [id], onDelete: SetNull)
+  parties          ForeclosureParty[]
+  associatedCases  ForeclosureAssociatedCase[]
+  actions          ForeclosureAction[]
+  documents        ForeclosureDocument[]
+  costs            ForeclosureCost[]
+  payments         ForeclosurePayment[]
+
+  @@index([tax_map_number])
+  @@index([status])
+  @@index([property_id])
+  @@map("foreclosure_cases")
+}
+
+model ForeclosureParty {
+  id           Int      @id @default(autoincrement())
+  case_id      Int
+  name         String?
+  address      String?
+  party_type   String?
+  party_status String?
+  last_updated DateTime? @db.Date
+
+  case ForeclosureCase @relation(fields: [case_id], references: [id], onDelete: Cascade)
+
+  @@index([case_id])
+  @@map("foreclosure_parties")
+}
+
+model ForeclosureAssociatedCase {
+  id               Int       @id @default(autoincrement())
+  case_id          Int
+  agency           String?
+  case_number      String?
+  external         String?
+  relationship     String?
+  description      String?
+  filed_date       DateTime? @db.Date
+  disposition_date DateTime? @db.Date
+  status           String?
+  disposition      String?
+  url              String?
+
+  case ForeclosureCase @relation(fields: [case_id], references: [id], onDelete: Cascade)
+
+  @@index([case_id])
+  @@map("foreclosure_associated_cases")
+}
+
+model ForeclosureAction {
+  id              Int       @id @default(autoincrement())
+  case_id         Int
+  name            String?
+  description     String?   @db.Text
+  type            String?
+  motion_roster   String?
+  begin_date      DateTime?
+  completion_date DateTime?
+  has_document    Boolean   @default(false)
+  document_url    String?
+
+  case ForeclosureCase @relation(fields: [case_id], references: [id], onDelete: Cascade)
+
+  @@index([case_id])
+  @@map("foreclosure_actions")
+}
+
+model ForeclosureDocument {
+  id              Int       @id @default(autoincrement())
+  case_id         Int
+  url             String
+  description     String?
+  date            DateTime? @db.Date
+  downloaded      Boolean   @default(false)
+  downloaded_at   DateTime?
+  s3_key          String?
+  s3_url          String?
+  file_size_bytes Int?
+
+  case ForeclosureCase @relation(fields: [case_id], references: [id], onDelete: Cascade)
+
+  @@index([case_id])
+  @@map("foreclosure_documents")
+}
+
+model ForeclosureCost {
+  id               Int      @id @default(autoincrement())
+  case_id          Int
+  description      String?
+  code             String?
+  amount           Decimal? @db.Decimal(12, 2)
+  charge_action    String?
+  disbursed_amount Decimal? @db.Decimal(12, 2)
+
+  case ForeclosureCase @relation(fields: [case_id], references: [id], onDelete: Cascade)
+
+  @@index([case_id])
+  @@map("foreclosure_costs")
+}
+
+model ForeclosurePayment {
+  id               Int       @id @default(autoincrement())
+  case_id          Int
+  date             DateTime? @db.Date
+  receipt_number   String?
+  entered_by       String?
+  transaction_type String?
+  amount           Decimal?  @db.Decimal(12, 2)
+
+  case ForeclosureCase @relation(fields: [case_id], references: [id], onDelete: Cascade)
+
+  @@index([case_id])
+  @@map("foreclosure_payments")
 }
 
 // ─────────────────────────────────────────────

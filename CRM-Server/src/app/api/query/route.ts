@@ -1,6 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { Pool } from "pg";
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+// ---------------------------------------------------------------------------
+// POST /api/query — execute raw SQL
+// ---------------------------------------------------------------------------
+export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { sql } = await req.json();
+  if (!sql?.trim()) return NextResponse.json({ error: "No query provided" }, { status: 400 });
+
+  const start = Date.now();
+  try {
+    const result = await pool.query(sql);
+    const ms = Date.now() - start;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rows = (result.rows || []).map((row: any) => {
+      const out: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(row)) {
+        if (v === null || v === undefined) out[k] = null;
+        else if (typeof v === "bigint") out[k] = v.toString();
+        else if (v instanceof Date) out[k] = v.toISOString();
+        else if (typeof v === "object") out[k] = JSON.stringify(v);
+        else out[k] = v;
+      }
+      return out;
+    });
+
+    return NextResponse.json({
+      rows,
+      rowCount: result.rowCount ?? rows.length,
+      columns: result.fields?.map((f) => f.name) ?? [],
+      durationMs: ms,
+    });
+  } catch (err: unknown) {
+    const ms = Date.now() - start;
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message, durationMs: ms }, { status: 400 });
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Column whitelists — only these fields can be selected or filtered

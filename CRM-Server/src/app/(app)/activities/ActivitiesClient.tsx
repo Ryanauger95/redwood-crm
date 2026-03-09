@@ -179,7 +179,7 @@ export default function ActivitiesClient() {
               const isOverdue = isOpen && act.due_date && new Date(act.due_date) < new Date();
 
               return (
-                <div key={act.id} className={`flex items-start gap-4 px-6 py-3.5 hover:bg-gray-50/60 transition-colors ${isOverdue ? "bg-red-50/20" : ""}`}>
+                <div key={act.id} className={`flex items-start gap-4 px-6 py-3.5 hover:bg-blue-50 transition-colors ${isOverdue ? "bg-red-50/20" : ""}`}>
                   <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-0.5 ${typeColors[act.type] || "bg-gray-50 text-gray-500"}`}>
                     {typeIcons[act.type] || <ActivityIcon size={14} />}
                   </div>

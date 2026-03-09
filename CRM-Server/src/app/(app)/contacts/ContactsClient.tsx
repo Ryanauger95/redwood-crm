@@ -304,7 +304,7 @@ export default function ContactsClient() {
                     const avatarColors = ["from-blue-400 to-indigo-500", "from-violet-400 to-purple-500", "from-emerald-400 to-teal-500", "from-amber-400 to-orange-500", "from-rose-400 to-pink-500"];
                     const colorIdx = name.charCodeAt(0) % avatarColors.length;
                     return (
-                      <tr key={p.person_id} className="hover:bg-[#f8fafc] transition-colors group">
+                      <tr key={p.person_id} className="hover:bg-blue-50 transition-colors group">
                         <td className="px-4 py-2.5">
                           <Link
                             href={`/contacts/${p.person_id}`}

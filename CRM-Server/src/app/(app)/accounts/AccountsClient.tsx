@@ -403,7 +403,7 @@ export default function AccountsClient() {
                   </tr>
                 ) : (
                   businesses.map((b) => (
-                    <tr key={b.business_id} className="hover:bg-[#f8fafc] transition-colors group">
+                    <tr key={b.business_id} className="hover:bg-blue-50 transition-colors group">
                       {/* Name — always on */}
                       <td className="px-4 py-2.5">
                         <Link href={`/accounts/${b.business_id}`} className="text-[13px] font-semibold text-gray-900 hover:text-blue-600 transition-colors">

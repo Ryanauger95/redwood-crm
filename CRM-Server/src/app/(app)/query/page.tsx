@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Database, Search, X, ChevronUp, ChevronDown, ChevronsUpDown,
   Download, SlidersHorizontal, RefreshCw, Users, GitBranch, Pencil, CheckSquare,
+  Play, Code, Table, AlertCircle, Clock,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -329,9 +330,198 @@ function BulkActionBar({
 }
 
 // ---------------------------------------------------------------------------
+// SQL Editor Component
+// ---------------------------------------------------------------------------
+interface SqlResult {
+  rows: Record<string, unknown>[];
+  rowCount: number;
+  columns: string[];
+  durationMs: number;
+  error?: string;
+}
+
+function SqlEditor() {
+  const [sql, setSql] = useState("SELECT *\nFROM foreclosure_cases\nLIMIT 25;");
+  const [result, setResult] = useState<SqlResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const runSql = useCallback(async () => {
+    if (!sql.trim()) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sql }),
+      });
+      const data = await res.json();
+      setResult(data);
+    } finally {
+      setLoading(false);
+    }
+  }, [sql]);
+
+  // Cmd/Ctrl+Enter to run
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+      e.preventDefault();
+      runSql();
+    }
+    // Tab inserts spaces
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const el = e.currentTarget;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const newVal = sql.substring(0, start) + "  " + sql.substring(end);
+      setSql(newVal);
+      requestAnimationFrame(() => { el.selectionStart = el.selectionEnd = start + 2; });
+    }
+  };
+
+  const exportCsvSql = () => {
+    if (!result || result.rows.length === 0) return;
+    const header = result.columns.join(",");
+    const body = result.rows.map((row) =>
+      result.columns.map((c) => `"${String(row[c] ?? "").replace(/"/g, '""')}"`).join(",")
+    ).join("\n");
+    const blob = new Blob([header + "\n" + body], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `query-${Date.now()}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Editor area */}
+      <div className="flex flex-col border-b border-gray-200 bg-white">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <Code size={13} className="text-blue-500" />
+            <span className="font-medium text-gray-700">SQL Editor</span>
+            <span className="text-gray-400">— press <kbd className="px-1 py-0.5 bg-gray-100 rounded text-[10px] font-mono">⌘ Enter</kbd> to run</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSql("")}
+              className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+            >
+              Clear
+            </button>
+            <button
+              onClick={runSql}
+              disabled={loading || !sql.trim()}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-40 transition-colors"
+            >
+              <Play size={11} />
+              {loading ? "Running..." : "Run"}
+            </button>
+          </div>
+        </div>
+        <textarea
+          ref={textareaRef}
+          value={sql}
+          onChange={(e) => setSql(e.target.value)}
+          onKeyDown={handleKeyDown}
+          spellCheck={false}
+          className="font-mono text-sm text-gray-800 bg-[#fafafa] px-5 py-4 resize-none focus:outline-none h-44 w-full leading-relaxed placeholder-gray-300"
+          placeholder="SELECT * FROM businesses LIMIT 10;"
+        />
+      </div>
+
+      {/* Results */}
+      <div className="flex-1 overflow-hidden flex flex-col bg-gray-50">
+        {result && (
+          <div className="flex items-center gap-3 px-4 py-2 bg-white border-b border-gray-200 flex-shrink-0">
+            {result.error ? (
+              <div className="flex items-center gap-2 text-red-600 text-xs font-medium">
+                <AlertCircle size={13} /> {result.error}
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                  <Table size={12} className="text-green-600" />
+                  <span className="font-semibold text-gray-800">{result.rowCount.toLocaleString()}</span> row{result.rowCount !== 1 ? "s" : ""}
+                </div>
+                <div className="flex items-center gap-1 text-xs text-gray-400">
+                  <Clock size={11} /> {result.durationMs}ms
+                </div>
+                <div className="ml-auto">
+                  <button
+                    onClick={exportCsvSql}
+                    disabled={result.rows.length === 0}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 transition-colors font-medium"
+                  >
+                    <Download size={11} /> Export CSV
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {!result && !loading && (
+          <div className="flex flex-col items-center justify-center h-full text-gray-400">
+            <Database size={32} className="mb-3 text-gray-300" />
+            <p className="text-sm">Run a query to see results</p>
+          </div>
+        )}
+
+        {loading && (
+          <div className="flex items-center justify-center h-full text-gray-400">
+            <RefreshCw size={16} className="animate-spin mr-2" /> Executing...
+          </div>
+        )}
+
+        {result && !result.error && result.rows.length > 0 && (
+          <div className="flex-1 overflow-auto">
+            <table className="w-full text-xs border-collapse">
+              <thead className="sticky top-0 bg-white border-b border-gray-200 z-10 shadow-sm">
+                <tr>
+                  {result.columns.map((col) => (
+                    <th key={col} className="text-left px-3 py-2.5 font-semibold text-gray-600 whitespace-nowrap border-r border-gray-100 last:border-r-0">
+                      {col}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {result.rows.map((row, i) => (
+                  <tr key={i} className={`border-b border-gray-100 ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"} hover:bg-blue-50 transition-colors`}>
+                    {result.columns.map((col) => {
+                      const val = row[col];
+                      return (
+                        <td key={col} className="px-3 py-2 border-r border-gray-100 last:border-r-0 max-w-xs">
+                          <span className={`block truncate ${val === null ? "text-gray-300 italic" : "text-gray-700"}`}>
+                            {val === null ? "null" : String(val)}
+                          </span>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {result && !result.error && result.rows.length === 0 && (
+          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+            Query returned 0 rows
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main Component
 // ---------------------------------------------------------------------------
 export default function QueryPage() {
+  const [mode, setMode] = useState<"builder" | "sql">("sql");
   const [table, setTable] = useState("businesses");
   const [selectedCols, setSelectedCols] = useState<string[]>(TABLES.businesses.defaultColumns);
   const [search, setSearch] = useState("");
@@ -425,6 +615,31 @@ export default function QueryPage() {
   const columnLabels = Object.fromEntries(allCols.map((c) => [c, tableConfig.columns[c].label]));
   const hasFilters = search || Object.values(filters).some(Boolean);
 
+  if (mode === "sql") {
+    return (
+      <div className="flex flex-col h-[calc(100vh-56px)]">
+        {/* Mode toggle */}
+        <div className="flex items-center gap-1 px-5 py-2.5 bg-white border-b border-gray-200 flex-shrink-0">
+          <button
+            onClick={() => setMode("builder")}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <Table size={12} /> Builder
+          </button>
+          <button
+            onClick={() => setMode("sql")}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-600 text-white"
+          >
+            <Code size={12} /> SQL
+          </button>
+        </div>
+        <div className="flex-1 overflow-hidden">
+          <SqlEditor />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-[calc(100vh-56px)] overflow-hidden">
       {/* ── Left panel ── */}
@@ -498,6 +713,22 @@ export default function QueryPage() {
       <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
         {/* Toolbar */}
         <div className="bg-white border-b border-gray-200 px-5 py-3 flex items-center gap-3">
+          {/* Mode toggle */}
+          <div className="flex items-center gap-1 flex-shrink-0 mr-2">
+            <button
+              onClick={() => setMode("builder")}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-600 text-white"
+            >
+              <Table size={12} /> Builder
+            </button>
+            <button
+              onClick={() => setMode("sql")}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            >
+              <Code size={12} /> SQL
+            </button>
+          </div>
+          <div className="w-px h-5 bg-gray-200 flex-shrink-0" />
           <div className="relative flex-1 max-w-sm">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)}

@@ -14,14 +14,16 @@ import {
   Mail,
   MapPin,
   Activity,
+  Scale,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 const navItems = [
   { href: "/dashboard",      label: "Dashboard",  icon: LayoutDashboard },
   { href: "/accounts",       label: "Businesses", icon: Building2 },
-  { href: "/properties",     label: "Properties", icon: MapPin },
-  { href: "/contacts",       label: "Contacts",   icon: Users },
+  { href: "/properties",     label: "Properties",   icon: MapPin },
+  { href: "/foreclosures",   label: "Foreclosures", icon: Scale },
+  { href: "/contacts",       label: "Contacts",     icon: Users },
   { href: "/pipeline",       label: "Pipeline",   icon: GitBranch },
   { href: "/activities",     label: "Activities", icon: Activity },
   { href: "/communications", label: "Outreach",   icon: Mail },

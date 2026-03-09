@@ -1,0 +1,450 @@
+{
+  "case_number": "2024CP1002777",
+  "detail_url": "https://jcmsweb.charlestoncounty.gov/PublicIndex/CaseDetails.aspx?County=10&CourtAgency=10002&Casenum=2024CP1002777&CaseType=V&HKey=4911387867011690731198273661046611883811008982806686104735475737311081727856806970116711019974103",
+  "scraped_at": "2026-02-26T19:52:24.077519",
+  "case_info": {
+    "case_number": "2024CP1002777",
+    "court_agency": "Common Pleas",
+    "filed_date": "05/29/2024",
+    "case_type": "Common Pleas",
+    "case_sub_type": "Foreclosure 420",
+    "file_type": "Non-Jury",
+    "status": "Dismissed",
+    "assigned_judge": "Clerk Of Court C P, G S, And Family Court",
+    "disposition": "Dismissed per Rule 41(a)",
+    "disposition_date": "07/29/2024",
+    "disposition_judge": "Clerk Of Court C P, G S, And Family Court",
+    "fine/costs": "$151.00",
+    "total_paid_for_fine/costs": "$151.00",
+    "balance_due": "$0.00",
+    "caption": "Midfirst Bank VS Shawna Christopher Dowers , defendant, et al"
+  },
+  "parties": [
+    {
+      "name": "Calderwood, Timothy Lee",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Plaintiff Attorney",
+      "party_status": null,
+      "last_updated": "05/30/2024"
+    },
+    {
+      "name": "Carrington Chase Property Owners Association Inc",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Defendant",
+      "party_status": null,
+      "last_updated": "05/29/2024"
+    },
+    {
+      "name": "Dowers, Megan Rebecca",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Defendant",
+      "party_status": null,
+      "last_updated": "05/29/2024"
+    },
+    {
+      "name": "Dowers, Shawna Christopher",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Defendant",
+      "party_status": null,
+      "last_updated": "05/29/2024"
+    },
+    {
+      "name": "Midfirst Bank",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Plaintiff",
+      "party_status": null,
+      "last_updated": "07/30/2024"
+    },
+    {
+      "name": "Secretary Of Housing And Urban Development The",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Defendant",
+      "party_status": null,
+      "last_updated": "05/29/2024"
+    },
+    {
+      "name": "Shook, Thomas A.",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Plaintiff Attorney",
+      "party_status": null,
+      "last_updated": "05/29/2024"
+    },
+    {
+      "name": "United States Of America",
+      "address": null,
+      "race": null,
+      "sex": null,
+      "year_of_birth": null,
+      "party_type": "Defendant",
+      "party_status": null,
+      "last_updated": "05/29/2024"
+    }
+  ],
+  "tax_map": {
+    "agency": "Common Pleas",
+    "tax_map_number": "3760600046",
+    "description": "114 Keaton Brook Drive, Summerville, SC 29485"
+  },
+  "associated_cases": [
+    {
+      "agency": "Common Pleas",
+      "case_number": "2024LP1000383",
+      "external": "N",
+      "relationship": "LP",
+      "description": "Associated by LP to CP Transfer",
+      "filed_date": "05/29/2024",
+      "disposition_date": "07/29/2024",
+      "status": "Cancelled",
+      "disposition": "LP Cancelled",
+      "url": "https://jcmsweb.charlestoncounty.gov/PublicIndex/CaseDetails.aspx?CourtAgency=10002&Casenum=2024LP1000383&CaseType=V&HKey=10976476990118781148656108876711011911472103751191067350487974721085610365485111475521055711911710389115&Org=AC"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Midfirst Bank",
+      "description": "NEF(07-30-2024 01:25:11 PM) Service/Certificate Of Servi...",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "07/30/2024-13:29",
+      "completion_date": null,
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A16"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Service/Certificate Of Service By Mail",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "07/30/2024-13:25",
+      "completion_date": null,
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A15"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "NEF(07-29-2024 03:53:48 PM) Notice/Dismissal",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "07/29/2024-16:00",
+      "completion_date": "07/29/2024-16:00",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A14"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Notice of Dismissal",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "07/29/2024-15:53",
+      "completion_date": "07/29/2024-15:53",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A12"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Cancellation Of Lis Pendens",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "07/29/2024-15:53",
+      "completion_date": "07/29/2024-15:53",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A13"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "NEF(06-12-2024 02:39:06 PM) Service/Affidavit Of Service",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "06/12/2024-15:31",
+      "completion_date": "07/29/2024-15:31",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A11"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Service/Affidavit Of Service by Certified Mail on United Sta",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "06/12/2024-14:39",
+      "completion_date": "07/29/2024-14:39",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A10"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "NEF(05-30-2024 09:59:35 AM) Service/Affidavit Of Service",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/30/2024-10:23",
+      "completion_date": "07/29/2024-10:23",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A9"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Affidavit Of Service on Shawna Christopher Dowers",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/30/2024-09:59",
+      "completion_date": "07/29/2024-09:59",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A6"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Affidavit Of Service on Megan Rebecca Dowers",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/30/2024-09:59",
+      "completion_date": "07/29/2024-09:59",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A7"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Notice of Appearance Atty Calderwood, Atty Shook",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/30/2024-09:59",
+      "completion_date": "07/29/2024-09:59",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A8"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "NEF(05-30-2024 08:37:36 AM) Service/Affidavit Of Service",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/30/2024-09:35",
+      "completion_date": "07/29/2024-09:35",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A5"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Service/Affidavit Of Service on Carrington Chase Property Ow",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/30/2024-08:37",
+      "completion_date": "07/29/2024-08:37",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A4"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Lis Pendens Filed",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/29/2024-09:18",
+      "completion_date": "07/29/2024-09:18",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A1"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "Summons & Complaint",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/29/2024-09:18",
+      "completion_date": "07/29/2024-09:18",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A2"
+    },
+    {
+      "name": "Midfirst Bank",
+      "description": "ADR/Certificate of Exemption",
+      "type": "Filing",
+      "motion_roster": null,
+      "begin_date": "05/29/2024-09:18",
+      "completion_date": "07/29/2024-09:18",
+      "has_document": true,
+      "document_url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A3"
+    }
+  ],
+  "documents": [
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A16",
+      "description": "NEF(07-30-2024 01:25:11 PM) Service/Certificate Of Servi...",
+      "date": "2024-07-30",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:41:28.674986"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A15",
+      "description": "Service/Certificate Of Service By Mail",
+      "date": "2024-07-30",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:41:34.135452"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A14",
+      "description": "NEF(07-29-2024 03:53:48 PM) Notice/Dismissal",
+      "date": "2024-07-29",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:41:39.894688"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A12",
+      "description": "Notice of Dismissal",
+      "date": "2024-07-29",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:41:45.128949"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A13",
+      "description": "Cancellation Of Lis Pendens",
+      "date": "2024-07-29",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:41:50.608712"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A11",
+      "description": "NEF(06-12-2024 02:39:06 PM) Service/Affidavit Of Service",
+      "date": "2024-06-12",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:41:55.899949"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A10",
+      "description": "Service/Affidavit Of Service by Certified Mail on United Sta",
+      "date": "2024-06-12",
+      "downloaded": false
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A9",
+      "description": "NEF(05-30-2024 09:59:35 AM) Service/Affidavit Of Service",
+      "date": "2024-05-30",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:04.908967"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A6",
+      "description": "Affidavit Of Service on Shawna Christopher Dowers",
+      "date": "2024-05-30",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:10.112686"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A7",
+      "description": "Affidavit Of Service on Megan Rebecca Dowers",
+      "date": "2024-05-30",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:15.809671"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A8",
+      "description": "Notice of Appearance Atty Calderwood, Atty Shook",
+      "date": "2024-05-30",
+      "downloaded": false
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A5",
+      "description": "NEF(05-30-2024 08:37:36 AM) Service/Affidavit Of Service",
+      "date": "2024-05-30",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:28.218277"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A4",
+      "description": "Service/Affidavit Of Service on Carrington Chase Property Ow",
+      "date": "2024-05-30",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:33.254305"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A1",
+      "description": "Lis Pendens Filed",
+      "date": "2024-05-29",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:39.079259"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A2",
+      "description": "Summons & Complaint",
+      "date": "2024-05-29",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:44.332964"
+    },
+    {
+      "url": "https://docviewer.charlestoncounty.gov/PublicIndex/Index?viewertype=cms&ctagency=10002&casenumber=2024CP1002777&docseq=P1A3",
+      "description": "ADR/Certificate of Exemption",
+      "date": "2024-05-29",
+      "downloaded": true,
+      "downloaded_at": "2026-03-04T13:42:49.675453"
+    }
+  ],
+  "financials": {
+    "summary": {
+      "fine_costs": "$151.00",
+      "total_paid_for_fine_costs": "$151.00",
+      "balance_due": "$0.00"
+    },
+    "costs": [
+      {
+        "description": "Civil Filing Fee State 56%",
+        "code": "CVFFST",
+        "amount": "$56.00",
+        "charge_action": null,
+        "disbursed_amount": "$56.00"
+      },
+      {
+        "description": "SCJD Filing Fee Proviso $50 / $25",
+        "code": "SCJDPV",
+        "amount": "$50.00",
+        "charge_action": null,
+        "disbursed_amount": "$50.00"
+      },
+      {
+        "description": "Cancellation of Lis Pendens",
+        "code": "CANCLP",
+        "amount": "$1.00",
+        "charge_action": null,
+        "disbursed_amount": "$1.00"
+      },
+      {
+        "description": "Civil Filing Fee County 44%/100%",
+        "code": "CVFFCN",
+        "amount": "$44.00",
+        "charge_action": null,
+        "disbursed_amount": "$44.00"
+      }
+    ],
+    "payments": [
+      {
+        "date": "07/29/2024",
+        "receipt_number": "685410",
+        "entered_by": "COCMGK",
+        "transaction_type": "PY",
+        "amount": "$1.00"
+      },
+      {
+        "date": "05/29/2024",
+        "receipt_number": "682452",
+        "entered_by": "COCALB",
+        "transaction_type": "PY",
+        "amount": "$150.00"
+      }
+    ]
+  }
+}

@@ -454,7 +454,7 @@ export default function PropertiesClient() {
                   </tr>
                 ) : (
                   properties.map((p) => (
-                    <tr key={p.id} className="hover:bg-blue-50/30 transition-colors">
+                    <tr key={p.id} className="hover:bg-blue-50 transition-colors">
                       <td className="px-4 py-3">
                         <Link href={`/properties/${p.id}`} className="font-medium text-gray-900 hover:text-blue-600 transition-colors text-sm">
                           {p.name || "Unnamed Property"}

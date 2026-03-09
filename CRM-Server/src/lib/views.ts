@@ -185,6 +185,146 @@ export const CONTACT_COLUMNS: ColumnDef[] = [
   { key: "linkedin_url", label: "LinkedIn", defaultOn: false },
 ];
 
+export const FORECLOSURE_FILTER_FIELDS: FilterField[] = [
+  { key: "status", label: "Status", type: "select", operators: SELECT_OPS, options: [
+    { value: "Pending",              label: "Pending"              },
+    { value: "Dismissed",            label: "Dismissed"            },
+    { value: "Disposed",             label: "Disposed"             },
+    { value: "Judgment",             label: "Judgment"             },
+    { value: "Referred To Master",   label: "Referred To Master"   },
+    { value: "Settled",              label: "Settled"              },
+    { value: "Stayed for Intervention", label: "Stayed for Intervention" },
+    { value: "Satisfied",            label: "Satisfied"            },
+    { value: "Stayed",               label: "Stayed"               },
+    { value: "Bankruptcy",           label: "Bankruptcy"           },
+    { value: "Cancelled",            label: "Cancelled"            },
+    { value: "Change Of Venue",      label: "Change Of Venue"      },
+    { value: "Transferred",          label: "Transferred"          },
+  ]},
+  { key: "court_agency", label: "Court", type: "select", operators: SELECT_OPS, options: [
+    { value: "Common Pleas",                    label: "Common Pleas"                    },
+    { value: "Greenville County Common Pleas",  label: "Greenville County Common Pleas"  },
+    { value: "Master In Equity",                label: "Master In Equity"                },
+    { value: "Greenville County Master in Equity", label: "Greenville County Master in Equity" },
+  ]},
+  { key: "file_type", label: "File Type", type: "select", operators: SELECT_OPS, options: [
+    { value: "Non-Jury", label: "Non-Jury" },
+    { value: "Jury",     label: "Jury"     },
+  ]},
+  { key: "caption",             label: "Caption",         type: "text",   operators: TEXT_OPS },
+  { key: "tax_map_description", label: "Address",         type: "text",   operators: TEXT_OPS },
+  { key: "tax_map_number",      label: "Parcel #",        type: "text",   operators: TEXT_OPS },
+  { key: "plaintiff",           label: "Plaintiff",       type: "text",   operators: TEXT_OPS },
+  { key: "assigned_judge",      label: "Assigned Judge",  type: "text",   operators: TEXT_OPS },
+  { key: "disposition",         label: "Disposition",     type: "text",   operators: TEXT_OPS },
+  { key: "balance_due",         label: "Balance Due",     type: "number", operators: ["gte", "lte", "equals"] },
+  { key: "fine_costs",          label: "Fine / Costs",    type: "number", operators: ["gte", "lte", "equals"] },
+  { key: "filed_date",          label: "Filed Date",      type: "date",   operators: ["gte", "lte"] },
+  { key: "disposition_date",    label: "Disposition Date",type: "date",   operators: ["gte", "lte"] },
+  { key: "has_balance",         label: "Has Balance Due", type: "boolean", operators: ["is_true", "is_false"] },
+];
+
+export const FORECLOSURE_COLUMNS: ColumnDef[] = [
+  { key: "case_number",         label: "Case #",           defaultOn: true,  alwaysOn: true },
+  { key: "address",             label: "Address",          defaultOn: true  },
+  { key: "plaintiff",           label: "Plaintiff",        defaultOn: true  },
+  { key: "status",              label: "Status",           defaultOn: true  },
+  { key: "filed_date",          label: "Filed",            defaultOn: true  },
+  { key: "disposition",         label: "Disposition",      defaultOn: true  },
+  { key: "disposition_date",    label: "Disposition Date", defaultOn: false },
+  { key: "balance_due",         label: "Balance Due",      defaultOn: true  },
+  { key: "fine_costs",          label: "Fine / Costs",     defaultOn: false },
+  { key: "total_paid",          label: "Total Paid",       defaultOn: false },
+  { key: "court_agency",        label: "Court",            defaultOn: false },
+  { key: "case_sub_type",       label: "Case Type",        defaultOn: false },
+  { key: "file_type",           label: "File Type",        defaultOn: false },
+  { key: "assigned_judge",      label: "Assigned Judge",   defaultOn: false },
+  { key: "disposition_judge",   label: "Disposition Judge",defaultOn: false },
+  { key: "caption",             label: "Caption",          defaultOn: false },
+  { key: "tax_map_number",      label: "Parcel #",         defaultOn: false },
+  { key: "tax_map_agency",      label: "Tax Map Agency",   defaultOn: false },
+  { key: "scraped_at",          label: "Scraped At",       defaultOn: false },
+];
+
+export const DEFAULT_FORECLOSURE_COLUMNS = FORECLOSURE_COLUMNS.filter(
+  (c) => c.defaultOn
+).map((c) => c.key);
+
+/** Builds a SQL WHERE clause from FilterConditions for the foreclosure_cases table.
+ *  Returns { clauses: string[], params: unknown[] } — caller prepends its own $N offsets. */
+export function buildForeclosureSqlConditions(
+  conditions: FilterCondition[],
+  startIdx = 1
+): { clauses: string[]; params: unknown[] } {
+  const clauses: string[] = [];
+  const params: unknown[] = [];
+  let idx = startIdx;
+
+  // Helper for text fields
+  const textClause = (col: string, operator: string, value: string) => {
+    if (operator === "contains") { clauses.push(`${col} ILIKE $${idx}`); params.push(`%${value}%`); }
+    else if (operator === "equals") { clauses.push(`${col} = $${idx}`); params.push(value); }
+    else if (operator === "is_not_empty") { clauses.push(`${col} IS NOT NULL AND ${col} != ''`); return; }
+    idx++;
+  };
+
+  // Helper for select fields (is / is_not)
+  const selectClause = (col: string, operator: string, value: string) => {
+    clauses.push(operator === "is" ? `${col} = $${idx}` : `${col} != $${idx}`);
+    params.push(value); idx++;
+  };
+
+  // Helper for numeric fields
+  const numClause = (col: string, operator: string, value: string) => {
+    const n = parseFloat(value);
+    if (isNaN(n)) return;
+    const op = operator === "gte" ? ">=" : operator === "lte" ? "<=" : "=";
+    clauses.push(`${col} ${op} $${idx}`);
+    params.push(n); idx++;
+  };
+
+  // Helper for date fields
+  const dateClause = (col: string, operator: string, value: string) => {
+    const op = operator === "gte" ? ">=" : "<=";
+    clauses.push(`${col} ${op} $${idx}`);
+    params.push(value); idx++;
+  };
+
+  for (const { field, operator, value } of conditions) {
+    switch (field) {
+      case "status":           selectClause("fc.status", operator, value); break;
+      case "court_agency":     selectClause("fc.court_agency", operator, value); break;
+      case "file_type":        selectClause("fc.file_type", operator, value); break;
+      case "caption":          textClause("fc.caption", operator, value); break;
+      case "tax_map_description": textClause("fc.tax_map_description", operator, value); break;
+      case "tax_map_number":   textClause("fc.tax_map_number", operator, value); break;
+      case "assigned_judge":   textClause("fc.assigned_judge", operator, value); break;
+      case "disposition":      textClause("fc.disposition", operator, value); break;
+      case "plaintiff":
+        // plaintiff comes from a subquery — filter on foreclosure_parties
+        if (operator === "contains") {
+          clauses.push(`EXISTS (SELECT 1 FROM foreclosure_parties fp WHERE fp.case_id = fc.id AND fp.party_type = 'Plaintiff' AND fp.name ILIKE $${idx})`);
+          params.push(`%${value}%`); idx++;
+        } else if (operator === "equals") {
+          clauses.push(`EXISTS (SELECT 1 FROM foreclosure_parties fp WHERE fp.case_id = fc.id AND fp.party_type = 'Plaintiff' AND fp.name = $${idx})`);
+          params.push(value); idx++;
+        }
+        break;
+      case "balance_due":      numClause("fc.balance_due", operator, value); break;
+      case "fine_costs":       numClause("fc.fine_costs", operator, value); break;
+      case "filed_date":       dateClause("fc.filed_date", operator, value); break;
+      case "disposition_date": dateClause("fc.disposition_date", operator, value); break;
+      case "has_balance":
+        clauses.push(operator === "is_true"
+          ? "fc.balance_due > 0"
+          : "(fc.balance_due IS NULL OR fc.balance_due = 0)");
+        break;
+    }
+  }
+
+  return { clauses, params };
+}
+
 export const PROPERTY_COLUMNS: ColumnDef[] = [
   { key: "name", label: "Name", defaultOn: true, alwaysOn: true },
   { key: "location", label: "Location", defaultOn: true },
