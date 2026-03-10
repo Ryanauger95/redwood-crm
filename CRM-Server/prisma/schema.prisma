@@ -396,7 +396,8 @@ model SavedView {
 
 model ForeclosureCase {
   id                        Int       @id @default(autoincrement())
-  case_number               String    @unique
+  case_number               String
+  county                    String
   detail_url                String?
   scraped_at                DateTime?
 
@@ -437,6 +438,7 @@ model ForeclosureCase {
   costs            ForeclosureCost[]
   payments         ForeclosurePayment[]
 
+  @@unique([case_number, county])
   @@index([tax_map_number])
   @@index([status])
   @@index([property_id])

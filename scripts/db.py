@@ -17,6 +17,7 @@ def get_connection():
         dbname=os.getenv("DB_NAME", "homevale_crm"),
         user=os.getenv("DB_USER", "homevale"),
         password=os.getenv("DB_PASSWORD", "homevale_pass"),
+        sslmode=os.getenv("DB_SSLMODE", "prefer"),
         cursor_factory=RealDictCursor,
     )
 
