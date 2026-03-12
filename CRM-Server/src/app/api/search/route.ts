@@ -7,14 +7,15 @@ export async function GET(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const q = new URL(req.url).searchParams.get("q") || "";
-  if (q.length < 2) return NextResponse.json({ businesses: [], people: [] });
+  if (q.length < 2) return NextResponse.json({ businesses: [], people: [], foreclosureCases: [] });
 
-  const [businesses, people] = await Promise.all([
+  const [businesses, people, foreclosureCases] = await Promise.all([
     prisma.business.findMany({
       where: {
         OR: [
           { le_name: { contains: q, mode: "insensitive" } },
           { lf_name: { contains: q, mode: "insensitive" } },
+          { address: { contains: q, mode: "insensitive" } },
           { city: { contains: q, mode: "insensitive" } },
           { phone: { contains: q, mode: "insensitive" } },
           { email: { contains: q, mode: "insensitive" } },
@@ -27,13 +28,14 @@ export async function GET(req: NextRequest) {
         business_id: true,
         le_name: true,
         lf_name: true,
+        address: true,
         city: true,
         county: true,
         enrichment_status: true,
         acquisition_fit_score: true,
         pipelineStage: { select: { stage: true } },
       },
-    }),
+    }).catch(() => []),
     prisma.person.findMany({
       where: {
         OR: [
@@ -41,6 +43,7 @@ export async function GET(req: NextRequest) {
           { first_name: { contains: q, mode: "insensitive" } },
           { last_name: { contains: q, mode: "insensitive" } },
           { city: { contains: q, mode: "insensitive" } },
+          { associated_case_number: { contains: q, mode: "insensitive" } },
         ],
       },
       take: 5,
@@ -51,6 +54,7 @@ export async function GET(req: NextRequest) {
         last_name: true,
         city: true,
         state_code: true,
+        associated_case_number: true,
         businessPeople: {
           take: 1,
           select: {
@@ -58,8 +62,24 @@ export async function GET(req: NextRequest) {
           },
         },
       },
-    }),
+    }).catch(() => []),
+    prisma.foreclosureCase.findMany({
+      where: {
+        case_number: { contains: q, mode: "insensitive" },
+      },
+      take: 5,
+      orderBy: { id: "desc" },
+      select: {
+        id: true,
+        case_number: true,
+        county: true,
+        status: true,
+        caption: true,
+        filed_date: true,
+        detail_url: true,
+      },
+    }).catch((e) => { console.error("Foreclosure search error:", e); return []; }),
   ]);
 
-  return NextResponse.json({ businesses, people });
+  return NextResponse.json({ businesses, people, foreclosureCases });
 }
