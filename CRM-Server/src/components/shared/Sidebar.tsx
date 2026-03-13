@@ -10,11 +10,12 @@ import {
   GitBranch,
   Database,
   LogOut,
-  HeartHandshake,
+  TreePine,
   Mail,
   MapPin,
   Activity,
   Scale,
+  Shield,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -30,15 +31,19 @@ const navItems = [
   { href: "/query",          label: "Query",      icon: Database },
 ];
 
-export function Sidebar() {
+export function Sidebar({ showAdmin }: { showAdmin?: boolean }) {
   const pathname = usePathname();
 
+  const allItems = showAdmin
+    ? [...navItems, { href: "/admin", label: "Admin", icon: Shield }]
+    : navItems;
+
   return (
-    <aside className="fixed left-0 top-0 h-full w-14 bg-[#0d1526] flex flex-col z-30 border-r border-white/[0.06]">
+    <aside className="fixed left-0 top-0 h-full w-14 bg-[#1a1a1a] flex flex-col z-30 border-r border-white/[0.06]">
       {/* Logo */}
       <div className="flex items-center justify-center py-[18px]">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-900/40">
-          <HeartHandshake size={16} className="text-white" strokeWidth={2.5} />
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-900/40">
+          <TreePine size={16} className="text-white" strokeWidth={2.5} />
         </div>
       </div>
 
@@ -46,7 +51,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 flex flex-col items-center py-2 gap-0.5">
-        {navItems.map(({ href, label, icon: Icon }) => {
+        {allItems.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link
@@ -61,9 +66,9 @@ export function Sidebar() {
               )}
             >
               {isActive && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue-400 rounded-r-full -ml-px" />
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-[#3B82F6] rounded-r-full -ml-px" />
               )}
-              <Icon size={17} className={isActive ? "text-blue-400" : ""} strokeWidth={isActive ? 2.5 : 2} />
+              <Icon size={17} className={isActive ? "text-blue-300" : ""} strokeWidth={isActive ? 2.5 : 2} />
 
               {/* Tooltip */}
               <span className="pointer-events-none absolute left-full ml-3 px-2 py-1 rounded-md bg-gray-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 shadow-lg z-50">

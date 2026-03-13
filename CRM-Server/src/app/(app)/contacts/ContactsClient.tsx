@@ -2,15 +2,19 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Search, User } from "lucide-react";
+import { Search, User, Plus } from "lucide-react";
 import { useToast } from "@/components/shared/Toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { FitScoreBadge } from "@/components/shared/FitScoreBadge";
 import { FilterBuilder } from "@/components/shared/FilterBuilder";
 import { ColumnPicker } from "@/components/shared/ColumnPicker";
 import { ViewsBar } from "@/components/shared/ViewsBar";
+import { InlineFieldEditor } from "@/components/shared/InlineFieldEditor";
+import { BulkActionBar } from "@/components/shared/BulkActionBar";
+import { AddEntityModal } from "@/components/shared/AddEntityModal";
+import { TABLE } from "@/components/shared/TablePrimitives";
+import { useRowSelection } from "@/hooks/useRowSelection";
 import { getLastViewId, setLastViewId } from "@/lib/viewPersistence";
 import {
   SavedViewData,
@@ -30,6 +34,25 @@ interface Person {
   estimated_age: number | null;
   linkedin_url: string | null;
   succession_signals: string | null;
+  email: string | null;
+  phone: string | null;
+  job_title: string | null;
+  company_name: string | null;
+  contact_type: string | null;
+  contact_status: string | null;
+  lead_score: number | null;
+  lifecycle_stage: string | null;
+  asset_class: string | null;
+  market_focus: string | null;
+  relationship_status: string | null;
+  source: string | null;
+  address: string | null;
+  zip_code: string | null;
+  owner_background: string | null;
+  other_businesses: string | null;
+  in_active_foreclosure: boolean | null;
+  associated_case_number: string | null;
+  skiptrace_url: string | null;
   businessPeople: {
     business: {
       business_id: number;
@@ -47,13 +70,15 @@ function conditionsEqual(a: FilterCondition[], b: FilterCondition[]) {
 
 export default function ContactsClient() {
   const { showToast, toastElement } = useToast();
-  const [editingCell, setEditingCell] = useState<{ id: number; field: string } | null>(null);
-  const [editValue, setEditValue] = useState("");
   const [people, setPeople] = useState<Person[]>([]);
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  // Users for bulk assign dropdown
+  const [users, setUsers] = useState<{ id: number; name: string }[]>([]);
 
   // Views state
   const [views, setViews] = useState<SavedViewData[]>([]);
@@ -73,6 +98,10 @@ export default function ContactsClient() {
       JSON.stringify(columns) !== JSON.stringify(activeView.columns ?? DEFAULT_CONTACT_COLUMNS)
     : false;
 
+  // Row selection
+  const visibleIds = people.map((p) => p.person_id);
+  const selection = useRowSelection(visibleIds, total, pages);
+
   // Load views on mount — restore last visited view
   useEffect(() => {
     fetch("/api/views?entity=contacts")
@@ -85,6 +114,14 @@ export default function ContactsClient() {
         if (initial) activateView(initial, false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Load users for bulk assign
+  useEffect(() => {
+    fetch("/api/users")
+      .then((r) => r.json())
+      .then((data: { id: number; name: string }[]) => setUsers(data))
+      .catch(() => {});
   }, []);
 
   function activateView(view: SavedViewData, resetPage = true) {
@@ -193,8 +230,32 @@ export default function ContactsClient() {
       setPeople((prev) => prev.map((p) => p.person_id === personId ? { ...p, [field]: value || null } : p));
       showToast("Saved");
     }
-    setEditingCell(null);
   }, [showToast]);
+
+  // Bulk action handlers
+  const handleBulkAssign = async (userId: number) => {
+    // Contacts don't have assignment - just clear selection
+    selection.clearSelection();
+  };
+
+  const handleBulkFieldChange = async (field: string, value: string) => {
+    await fetch("/api/bulk", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ entity: "contacts", ids: Array.from(selection.selectedIds), field, value }),
+    });
+    selection.clearSelection();
+    fetchPeople();
+    showToast("Updated");
+  };
+
+  // Create contact handler
+  const handleCreateContact = async (data: Record<string, string>) => {
+    const res = await fetch("/api/contacts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    if (!res.ok) throw new Error("Failed to create contact");
+    fetchPeople();
+    showToast("Contact created");
+  };
 
   return (
     <div>
@@ -213,6 +274,24 @@ export default function ContactsClient() {
           onSaveCurrent={handleSaveCurrent}
           onSaveAsNew={handleSaveAsNew}
           onDiscard={handleDiscard}
+        />
+      )}
+
+      {/* Bulk action bar */}
+      {selection.selectedCount > 0 && (
+        <BulkActionBar
+          selectedCount={selection.selectedCount}
+          totalCount={total}
+          allPagesSelected={selection.allPagesSelected}
+          hasMultiplePages={selection.hasMultiplePages}
+          onSelectAllPages={selection.selectAllPages}
+          onClearSelection={selection.clearSelection}
+          onAssign={handleBulkAssign}
+          onChangeField={handleBulkFieldChange}
+          assignableUsers={users}
+          editableFields={[
+            { key: "city", label: "City" },
+          ]}
         />
       )}
 
@@ -244,34 +323,108 @@ export default function ContactsClient() {
             selected={columns}
             onChange={setColumns}
           />
+          <div className="ml-auto">
+            <Button onClick={() => setShowAddModal(true)} className="gap-1.5">
+              <Plus size={15} />
+              Add Contact
+            </Button>
+          </div>
         </div>
 
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-100 bg-[#f8fafc]">
-                  <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Name</th>
+                <tr className={TABLE.thead}>
+                  <th className="w-10 px-4 py-2.5">
+                    <input
+                      type="checkbox"
+                      checked={selection.allOnPageSelected && visibleIds.length > 0}
+                      ref={(el) => {
+                        if (el) el.indeterminate = selection.someOnPageSelected && !selection.allOnPageSelected;
+                      }}
+                      onChange={selection.toggleAll}
+                      className={TABLE.checkbox}
+                    />
+                  </th>
+                  <th className={TABLE.th}>Name</th>
                   {columns.includes("location") && (
-                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Location</th>
+                    <th className={TABLE.th}>Location</th>
                   )}
                   {columns.includes("businesses") && (
-                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Businesses</th>
+                    <th className={TABLE.th}>Businesses</th>
                   )}
                   {columns.includes("top_fit_score") && (
-                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Fit Score</th>
+                    <th className={TABLE.th}>Fit Score</th>
                   )}
                   {columns.includes("activities") && (
-                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Activities</th>
+                    <th className={TABLE.th}>Activities</th>
                   )}
                   {columns.includes("estimated_age") && (
-                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Age</th>
+                    <th className={TABLE.th}>Age</th>
                   )}
                   {columns.includes("succession_signals") && (
-                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Succession Signals</th>
+                    <th className={TABLE.th}>Succession Signals</th>
                   )}
                   {columns.includes("linkedin_url") && (
-                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">LinkedIn</th>
+                    <th className={TABLE.th}>LinkedIn</th>
+                  )}
+                  {columns.includes("email") && (
+                    <th className={TABLE.th}>Email</th>
+                  )}
+                  {columns.includes("phone") && (
+                    <th className={TABLE.th}>Phone</th>
+                  )}
+                  {columns.includes("job_title") && (
+                    <th className={TABLE.th}>Job Title</th>
+                  )}
+                  {columns.includes("company_name") && (
+                    <th className={TABLE.th}>Company</th>
+                  )}
+                  {columns.includes("contact_type") && (
+                    <th className={TABLE.th}>Contact Type</th>
+                  )}
+                  {columns.includes("contact_status") && (
+                    <th className={TABLE.th}>Status</th>
+                  )}
+                  {columns.includes("lead_score") && (
+                    <th className={TABLE.th}>Lead Score</th>
+                  )}
+                  {columns.includes("lifecycle_stage") && (
+                    <th className={TABLE.th}>Lifecycle Stage</th>
+                  )}
+                  {columns.includes("asset_class") && (
+                    <th className={TABLE.th}>Asset Class</th>
+                  )}
+                  {columns.includes("market_focus") && (
+                    <th className={TABLE.th}>Market Focus</th>
+                  )}
+                  {columns.includes("relationship_status") && (
+                    <th className={TABLE.th}>Relationship</th>
+                  )}
+                  {columns.includes("source") && (
+                    <th className={TABLE.th}>Source</th>
+                  )}
+                  {columns.includes("address") && (
+                    <th className={TABLE.th}>Address</th>
+                  )}
+                  {columns.includes("zip_code") && (
+                    <th className={TABLE.th}>Zip Code</th>
+                  )}
+                  {columns.includes("owner_background") && (
+                    <th className={TABLE.th}>Owner Background</th>
+                  )}
+                  {columns.includes("other_businesses") && (
+                    <th className={TABLE.th}>Other Businesses</th>
+                  )}
+                  {columns.includes("in_active_foreclosure") && (
+                    <th className={TABLE.th}>Active Foreclosure</th>
+                  )}
+                  {columns.includes("associated_case_number") && (
+                    <th className={TABLE.th}>Case Number</th>
+                  )}
+                  {columns.includes("skiptrace_url") && (
+                    <th className={TABLE.th}>Skiptrace</th>
                   )}
                 </tr>
               </thead>
@@ -279,7 +432,7 @@ export default function ContactsClient() {
                 {loading ? (
                   Array.from({ length: 6 }).map((_, i) => (
                     <tr key={i}>
-                      {Array.from({ length: columns.length + 1 }).map((_, j) => (
+                      {Array.from({ length: columns.length + 2 }).map((_, j) => (
                         <td key={j} className="px-4 py-2.5">
                           <div className="h-4 bg-gray-100 rounded animate-pulse" style={{ width: `${40 + ((i * 11 + j * 9) % 55)}%` }} />
                         </td>
@@ -288,7 +441,7 @@ export default function ContactsClient() {
                   ))
                 ) : people.length === 0 ? (
                   <tr>
-                    <td colSpan={columns.length + 1} className="text-center py-16 text-gray-400">
+                    <td colSpan={columns.length + 2} className="text-center py-16 text-gray-400">
                       <User size={24} className="mx-auto mb-2 opacity-30" />
                       <p className="text-sm">No contacts found</p>
                     </td>
@@ -304,7 +457,15 @@ export default function ContactsClient() {
                     const avatarColors = ["from-blue-400 to-indigo-500", "from-violet-400 to-purple-500", "from-emerald-400 to-teal-500", "from-amber-400 to-orange-500", "from-rose-400 to-pink-500"];
                     const colorIdx = name.charCodeAt(0) % avatarColors.length;
                     return (
-                      <tr key={p.person_id} className="hover:bg-blue-50 transition-colors group">
+                      <tr key={p.person_id} className={`${TABLE.row} group`}>
+                        <td className="w-10 px-4 py-2.5">
+                          <input
+                            type="checkbox"
+                            checked={selection.isSelected(p.person_id)}
+                            onChange={() => selection.toggleOne(p.person_id)}
+                            className={TABLE.checkbox}
+                          />
+                        </td>
                         <td className="px-4 py-2.5">
                           <Link
                             href={`/contacts/${p.person_id}`}
@@ -318,26 +479,15 @@ export default function ContactsClient() {
                         </td>
                         {columns.includes("location") && (
                           <td className="px-4 py-2.5 text-[13px] text-gray-600">
-                            {editingCell?.id === p.person_id && editingCell.field === "city" ? (
-                              <input
-                                autoFocus
-                                value={editValue}
-                                onChange={(e) => setEditValue(e.target.value)}
-                                onBlur={() => patchContact(p.person_id, "city", editValue)}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") patchContact(p.person_id, "city", editValue);
-                                  if (e.key === "Escape") setEditingCell(null);
-                                }}
-                                className="border border-blue-400 rounded px-1.5 py-0.5 text-sm focus:outline-none w-28"
-                              />
-                            ) : (
-                              <span
-                                className="cursor-text hover:bg-gray-100 rounded px-1 py-0.5 transition-colors"
-                                onClick={() => { setEditingCell({ id: p.person_id, field: "city" }); setEditValue(p.city || ""); }}
-                              >
-                                {p.city ? `${p.city}, ${p.state_code || "SC"}` : <span className="text-gray-300">—</span>}
-                              </span>
-                            )}
+                            <InlineFieldEditor
+                              value={p.city}
+                              onSave={(val) => patchContact(p.person_id, "city", val)}
+                              renderDisplay={(v) => (
+                                <span className="text-[13px] text-gray-600">
+                                  {v ? `${v}, ${p.state_code || "SC"}` : <span className="text-gray-300">—</span>}
+                                </span>
+                              )}
+                            />
                           </td>
                         )}
                         {columns.includes("businesses") && (
@@ -351,8 +501,8 @@ export default function ContactsClient() {
                           </td>
                         )}
                         {columns.includes("top_fit_score") && (
-                          <td className="px-4 py-2.5">
-                            <FitScoreBadge score={topScore || null} size="sm" />
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">
+                            {topScore || <span className="text-gray-300">—</span>}
                           </td>
                         )}
                         {columns.includes("activities") && (
@@ -377,6 +527,69 @@ export default function ContactsClient() {
                               : <span className="text-gray-300">—</span>}
                           </td>
                         )}
+                        {columns.includes("email") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.email || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("phone") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.phone || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("job_title") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.job_title || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("company_name") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.company_name || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("contact_type") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.contact_type || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("contact_status") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.contact_status || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("lead_score") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.lead_score ?? <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("lifecycle_stage") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.lifecycle_stage || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("asset_class") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.asset_class || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("market_focus") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.market_focus || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("relationship_status") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.relationship_status || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("source") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.source || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("address") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.address || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("zip_code") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.zip_code || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("owner_background") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600 max-w-xs">
+                            <span className="truncate block">{p.owner_background || <span className="text-gray-300">—</span>}</span>
+                          </td>
+                        )}
+                        {columns.includes("other_businesses") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600 max-w-xs">
+                            <span className="truncate block">{p.other_businesses || <span className="text-gray-300">—</span>}</span>
+                          </td>
+                        )}
+                        {columns.includes("in_active_foreclosure") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.in_active_foreclosure ? "Yes" : "No"}</td>
+                        )}
+                        {columns.includes("associated_case_number") && (
+                          <td className="px-4 py-2.5 text-[13px] text-gray-600">{p.associated_case_number || <span className="text-gray-300">—</span>}</td>
+                        )}
+                        {columns.includes("skiptrace_url") && (
+                          <td className="px-4 py-2.5 text-[13px]">
+                            {p.skiptrace_url ? <a href={p.skiptrace_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-xs">Link</a> : <span className="text-gray-300">—</span>}
+                          </td>
+                        )}
                       </tr>
                     );
                   })
@@ -386,8 +599,8 @@ export default function ContactsClient() {
           </div>
 
           {pages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-[#f8fafc]">
-              <p className="text-[13px] text-gray-400">Page {page} of {pages}</p>
+            <div className={TABLE.pagination}>
+              <p className={TABLE.paginationText}>Page {page} of {pages}</p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setPage(page - 1)} disabled={page <= 1}>Previous</Button>
                 <Button variant="outline" size="sm" onClick={() => setPage(page + 1)} disabled={page >= pages}>Next</Button>
@@ -396,6 +609,22 @@ export default function ContactsClient() {
           )}
         </Card>
       </div>
+
+      {/* Add Contact Modal */}
+      <AddEntityModal
+        title="Add Contact"
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        fields={[
+          { key: "first_name", label: "First Name", required: true },
+          { key: "last_name", label: "Last Name", required: true },
+          { key: "city", label: "City" },
+          { key: "state_code", label: "State", placeholder: "SC" },
+          { key: "email", label: "Email" },
+          { key: "phone", label: "Phone" },
+        ]}
+        onSubmit={handleCreateContact}
+      />
     </div>
   );
 }

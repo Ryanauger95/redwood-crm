@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Search, ChevronUp, ChevronDown, MapPin } from "lucide-react";
+import { Search, MapPin, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,6 +12,12 @@ import { ViewsBar } from "@/components/shared/ViewsBar";
 import { useToast } from "@/components/shared/Toast";
 import { formatCurrency } from "@/lib/utils";
 import { getLastViewId, setLastViewId } from "@/lib/viewPersistence";
+import { useRowSelection } from "@/hooks/useRowSelection";
+import { BulkActionBar } from "@/components/shared/BulkActionBar";
+import { InlineFieldEditor } from "@/components/shared/InlineFieldEditor";
+import { AddEntityModal } from "@/components/shared/AddEntityModal";
+import { PROPERTY_ASSET_CLASS_OPTIONS } from "@/lib/fieldOptions";
+import { TABLE, HeaderCheckbox, RowCheckbox, TextCell, BoolCell, CurrencyCell, DateCell, TruncCell, LinkCell, SortIcon as SharedSortIcon } from "@/components/shared/TablePrimitives";
 import {
   SavedViewData,
   FilterCondition,
@@ -39,110 +45,39 @@ interface Property {
   annual_revenue: string | null;
   num_employees: number | null;
   territory: string | null;
+  address: string | null;
+  zipcode: string | null;
+  deal_type: string | null;
+  motivation_level: string | null;
+  sale_timeline: string | null;
+  ownership_type: string | null;
+  letter_status: string | null;
+  phone: string | null;
+  website: string | null;
+  data_status: string | null;
+  offer_made: string | null;
+  last_contact_date: string | null;
+  next_contact_date: string | null;
+  last_sale_amount: string | null;
+  last_sale_date: string | null;
+  last_sale_year: number | null;
+  tax_assessed_value: string | null;
+  mortgage_amount: string | null;
+  listing_url: string | null;
+  asking_price_per_sqft: string | null;
+  property_size_estimate: string | null;
+  broker_names: string | null;
+  broker_phone: string | null;
+  broker_company: string | null;
+  industry_type: string | null;
+  business_type: string | null;
+  in_foreclosure: boolean | null;
+  foreclosure_status: string | null;
+  created_at: string | null;
 }
-
-type EditingCell = { id: string; field: string } | null;
 
 function conditionsEqual(a: FilterCondition[], b: FilterCondition[]) {
   return JSON.stringify(a) === JSON.stringify(b);
-}
-
-// Inline text cell — click to edit, blur/Enter to save, Escape to cancel
-function InlineText({
-  value,
-  field,
-  rowId,
-  editingCell,
-  editValue,
-  onStartEdit,
-  onChangeValue,
-  onCommit,
-  onCancel,
-  className = "",
-}: {
-  value: string | null;
-  field: string;
-  rowId: string;
-  editingCell: EditingCell;
-  editValue: string;
-  onStartEdit: (id: string, field: string, current: string) => void;
-  onChangeValue: (v: string) => void;
-  onCommit: () => void;
-  onCancel: () => void;
-  className?: string;
-}) {
-  const isEditing = editingCell?.id === rowId && editingCell.field === field;
-  if (isEditing) {
-    return (
-      <input
-        autoFocus
-        value={editValue}
-        onChange={(e) => onChangeValue(e.target.value)}
-        onBlur={onCommit}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") onCommit();
-          if (e.key === "Escape") onCancel();
-        }}
-        className={`border border-blue-400 rounded px-1.5 py-0.5 text-sm focus:outline-none w-full ${className}`}
-      />
-    );
-  }
-  return (
-    <span
-      className="cursor-text hover:bg-gray-100 rounded px-1.5 py-0.5 transition-colors block"
-      onClick={() => onStartEdit(rowId, field, value || "")}
-    >
-      {value || <span className="text-gray-300">—</span>}
-    </span>
-  );
-}
-
-// Inline select cell — click to edit, onChange saves immediately
-function InlineSelect({
-  value,
-  field,
-  rowId,
-  options,
-  editingCell,
-  editValue,
-  onStartEdit,
-  onCommit,
-  onCancel,
-  renderValue,
-}: {
-  value: string | null;
-  field: string;
-  rowId: string;
-  options: string[];
-  editingCell: EditingCell;
-  editValue: string;
-  onStartEdit: (id: string, field: string, current: string) => void;
-  onCommit: (val: string) => void;
-  onCancel: () => void;
-  renderValue: (v: string | null) => React.ReactNode;
-}) {
-  const isEditing = editingCell?.id === rowId && editingCell.field === field;
-  if (isEditing) {
-    return (
-      <select
-        autoFocus
-        value={editValue}
-        onChange={(e) => onCommit(e.target.value)}
-        onBlur={onCancel}
-        className="border border-blue-400 rounded px-1 py-0.5 text-xs focus:outline-none max-w-48"
-      >
-        {options.map((o) => <option key={o} value={o}>{o}</option>)}
-      </select>
-    );
-  }
-  return (
-    <span
-      className="cursor-pointer block"
-      onClick={() => onStartEdit(rowId, field, value || options[0])}
-    >
-      {renderValue(value)}
-    </span>
-  );
 }
 
 function DealStageBadge({ stage }: { stage: string | null }) {
@@ -167,10 +102,6 @@ export default function PropertiesClient() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
-  // Inline editing
-  const [editingCell, setEditingCell] = useState<EditingCell>(null);
-  const [editValue, setEditValue] = useState("");
-
   // Views
   const [views, setViews] = useState<SavedViewData[]>([]);
   const [activeViewId, setActiveViewId] = useState<number | null>(null);
@@ -181,6 +112,16 @@ export default function PropertiesClient() {
   const [columns, setColumns] = useState<string[]>(DEFAULT_PROPERTY_COLUMNS);
   const [sortField, setSortField] = useState("updated_at");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+
+  // Add modal
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  // Users for bulk assign
+  const [users, setUsers] = useState<{ id: number; name: string }[]>([]);
+
+  // Row selection
+  const visibleIds = properties.map((p) => p.id);
+  const selection = useRowSelection(visibleIds, total, pages);
 
   const activeView = views.find((v) => v.id === activeViewId) ?? null;
 
@@ -202,6 +143,14 @@ export default function PropertiesClient() {
         if (initial) activateView(initial, false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Load users for bulk assign
+  useEffect(() => {
+    fetch("/api/users")
+      .then((r) => r.json())
+      .then((data: { id: number; name: string }[]) => setUsers(data))
+      .catch(() => {});
   }, []);
 
   function activateView(view: SavedViewData, resetPage = true) {
@@ -246,20 +195,11 @@ export default function PropertiesClient() {
     setPage(1);
   };
 
-  const SortIcon = ({ field }: { field: string }) => {
-    if (sortField !== field) return <span className="text-gray-300 ml-0.5 text-xs">↕</span>;
-    return sortDir === "desc"
-      ? <ChevronDown size={13} className="ml-0.5" />
-      : <ChevronUp size={13} className="ml-0.5" />;
-  };
+  const SortIcon = ({ field }: { field: string }) => (
+    <SharedSortIcon field={field} sortField={sortField} sortDir={sortDir} />
+  );
 
-  // Inline editing helpers
-  const startEdit = (id: string, field: string, current: string) => {
-    setEditingCell({ id, field });
-    setEditValue(current);
-  };
-  const cancelEdit = () => setEditingCell(null);
-
+  // Inline patch
   const patchProperty = useCallback(async (id: string, field: string, value: string) => {
     const res = await fetch(`/api/properties/${id}`, {
       method: "PATCH",
@@ -272,13 +212,38 @@ export default function PropertiesClient() {
       );
       showToast("Saved");
     }
-    setEditingCell(null);
   }, [showToast]);
 
-  const commitTextEdit = useCallback(() => {
-    if (!editingCell) return;
-    patchProperty(editingCell.id, editingCell.field, editValue);
-  }, [editingCell, editValue, patchProperty]);
+  // Bulk handlers
+  const handleBulkAssign = async (userId: number) => {
+    await fetch("/api/bulk", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ entity: "properties", ids: Array.from(selection.selectedIds), field: "assigned_user_id", value: String(userId) }),
+    });
+    selection.clearSelection();
+    fetchProperties();
+    showToast("Assigned");
+  };
+
+  const handleBulkFieldChange = async (field: string, value: string) => {
+    await fetch("/api/bulk", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ entity: "properties", ids: Array.from(selection.selectedIds), field, value }),
+    });
+    selection.clearSelection();
+    fetchProperties();
+    showToast("Updated");
+  };
+
+  // Create handler
+  const handleCreateProperty = async (data: Record<string, string>) => {
+    const res = await fetch("/api/properties", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    if (!res.ok) throw new Error("Failed to create property");
+    fetchProperties();
+    showToast("Property created");
+  };
 
   // View CRUD
   const handleSaveCurrent = async (): Promise<void> => {
@@ -359,6 +324,25 @@ export default function PropertiesClient() {
         />
       )}
 
+      {selection.selectedCount > 0 && (
+        <BulkActionBar
+          selectedCount={selection.selectedCount}
+          totalCount={total}
+          allPagesSelected={selection.allPagesSelected}
+          hasMultiplePages={selection.hasMultiplePages}
+          onSelectAllPages={selection.selectAllPages}
+          onClearSelection={selection.clearSelection}
+          onAssign={handleBulkAssign}
+          onChangeField={handleBulkFieldChange}
+          assignableUsers={users}
+          editableFields={[
+            { key: "deal_stage", label: "Deal Stage", options: [...DEAL_STAGES] },
+            { key: "relationship_status", label: "Relationship Status", options: ["Cold", "Warm", "Hot", "Not Interested"] },
+            { key: "sales_owner", label: "Sales Owner" },
+          ]}
+        />
+      )}
+
       <div className="p-8 space-y-5">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Properties</h1>
@@ -382,49 +366,167 @@ export default function PropertiesClient() {
             onChange={(c) => { setConditions(c); setPage(1); }}
           />
           <ColumnPicker columnDefs={PROPERTY_COLUMNS} selected={columns} onChange={setColumns} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowAddModal(true)}
+            className="gap-1.5 ml-auto"
+          >
+            <Plus size={14} />
+            Add Property
+          </Button>
         </div>
 
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50/50">
+                <tr className={TABLE.thead}>
+                  <HeaderCheckbox
+                    allChecked={selection.allOnPageSelected}
+                    indeterminate={selection.someOnPageSelected && !selection.allOnPageSelected}
+                    onChange={selection.toggleAll}
+                  />
                   <th
-                    className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                    className={TABLE.thSort}
                     onClick={() => toggleSort("name")}
                   >
                     <span className="flex items-center">Name <SortIcon field="name" /></span>
                   </th>
                   {columns.includes("location") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Location</th>
+                    <th className={TABLE.th}>Location</th>
+                  )}
+                  {columns.includes("address") && (
+                    <th className={TABLE.th}>Address</th>
+                  )}
+                  {columns.includes("zipcode") && (
+                    <th className={TABLE.th}>Zipcode</th>
+                  )}
+                  {columns.includes("territory") && (
+                    <th className={TABLE.th}>Territory</th>
                   )}
                   {columns.includes("asset_class") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Asset Class</th>
+                    <th className={TABLE.th}>Asset Class</th>
                   )}
                   {columns.includes("deal_stage") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Deal Stage</th>
+                    <th className={TABLE.th}>Deal Stage</th>
+                  )}
+                  {columns.includes("deal_type") && (
+                    <th className={TABLE.th}>Deal Type</th>
                   )}
                   {columns.includes("relationship_status") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Relationship</th>
+                    <th className={TABLE.th}>Relationship</th>
+                  )}
+                  {columns.includes("motivation_level") && (
+                    <th className={TABLE.th}>Motivation</th>
+                  )}
+                  {columns.includes("sale_timeline") && (
+                    <th className={TABLE.th}>Sale Timeline</th>
+                  )}
+                  {columns.includes("ownership_type") && (
+                    <th className={TABLE.th}>Ownership Type</th>
                   )}
                   {columns.includes("owner") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Owner</th>
+                    <th className={TABLE.th}>Owner</th>
+                  )}
+                  {columns.includes("owner_phone") && (
+                    <th className={TABLE.th}>Owner Phone</th>
                   )}
                   {columns.includes("asking_price") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Asking Price</th>
+                    <th className={TABLE.th}>Asking Price</th>
+                  )}
+                  {columns.includes("asking_price_per_sqft") && (
+                    <th className={TABLE.th}>Price/SqFt</th>
                   )}
                   {columns.includes("communication_status") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Comm. Status</th>
+                    <th className={TABLE.th}>Comm. Status</th>
+                  )}
+                  {columns.includes("letter_status") && (
+                    <th className={TABLE.th}>Letter Status</th>
                   )}
                   {columns.includes("sales_owner") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Sales Owner</th>
+                    <th className={TABLE.th}>Sales Owner</th>
+                  )}
+                  {columns.includes("phone") && (
+                    <th className={TABLE.th}>Phone</th>
+                  )}
+                  {columns.includes("website") && (
+                    <th className={TABLE.th}>Website</th>
+                  )}
+                  {columns.includes("annual_revenue") && (
+                    <th className={TABLE.th}>Annual Revenue</th>
+                  )}
+                  {columns.includes("num_employees") && (
+                    <th className={TABLE.th}>Employees</th>
+                  )}
+                  {columns.includes("data_status") && (
+                    <th className={TABLE.th}>Data Status</th>
+                  )}
+                  {columns.includes("offer_made") && (
+                    <th className={TABLE.th}>Offer Made</th>
+                  )}
+                  {columns.includes("last_contact_date") && (
+                    <th className={TABLE.th}>Last Contact</th>
+                  )}
+                  {columns.includes("next_contact_date") && (
+                    <th className={TABLE.th}>Next Contact</th>
+                  )}
+                  {columns.includes("last_sale_amount") && (
+                    <th className={TABLE.th}>Last Sale Amt</th>
+                  )}
+                  {columns.includes("last_sale_date") && (
+                    <th className={TABLE.th}>Last Sale Date</th>
+                  )}
+                  {columns.includes("last_sale_year") && (
+                    <th className={TABLE.th}>Last Sale Year</th>
+                  )}
+                  {columns.includes("tax_assessed_value") && (
+                    <th className={TABLE.th}>Tax Assessed</th>
+                  )}
+                  {columns.includes("mortgage_amount") && (
+                    <th className={TABLE.th}>Mortgage</th>
+                  )}
+                  {columns.includes("listing_url") && (
+                    <th className={TABLE.th}>Listing URL</th>
+                  )}
+                  {columns.includes("property_size_estimate") && (
+                    <th className={TABLE.th}>Size Estimate</th>
+                  )}
+                  {columns.includes("broker_names") && (
+                    <th className={TABLE.th}>Broker Names</th>
+                  )}
+                  {columns.includes("broker_phone") && (
+                    <th className={TABLE.th}>Broker Phone</th>
+                  )}
+                  {columns.includes("broker_company") && (
+                    <th className={TABLE.th}>Broker Company</th>
+                  )}
+                  {columns.includes("industry_type") && (
+                    <th className={TABLE.th}>Industry Type</th>
+                  )}
+                  {columns.includes("business_type") && (
+                    <th className={TABLE.th}>Business Type</th>
+                  )}
+                  {columns.includes("in_foreclosure") && (
+                    <th className={TABLE.th}>In Foreclosure</th>
+                  )}
+                  {columns.includes("foreclosure_status") && (
+                    <th className={TABLE.th}>Foreclosure Status</th>
                   )}
                   {columns.includes("updated_at") && (
                     <th
-                      className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                      className={TABLE.thSort}
                       onClick={() => toggleSort("updated_at")}
                     >
                       <span className="flex items-center">Updated <SortIcon field="updated_at" /></span>
+                    </th>
+                  )}
+                  {columns.includes("created_at") && (
+                    <th
+                      className={TABLE.thSort}
+                      onClick={() => toggleSort("created_at")}
+                    >
+                      <span className="flex items-center">Created <SortIcon field="created_at" /></span>
                     </th>
                   )}
                 </tr>
@@ -433,8 +535,8 @@ export default function PropertiesClient() {
                 {loading ? (
                   Array.from({ length: 8 }).map((_, i) => (
                     <tr key={i}>
-                      {Array.from({ length: columns.length + 1 }).map((_, j) => (
-                        <td key={j} className="px-4 py-3">
+                      {Array.from({ length: columns.length + 2 }).map((_, j) => (
+                        <td key={j} className={TABLE.cell}>
                           <div className="h-4 bg-gray-100 rounded animate-pulse" style={{ width: `${50 + ((i * 13 + j * 7) % 50)}%` }} />
                         </td>
                       ))}
@@ -442,8 +544,8 @@ export default function PropertiesClient() {
                   ))
                 ) : properties.length === 0 ? (
                   <tr>
-                    <td colSpan={columns.length + 1} className="text-center py-16 text-gray-400">
-                      <MapPin size={24} className="mx-auto mb-2 opacity-30" />
+                    <td colSpan={columns.length + 2} className="text-center py-16 text-gray-400">
+                      <MapPin size={24} className={TABLE.emptyIcon} />
                       <p className="text-sm">No properties found</p>
                       {hasFilters && (
                         <button onClick={() => { setSearch(""); setConditions([]); setPage(1); }} className="text-xs text-blue-600 hover:underline mt-1">
@@ -454,8 +556,12 @@ export default function PropertiesClient() {
                   </tr>
                 ) : (
                   properties.map((p) => (
-                    <tr key={p.id} className="hover:bg-blue-50 transition-colors">
-                      <td className="px-4 py-3">
+                    <tr key={p.id} className={TABLE.row}>
+                      <RowCheckbox
+                        checked={selection.isSelected(p.id)}
+                        onChange={() => selection.toggleOne(p.id)}
+                      />
+                      <td className={TABLE.cell}>
                         <Link href={`/properties/${p.id}`} className="font-medium text-gray-900 hover:text-blue-600 transition-colors text-sm">
                           {p.name || "Unnamed Property"}
                         </Link>
@@ -467,131 +573,217 @@ export default function PropertiesClient() {
                       </td>
 
                       {columns.includes("location") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
-                          <div>{[p.city, p.state].filter(Boolean).join(", ") || "—"}</div>
+                        <td className={TABLE.cellText}>
+                          <div>{[p.city, p.state].filter(Boolean).join(", ") || "\u2014"}</div>
                           {p.county && <div className="text-xs text-gray-400">{p.county} Co.</div>}
                         </td>
                       )}
 
+                      {columns.includes("address") && (
+                        <TextCell value={p.address} />
+                      )}
+
+                      {columns.includes("zipcode") && (
+                        <TextCell value={p.zipcode} />
+                      )}
+
+                      {columns.includes("territory") && (
+                        <TextCell value={p.territory} />
+                      )}
+
                       {columns.includes("asset_class") && (
-                        <td className="px-4 py-3">
+                        <td className={TABLE.cell}>
                           {p.asset_class
                             ? <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{p.asset_class}</span>
-                            : <span className="text-gray-300 text-xs">—</span>}
+                            : <span className="text-gray-300 text-xs">&mdash;</span>}
                         </td>
                       )}
 
                       {columns.includes("deal_stage") && (
-                        <td className="px-4 py-3">
-                          <InlineSelect
+                        <td className={TABLE.cell}>
+                          <InlineFieldEditor
                             value={p.deal_stage}
-                            field="deal_stage"
-                            rowId={p.id}
                             options={[...DEAL_STAGES]}
-                            editingCell={editingCell}
-                            editValue={editValue}
-                            onStartEdit={startEdit}
-                            onCommit={(val) => patchProperty(p.id, "deal_stage", val)}
-                            onCancel={cancelEdit}
-                            renderValue={(v) => <DealStageBadge stage={v} />}
+                            onSave={(val) => patchProperty(p.id, "deal_stage", val)}
+                            renderDisplay={(v) => <DealStageBadge stage={v} />}
                           />
                         </td>
+                      )}
+
+                      {columns.includes("deal_type") && (
+                        <TextCell value={p.deal_type} />
                       )}
 
                       {columns.includes("relationship_status") && (
-                        <td className="px-4 py-3">
-                          <InlineSelect
+                        <td className={TABLE.cell}>
+                          <InlineFieldEditor
                             value={p.relationship_status}
-                            field="relationship_status"
-                            rowId={p.id}
                             options={["", "Cold", "Warm", "Hot", "Not Interested"]}
-                            editingCell={editingCell}
-                            editValue={editValue}
-                            onStartEdit={startEdit}
-                            onCommit={(val) => patchProperty(p.id, "relationship_status", val)}
-                            onCancel={cancelEdit}
-                            renderValue={(v) => <RelStatusBadge status={v} />}
+                            onSave={(val) => patchProperty(p.id, "relationship_status", val)}
+                            renderDisplay={(v) => <RelStatusBadge status={v} />}
                           />
                         </td>
+                      )}
+
+                      {columns.includes("motivation_level") && (
+                        <TextCell value={p.motivation_level} />
+                      )}
+
+                      {columns.includes("sale_timeline") && (
+                        <TextCell value={p.sale_timeline} />
+                      )}
+
+                      {columns.includes("ownership_type") && (
+                        <TextCell value={p.ownership_type} />
                       )}
 
                       {columns.includes("owner") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
-                          <InlineText
+                        <td className={TABLE.cellText}>
+                          <InlineFieldEditor
                             value={p.owner_name}
-                            field="owner_name"
-                            rowId={p.id}
-                            editingCell={editingCell}
-                            editValue={editValue}
-                            onStartEdit={startEdit}
-                            onChangeValue={setEditValue}
-                            onCommit={commitTextEdit}
-                            onCancel={cancelEdit}
+                            onSave={(val) => patchProperty(p.id, "owner_name", val)}
+                            placeholder="\u2014"
                           />
-                          {(editingCell?.id !== p.id || editingCell.field !== "owner_name") && (
-                            <div
-                              className="text-xs text-gray-400 cursor-text hover:bg-gray-100 rounded px-1.5 py-0.5 transition-colors mt-0.5"
-                              onClick={() => startEdit(p.id, "owner_phone", p.owner_phone || "")}
-                            >
-                              {editingCell?.id === p.id && editingCell.field === "owner_phone" ? (
-                                <input
-                                  autoFocus
-                                  value={editValue}
-                                  onChange={(e) => setEditValue(e.target.value)}
-                                  onBlur={commitTextEdit}
-                                  onKeyDown={(e) => { if (e.key === "Enter") commitTextEdit(); if (e.key === "Escape") cancelEdit(); }}
-                                  className="border border-blue-400 rounded px-1.5 py-0.5 text-xs focus:outline-none w-full"
-                                />
-                              ) : (
-                                p.owner_phone || <span className="text-gray-300">phone...</span>
-                              )}
-                            </div>
-                          )}
+                          <div className="mt-0.5">
+                            <InlineFieldEditor
+                              value={p.owner_phone}
+                              onSave={(val) => patchProperty(p.id, "owner_phone", val)}
+                              placeholder="phone..."
+                            />
+                          </div>
                         </td>
+                      )}
+
+                      {columns.includes("owner_phone") && (
+                        <TextCell value={p.owner_phone} />
                       )}
 
                       {columns.includes("asking_price") && (
-                        <td className="px-4 py-3 text-sm font-medium text-green-700">
-                          {p.asking_price ? formatCurrency(Number(p.asking_price)) : <span className="text-gray-300 font-normal">—</span>}
-                        </td>
+                        <CurrencyCell value={p.asking_price} />
+                      )}
+
+                      {columns.includes("asking_price_per_sqft") && (
+                        <CurrencyCell value={p.asking_price_per_sqft} />
                       )}
 
                       {columns.includes("communication_status") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
-                          <InlineText
+                        <td className={TABLE.cellText}>
+                          <InlineFieldEditor
                             value={p.communication_status}
-                            field="communication_status"
-                            rowId={p.id}
-                            editingCell={editingCell}
-                            editValue={editValue}
-                            onStartEdit={startEdit}
-                            onChangeValue={setEditValue}
-                            onCommit={commitTextEdit}
-                            onCancel={cancelEdit}
+                            onSave={(val) => patchProperty(p.id, "communication_status", val)}
+                            placeholder="\u2014"
                           />
                         </td>
+                      )}
+
+                      {columns.includes("letter_status") && (
+                        <TextCell value={p.letter_status} />
                       )}
 
                       {columns.includes("sales_owner") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
-                          <InlineText
+                        <td className={TABLE.cellText}>
+                          <InlineFieldEditor
                             value={p.sales_owner}
-                            field="sales_owner"
-                            rowId={p.id}
-                            editingCell={editingCell}
-                            editValue={editValue}
-                            onStartEdit={startEdit}
-                            onChangeValue={setEditValue}
-                            onCommit={commitTextEdit}
-                            onCancel={cancelEdit}
+                            onSave={(val) => patchProperty(p.id, "sales_owner", val)}
+                            placeholder="\u2014"
                           />
                         </td>
                       )}
 
+                      {columns.includes("phone") && (
+                        <TextCell value={p.phone} />
+                      )}
+
+                      {columns.includes("website") && (
+                        <LinkCell value={p.website} label="Visit" />
+                      )}
+
+                      {columns.includes("annual_revenue") && (
+                        <CurrencyCell value={p.annual_revenue} />
+                      )}
+
+                      {columns.includes("num_employees") && (
+                        <TextCell value={p.num_employees} />
+                      )}
+
+                      {columns.includes("data_status") && (
+                        <TextCell value={p.data_status} />
+                      )}
+
+                      {columns.includes("offer_made") && (
+                        <TextCell value={p.offer_made} />
+                      )}
+
+                      {columns.includes("last_contact_date") && (
+                        <DateCell value={p.last_contact_date} />
+                      )}
+
+                      {columns.includes("next_contact_date") && (
+                        <DateCell value={p.next_contact_date} />
+                      )}
+
+                      {columns.includes("last_sale_amount") && (
+                        <CurrencyCell value={p.last_sale_amount} />
+                      )}
+
+                      {columns.includes("last_sale_date") && (
+                        <DateCell value={p.last_sale_date} />
+                      )}
+
+                      {columns.includes("last_sale_year") && (
+                        <TextCell value={p.last_sale_year} />
+                      )}
+
+                      {columns.includes("tax_assessed_value") && (
+                        <CurrencyCell value={p.tax_assessed_value} />
+                      )}
+
+                      {columns.includes("mortgage_amount") && (
+                        <CurrencyCell value={p.mortgage_amount} />
+                      )}
+
+                      {columns.includes("listing_url") && (
+                        <LinkCell value={p.listing_url} label="Listing" />
+                      )}
+
+                      {columns.includes("property_size_estimate") && (
+                        <TextCell value={p.property_size_estimate} />
+                      )}
+
+                      {columns.includes("broker_names") && (
+                        <TextCell value={p.broker_names} />
+                      )}
+
+                      {columns.includes("broker_phone") && (
+                        <TextCell value={p.broker_phone} />
+                      )}
+
+                      {columns.includes("broker_company") && (
+                        <TextCell value={p.broker_company} />
+                      )}
+
+                      {columns.includes("industry_type") && (
+                        <TextCell value={p.industry_type} />
+                      )}
+
+                      {columns.includes("business_type") && (
+                        <TextCell value={p.business_type} />
+                      )}
+
+                      {columns.includes("in_foreclosure") && (
+                        <BoolCell value={p.in_foreclosure} />
+                      )}
+
+                      {columns.includes("foreclosure_status") && (
+                        <TextCell value={p.foreclosure_status} />
+                      )}
+
                       {columns.includes("updated_at") && (
-                        <td className="px-4 py-3 text-xs text-gray-400">
-                          {p.updated_at ? new Date(p.updated_at).toLocaleDateString() : "—"}
-                        </td>
+                        <DateCell value={p.updated_at} />
+                      )}
+
+                      {columns.includes("created_at") && (
+                        <DateCell value={p.created_at} />
                       )}
                     </tr>
                   ))
@@ -601,8 +793,8 @@ export default function PropertiesClient() {
           </div>
 
           {pages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50/50">
-              <p className="text-sm text-gray-500">Page {page} of {pages} &middot; {total.toLocaleString()} results</p>
+            <div className={TABLE.pagination}>
+              <p className={TABLE.paginationText}>Page {page} of {pages} &middot; {total.toLocaleString()} results</p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setPage(page - 1)} disabled={page <= 1}>&larr; Previous</Button>
                 <Button variant="outline" size="sm" onClick={() => setPage(page + 1)} disabled={page >= pages}>Next &rarr;</Button>
@@ -611,6 +803,21 @@ export default function PropertiesClient() {
           )}
         </Card>
       </div>
+
+      <AddEntityModal
+        title="Add Property"
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSubmit={handleCreateProperty}
+        fields={[
+          { key: "name", label: "Name", required: true, placeholder: "Property name" },
+          { key: "city", label: "City", placeholder: "City" },
+          { key: "state", label: "State", placeholder: "State" },
+          { key: "county", label: "County", placeholder: "County" },
+          { key: "asset_class", label: "Asset Class", type: "select", options: [...PROPERTY_ASSET_CLASS_OPTIONS] },
+          { key: "deal_stage", label: "Deal Stage", type: "select", options: [...DEAL_STAGES] },
+        ]}
+      />
     </div>
   );
 }

@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { HeartHandshake, Mail, Lock } from "lucide-react";
+import { TreePine, Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@homevale.com");
+  const [email, setEmail] = useState("ryan@redwoodoperations.com");
   const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,15 +35,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-blue-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#3a1515] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 mb-4 shadow-xl shadow-blue-900/40">
-            <HeartHandshake size={28} className="text-white" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] mb-4 shadow-xl shadow-blue-900/40">
+            <TreePine size={28} className="text-white" />
           </div>
-          <h1 className="text-[22px] font-bold text-white tracking-tight">Homevale CRM</h1>
-          <p className="text-slate-400 mt-1 text-[13px]">Home Healthcare M&A Platform</p>
+          <h1 className="text-[22px] font-bold text-white tracking-tight">Redwood Capital Group</h1>
+          <p className="text-slate-400 mt-1 text-[13px]">Real Estate Investment Platform</p>
         </div>
 
         {/* Card */}
@@ -57,7 +57,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               leftIcon={<Mail size={16} />}
-              placeholder="admin@homevale.com"
+              placeholder="ryan@redwoodoperations.com"
               required
             />
 
@@ -88,7 +88,7 @@ export default function LoginPage() {
           </form>
 
           <p className="text-center text-xs text-gray-400 mt-6">
-            Default credentials: admin@homevale.com / admin123
+            Default credentials: ryan@redwoodoperations.com / admin123
           </p>
         </div>
       </div>

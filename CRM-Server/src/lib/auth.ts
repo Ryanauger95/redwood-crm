@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { logAudit } from "@/lib/audit";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -26,6 +27,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         );
 
         if (!isValid) return null;
+
+        if (!user.is_active) return null;
+
+        // Log login
+        logAudit({ userId: user.id, action: "login", entityType: "session", entityId: user.id });
 
         return {
           id: String(user.id),

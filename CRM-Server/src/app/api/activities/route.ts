@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { logAudit } from "@/lib/audit";
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -61,6 +62,10 @@ export async function POST(req: NextRequest) {
       user: { select: { name: true, email: true } },
     },
   });
+
+  if (user?.id) {
+    await logAudit({ userId: user.id, action: "create", entityType: "activity", entityId: activity.id, newValue: { type, subject, business_id, person_id } });
+  }
 
   return NextResponse.json(activity, { status: 201 });
 }

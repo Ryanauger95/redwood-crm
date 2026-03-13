@@ -2,14 +2,17 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Search, ChevronUp, ChevronDown, Scale } from "lucide-react";
+import { Search, Scale } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FilterBuilder } from "@/components/shared/FilterBuilder";
 import { ColumnPicker } from "@/components/shared/ColumnPicker";
 import { ViewsBar } from "@/components/shared/ViewsBar";
+import { TABLE, SortIcon as SharedSortIcon } from "@/components/shared/TablePrimitives";
+import { BulkActionBar } from "@/components/shared/BulkActionBar";
 import { useToast } from "@/components/shared/Toast";
+import { useRowSelection } from "@/hooks/useRowSelection";
 import { getLastViewId, setLastViewId } from "@/lib/viewPersistence";
 import {
   SavedViewData,
@@ -41,6 +44,7 @@ interface ForeclosureCase {
   assigned_judge: string | null;
   property_id: string | null;
   scraped_at: string | null;
+  county: string | null;
   plaintiff: string | null;
 }
 
@@ -80,6 +84,20 @@ export default function ForeclosuresClient() {
   const [columns, setColumns] = useState<string[]>(DEFAULT_FORECLOSURE_COLUMNS);
   const [sortField, setSortField] = useState("filed_date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+
+  // Row selection
+  const visibleIds = cases.map(c => c.id);
+  const selection = useRowSelection(visibleIds, total, pages);
+
+  // Users for bulk assign
+  const [users, setUsers] = useState<{ id: number; name: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/users")
+      .then((r) => r.json())
+      .then((data) => setUsers(data))
+      .catch(() => {});
+  }, []);
 
   const activeView = views.find((v) => v.id === activeViewId) ?? null;
 
@@ -140,9 +158,18 @@ export default function ForeclosuresClient() {
     setPage(1);
   };
 
-  const SortIcon = ({ field }: { field: string }) => {
-    if (sortField !== field) return <span className="text-gray-300 ml-0.5 text-xs">↕</span>;
-    return sortDir === "desc" ? <ChevronDown size={13} className="ml-0.5" /> : <ChevronUp size={13} className="ml-0.5" />;
+  const SortIcon = ({ field }: { field: string }) => (
+    <SharedSortIcon field={field} sortField={sortField} sortDir={sortDir} />
+  );
+
+  // Bulk action handlers (foreclosures are mostly read-only)
+  const handleBulkAssign = async (userId: number) => {
+    selection.clearSelection();
+  };
+
+  const handleBulkFieldChange = async (field: string, value: string) => {
+    selection.clearSelection();
+    showToast("Foreclosures are read-only");
   };
 
   // View CRUD
@@ -205,7 +232,7 @@ export default function ForeclosuresClient() {
   const handleDiscard = () => { if (activeView) activateView(activeView); };
 
   const hasFilters = conditions.length > 0 || !!search;
-  const colCount = columns.length + 1; // +1 for case_number (always on)
+  const colCount = columns.length + 2; // +1 for case_number (always on) +1 for checkbox
 
   return (
     <div>
@@ -224,6 +251,23 @@ export default function ForeclosuresClient() {
           onSaveCurrent={handleSaveCurrent}
           onSaveAsNew={handleSaveAsNew}
           onDiscard={handleDiscard}
+        />
+      )}
+
+      {selection.selectedCount > 0 && (
+        <BulkActionBar
+          selectedCount={selection.selectedCount}
+          totalCount={total}
+          allPagesSelected={selection.allPagesSelected}
+          hasMultiplePages={selection.hasMultiplePages}
+          onSelectAllPages={selection.selectAllPages}
+          onClearSelection={selection.clearSelection}
+          onAssign={handleBulkAssign}
+          onChangeField={handleBulkFieldChange}
+          assignableUsers={users}
+          editableFields={[
+            { key: "status", label: "Status", options: ["Pending", "Dismissed", "Active", "Closed", "Cancelled"] },
+          ]}
         />
       )}
 
@@ -256,23 +300,33 @@ export default function ForeclosuresClient() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50/50">
+                <tr className={TABLE.thead}>
+                  {/* Checkbox header */}
+                  <th className="w-10 px-4 py-2.5">
+                    <input
+                      type="checkbox"
+                      checked={selection.allOnPageSelected}
+                      ref={(el) => { if (el) el.indeterminate = selection.someOnPageSelected && !selection.allOnPageSelected; }}
+                      onChange={selection.toggleAll}
+                      className={TABLE.checkbox}
+                    />
+                  </th>
                   {/* Case # always shown */}
                   <th
-                    className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                    className={TABLE.thSort}
                     onClick={() => toggleSort("case_number")}
                   >
                     <span className="flex items-center">Case # <SortIcon field="case_number" /></span>
                   </th>
                   {columns.includes("address") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Property / Address</th>
+                    <th className={TABLE.th}>Property / Address</th>
                   )}
                   {columns.includes("plaintiff") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Plaintiff</th>
+                    <th className={TABLE.th}>Plaintiff</th>
                   )}
                   {columns.includes("status") && (
                     <th
-                      className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                      className={TABLE.thSort}
                       onClick={() => toggleSort("status")}
                     >
                       <span className="flex items-center">Status <SortIcon field="status" /></span>
@@ -280,67 +334,75 @@ export default function ForeclosuresClient() {
                   )}
                   {columns.includes("filed_date") && (
                     <th
-                      className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors"
+                      className={TABLE.thSort}
                       onClick={() => toggleSort("filed_date")}
                     >
                       <span className="flex items-center">Filed <SortIcon field="filed_date" /></span>
                     </th>
                   )}
                   {columns.includes("disposition") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Disposition</th>
+                    <th className={TABLE.th}>Disposition</th>
                   )}
                   {columns.includes("disposition_date") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors" onClick={() => toggleSort("disposition_date")}>
+                    <th className={TABLE.thSort} onClick={() => toggleSort("disposition_date")}>
                       <span className="flex items-center">Disp. Date <SortIcon field="disposition_date" /></span>
                     </th>
                   )}
                   {columns.includes("balance_due") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors" onClick={() => toggleSort("balance_due")}>
+                    <th className={TABLE.thSort} onClick={() => toggleSort("balance_due")}>
                       <span className="flex items-center">Balance Due <SortIcon field="balance_due" /></span>
                     </th>
                   )}
                   {columns.includes("fine_costs") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors" onClick={() => toggleSort("fine_costs")}>
+                    <th className={TABLE.thSort} onClick={() => toggleSort("fine_costs")}>
                       <span className="flex items-center">Fine / Costs <SortIcon field="fine_costs" /></span>
                     </th>
                   )}
                   {columns.includes("total_paid") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors" onClick={() => toggleSort("total_paid")}>
+                    <th className={TABLE.thSort} onClick={() => toggleSort("total_paid")}>
                       <span className="flex items-center">Total Paid <SortIcon field="total_paid" /></span>
                     </th>
                   )}
                   {columns.includes("court_agency") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors" onClick={() => toggleSort("court_agency")}>
+                    <th className={TABLE.thSort} onClick={() => toggleSort("court_agency")}>
                       <span className="flex items-center">Court <SortIcon field="court_agency" /></span>
                     </th>
                   )}
                   {columns.includes("case_sub_type") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Case Type</th>
+                    <th className={TABLE.th}>Case Type</th>
                   )}
                   {columns.includes("file_type") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">File Type</th>
+                    <th className={TABLE.th}>File Type</th>
                   )}
                   {columns.includes("assigned_judge") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors" onClick={() => toggleSort("assigned_judge")}>
+                    <th className={TABLE.thSort} onClick={() => toggleSort("assigned_judge")}>
                       <span className="flex items-center">Judge <SortIcon field="assigned_judge" /></span>
                     </th>
                   )}
                   {columns.includes("disposition_judge") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Disp. Judge</th>
+                    <th className={TABLE.th}>Disp. Judge</th>
                   )}
                   {columns.includes("caption") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Caption</th>
+                    <th className={TABLE.th}>Caption</th>
                   )}
                   {columns.includes("tax_map_number") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Parcel #</th>
+                    <th className={TABLE.th}>Parcel #</th>
                   )}
                   {columns.includes("tax_map_agency") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tax Map Agency</th>
+                    <th className={TABLE.th}>Tax Map Agency</th>
                   )}
                   {columns.includes("scraped_at") && (
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide cursor-pointer hover:text-gray-800 transition-colors" onClick={() => toggleSort("scraped_at")}>
+                    <th className={TABLE.thSort} onClick={() => toggleSort("scraped_at")}>
                       <span className="flex items-center">Scraped <SortIcon field="scraped_at" /></span>
                     </th>
+                  )}
+                  {columns.includes("county") && (
+                    <th className={TABLE.thSort} onClick={() => toggleSort("county")}>
+                      <span className="flex items-center">County <SortIcon field="county" /></span>
+                    </th>
+                  )}
+                  {columns.includes("case_type") && (
+                    <th className={TABLE.th}>Case Type (Main)</th>
                   )}
                 </tr>
               </thead>
@@ -349,7 +411,7 @@ export default function ForeclosuresClient() {
                   Array.from({ length: 10 }).map((_, i) => (
                     <tr key={i}>
                       {Array.from({ length: colCount }).map((_, j) => (
-                        <td key={j} className="px-4 py-3">
+                        <td key={j} className={TABLE.cell}>
                           <div className="h-4 bg-gray-100 rounded animate-pulse" style={{ width: `${50 + ((i * 13 + j * 7) % 45)}%` }} />
                         </td>
                       ))}
@@ -369,9 +431,18 @@ export default function ForeclosuresClient() {
                   </tr>
                 ) : (
                   cases.map((c) => (
-                    <tr key={c.id} className="hover:bg-blue-50 transition-colors">
+                    <tr key={c.id} className={TABLE.row}>
+                      {/* Checkbox per row */}
+                      <td className="w-10 px-4 py-2.5">
+                        <input
+                          type="checkbox"
+                          checked={selection.isSelected(c.id)}
+                          onChange={() => selection.toggleOne(c.id)}
+                          className={TABLE.checkbox}
+                        />
+                      </td>
                       {/* Case # — always shown */}
-                      <td className="px-4 py-3">
+                      <td className={TABLE.cell}>
                         <Link href={`/foreclosures/${c.id}`} className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-sm font-mono">
                           {c.case_number}
                         </Link>
@@ -381,7 +452,7 @@ export default function ForeclosuresClient() {
                       </td>
 
                       {columns.includes("address") && (
-                        <td className="px-4 py-3">
+                        <td className={TABLE.cell}>
                           <div className="text-sm text-gray-800 max-w-xs truncate">{c.tax_map_description || "—"}</div>
                           {c.tax_map_number && <div className="text-xs text-gray-400 font-mono mt-0.5">{c.tax_map_number}</div>}
                           {c.property_id && (
@@ -393,37 +464,37 @@ export default function ForeclosuresClient() {
                       )}
 
                       {columns.includes("plaintiff") && (
-                        <td className="px-4 py-3 text-sm text-gray-600 max-w-[180px]">
+                        <td className={`${TABLE.cellText} max-w-[180px]`}>
                           <span className="truncate block">{c.plaintiff || "—"}</span>
                         </td>
                       )}
 
                       {columns.includes("status") && (
-                        <td className="px-4 py-3">
+                        <td className={TABLE.cell}>
                           <StatusBadge status={c.status} />
                         </td>
                       )}
 
                       {columns.includes("filed_date") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className={TABLE.cellText}>
                           {c.filed_date ? new Date(c.filed_date).toLocaleDateString() : "—"}
                         </td>
                       )}
 
                       {columns.includes("disposition") && (
-                        <td className="px-4 py-3 text-sm text-gray-600 max-w-[200px]">
+                        <td className={`${TABLE.cellText} max-w-[200px]`}>
                           <span className="truncate block">{c.disposition || "—"}</span>
                         </td>
                       )}
 
                       {columns.includes("disposition_date") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className={TABLE.cellText}>
                           {c.disposition_date ? new Date(c.disposition_date).toLocaleDateString() : "—"}
                         </td>
                       )}
 
                       {columns.includes("balance_due") && (
-                        <td className="px-4 py-3 text-sm">
+                        <td className={`${TABLE.cell} text-[13px]`}>
                           {c.balance_due && parseFloat(c.balance_due) > 0
                             ? <span className="font-medium text-red-600">${parseFloat(c.balance_due).toLocaleString()}</span>
                             : <span className="text-gray-400">$0</span>}
@@ -431,55 +502,63 @@ export default function ForeclosuresClient() {
                       )}
 
                       {columns.includes("fine_costs") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className={TABLE.cellText}>
                           {c.fine_costs ? `$${parseFloat(c.fine_costs).toLocaleString()}` : "—"}
                         </td>
                       )}
 
                       {columns.includes("total_paid") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className={TABLE.cellText}>
                           {c.total_paid_for_fine_costs ? `$${parseFloat(c.total_paid_for_fine_costs).toLocaleString()}` : "—"}
                         </td>
                       )}
 
                       {columns.includes("court_agency") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">{c.court_agency || "—"}</td>
+                        <td className={TABLE.cellText}>{c.court_agency || "—"}</td>
                       )}
 
                       {columns.includes("case_sub_type") && (
-                        <td className="px-4 py-3 text-xs text-gray-500">{c.case_sub_type || "—"}</td>
+                        <td className={TABLE.cellText}>{c.case_sub_type || "—"}</td>
                       )}
 
                       {columns.includes("file_type") && (
-                        <td className="px-4 py-3 text-xs text-gray-500">{c.file_type || "—"}</td>
+                        <td className={TABLE.cellText}>{c.file_type || "—"}</td>
                       )}
 
                       {columns.includes("assigned_judge") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">{c.assigned_judge || "—"}</td>
+                        <td className={TABLE.cellText}>{c.assigned_judge || "—"}</td>
                       )}
 
                       {columns.includes("disposition_judge") && (
-                        <td className="px-4 py-3 text-sm text-gray-600">{c.disposition_judge || "—"}</td>
+                        <td className={TABLE.cellText}>{c.disposition_judge || "—"}</td>
                       )}
 
                       {columns.includes("caption") && (
-                        <td className="px-4 py-3 text-sm text-gray-600 max-w-[220px]">
+                        <td className={`${TABLE.cellText} max-w-[220px]`}>
                           <span className="truncate block">{c.caption || "—"}</span>
                         </td>
                       )}
 
                       {columns.includes("tax_map_number") && (
-                        <td className="px-4 py-3 text-xs font-mono text-gray-500">{c.tax_map_number || "—"}</td>
+                        <td className={`${TABLE.cellText} font-mono`}>{c.tax_map_number || "—"}</td>
                       )}
 
                       {columns.includes("tax_map_agency") && (
-                        <td className="px-4 py-3 text-xs text-gray-500">{c.tax_map_agency || "—"}</td>
+                        <td className={TABLE.cellText}>{c.tax_map_agency || "—"}</td>
                       )}
 
                       {columns.includes("scraped_at") && (
-                        <td className="px-4 py-3 text-xs text-gray-400">
+                        <td className={TABLE.cellText}>
                           {c.scraped_at ? new Date(c.scraped_at).toLocaleDateString() : "—"}
                         </td>
+                      )}
+
+                      {columns.includes("county") && (
+                        <td className={TABLE.cellText}>{c.county || "—"}</td>
+                      )}
+
+                      {columns.includes("case_type") && (
+                        <td className={TABLE.cellText}>{c.case_type || "—"}</td>
                       )}
                     </tr>
                   ))
@@ -489,8 +568,8 @@ export default function ForeclosuresClient() {
           </div>
 
           {pages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50/50">
-              <p className="text-sm text-gray-500">Page {page} of {pages} &middot; {total.toLocaleString()} results</p>
+            <div className={TABLE.pagination}>
+              <p className={TABLE.paginationText}>Page {page} of {pages} &middot; {total.toLocaleString()} results</p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setPage(page - 1)} disabled={page <= 1}>&larr; Previous</Button>
                 <Button variant="outline" size="sm" onClick={() => setPage(page + 1)} disabled={page >= pages}>Next &rarr;</Button>

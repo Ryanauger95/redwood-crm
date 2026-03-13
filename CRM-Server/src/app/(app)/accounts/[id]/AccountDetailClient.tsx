@@ -4,14 +4,13 @@ import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  ArrowLeft, Phone, Mail, Globe, MapPin, Star, User,
+  ArrowLeft, Phone, Mail, Globe, MapPin, User,
   AlertTriangle, TrendingUp, CheckCircle, ExternalLink,
   Building2, Copy, Check, Plus, X
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
-import { FitScoreBadge } from "@/components/shared/FitScoreBadge";
 import { StageBadge } from "@/components/shared/StageBadge";
 import { ActivityTimeline } from "@/components/shared/ActivityTimeline";
 import { ActivityForm } from "@/components/shared/ActivityForm";
@@ -129,19 +128,6 @@ function CopyButton({ text }: { text: string }) {
     <button onClick={handleCopy} className="text-gray-400 hover:text-gray-600 transition-colors ml-1 flex-shrink-0">
       {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
     </button>
-  );
-}
-
-function StarRating({ rating }: { rating: string | null }) {
-  if (!rating) return null;
-  const r = parseFloat(rating);
-  return (
-    <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <Star key={i} size={14} className={i <= Math.round(r) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"} />
-      ))}
-      <span className="text-sm font-medium text-gray-700 ml-1">{rating}</span>
-    </div>
   );
 }
 
@@ -343,9 +329,8 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
 
           {/* Name + Score */}
           <div>
-            <div className="flex items-start justify-between gap-2 mb-1.5">
+            <div className="mb-1.5">
               <h2 className="text-[13px] font-bold text-gray-900 leading-tight">{name}</h2>
-              {isEnriched && <FitScoreBadge score={business.acquisition_fit_score} size="sm" />}
             </div>
             {business.city && (
               <p className="text-[11px] text-gray-400 flex items-center gap-1">
@@ -421,25 +406,8 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
 
           {/* Badges */}
           <div className="flex flex-wrap gap-1.5">
-            {business.medicare_certified && (
-              <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <CheckCircle size={10} /> Medicare
-              </span>
-            )}
             {business.license_type && (
               <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">{business.license_type}</span>
-            )}
-            {business.pe_backed === true && (
-              <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">PE Backed</span>
-            )}
-            {business.pe_backed === false && (
-              <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">Independent</span>
-            )}
-            {business.cms_star_rating && (
-              <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <Star size={10} className="fill-yellow-400 text-yellow-400" />
-                {business.cms_star_rating} stars
-              </span>
             )}
           </div>
 
@@ -814,7 +782,7 @@ export function AccountDetailClient({ business: initialBusiness }: { business: B
                         {business.cms_star_rating && (
                           <div>
                             <p className="text-xs text-gray-500 mb-1">Star Rating</p>
-                            <StarRating rating={business.cms_star_rating} />
+                            <p className="text-sm font-medium text-gray-900">{business.cms_star_rating}</p>
                           </div>
                         )}
                         {business.cms_certification_date && (

@@ -85,13 +85,16 @@ model Business {
   growth_signals           String?
   red_flags                String?
   enrichment_error         String?
+  assigned_user_id         Int?
 
   businessPeople BusinessPerson[]
   pipelineStage  PipelineStage?
   activities     Activity[]
   tags           Tag[]
   emails         CachedEmail[]
+  assignedUser   CrmUser?       @relation("AssignedBusinessUser", fields: [assigned_user_id], references: [id], onDelete: SetNull)
 
+  @@index([assigned_user_id])
   @@map("businesses")
 }
 
@@ -180,13 +183,19 @@ model CrmUser {
   password_hash String
   name          String
   role          String   @default("agent")
+  is_active     Boolean  @default(true)
   created_at    DateTime @default(now())
 
-  activities      Activity[]
-  gmailAccount    GmailAccount?
-  emailTemplates  EmailTemplate[]
-  propertyNotes   PropertyNote[]
-  preferences     UserPreference[]
+  activities           Activity[]
+  gmailAccount         GmailAccount?
+  emailTemplates       EmailTemplate[]
+  propertyNotes        PropertyNote[]
+  preferences          UserPreference[]
+  auditLogs            AuditLog[]
+  assignedBusinesses   Business[]        @relation("AssignedBusinessUser")
+  assignedProperties   Property[]        @relation("AssignedPropertyUser")
+  assignedForeclosures ForeclosureCase[] @relation("AssignedForeclosureUser")
+  dashboardWidgets     UserDashboardWidget[]
 
   @@map("crm_users")
 }
@@ -330,6 +339,7 @@ model Property {
   links_to_original_data   String?
   amenities                String?   @db.Text
   tags                     String?
+  assigned_user_id         Int?
 
   // Foreclosure fields
   in_foreclosure                  Boolean?
@@ -348,10 +358,12 @@ model Property {
   notes              PropertyNote[]
   personLinks        PersonProperty[]
   foreclosureCases   ForeclosureCase[]
+  assignedUser       CrmUser?       @relation("AssignedPropertyUser", fields: [assigned_user_id], references: [id], onDelete: SetNull)
 
   @@index([state])
   @@index([asset_class])
   @@index([deal_stage])
+  @@index([assigned_user_id])
   @@map("properties")
 }
 
@@ -426,11 +438,13 @@ model ForeclosureCase {
 
   // CRM link (set later via parcel matching)
   property_id               BigInt?
+  assigned_user_id          Int?
 
   created_at                DateTime  @default(now())
   updated_at                DateTime  @default(now())
 
   property         Property?                    @relation(fields: [property_id], references: [id], onDelete: SetNull)
+  assignedUser     CrmUser?                     @relation("AssignedForeclosureUser", fields: [assigned_user_id], references: [id], onDelete: SetNull)
   parties          ForeclosureParty[]
   associatedCases  ForeclosureAssociatedCase[]
   actions          ForeclosureAction[]
@@ -442,6 +456,7 @@ model ForeclosureCase {
   @@index([tax_map_number])
   @@index([status])
   @@index([property_id])
+  @@index([assigned_user_id])
   @@map("foreclosure_cases")
 }
 
@@ -607,4 +622,60 @@ model CachedEmail {
   @@index([business_id])
   @@index([person_id])
   @@map("cached_emails")
+}
+
+// ─────────────────────────────────────────────
+// Audit Log
+// ─────────────────────────────────────────────
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  action      String
+  entity_type String
+  entity_id   String
+  field_name  String?
+  old_value   Json?
+  new_value   Json?
+  created_at  DateTime @default(now())
+
+  user CrmUser @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([entity_type, entity_id])
+  @@index([user_id])
+  @@index([created_at])
+  @@map("audit_logs")
+}
+
+// ─────────────────────────────────────────────
+// Dashboard Widgets
+// ─────────────────────────────────────────────
+
+model DashboardWidget {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  query_key   String   @unique
+  category    String
+  is_default  Boolean  @default(false)
+  created_at  DateTime @default(now())
+
+  userWidgets UserDashboardWidget[]
+
+  @@map("dashboard_widgets")
+}
+
+model UserDashboardWidget {
+  id         Int     @id @default(autoincrement())
+  user_id    Int
+  widget_id  Int
+  sort_order Int     @default(0)
+  config     Json    @default("{}")
+  is_visible Boolean @default(true)
+
+  user   CrmUser         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  widget DashboardWidget @relation(fields: [widget_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, widget_id])
+  @@map("user_dashboard_widgets")
 }

@@ -4,6 +4,32 @@ import { auth } from "@/lib/auth";
 import { buildContactWhere, FilterCondition } from "@/lib/views";
 import { Prisma } from "@prisma/client";
 
+export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const body = await req.json();
+  const { first_name, last_name, city, state_code, email, phone } = body;
+
+  if (!first_name && !last_name) {
+    return NextResponse.json({ error: "Name is required" }, { status: 400 });
+  }
+
+  const person = await prisma.person.create({
+    data: {
+      first_name: first_name || null,
+      last_name: last_name || null,
+      full_name: [first_name, last_name].filter(Boolean).join(" ") || null,
+      city: city || null,
+      state_code: state_code || null,
+      email: email || null,
+      phone: phone || null,
+    },
+  });
+
+  return NextResponse.json({ person_id: person.person_id, success: true }, { status: 201 });
+}
+
 export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

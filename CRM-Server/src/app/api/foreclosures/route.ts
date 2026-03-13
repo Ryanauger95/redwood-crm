@@ -52,6 +52,7 @@ export async function GET(req: NextRequest) {
     court_agency:     "fc.court_agency",
     assigned_judge:   "fc.assigned_judge",
     scraped_at:       "fc.scraped_at",
+    county:           "fc.county",
   };
   const sortCol = allowedSort[sort] || "fc.filed_date";
 
@@ -62,7 +63,7 @@ export async function GET(req: NextRequest) {
               fc.caption, fc.tax_map_description, fc.tax_map_number, fc.tax_map_agency,
               fc.balance_due, fc.fine_costs, fc.total_paid_for_fine_costs,
               fc.court_agency, fc.case_type, fc.case_sub_type, fc.file_type,
-              fc.assigned_judge, fc.property_id, fc.scraped_at,
+              fc.assigned_judge, fc.property_id, fc.scraped_at, fc.county,
               (SELECT fp.name FROM foreclosure_parties fp WHERE fp.party_type = 'Plaintiff' AND fp.case_id = fc.id LIMIT 1) AS plaintiff
        FROM foreclosure_cases fc
        ${where}

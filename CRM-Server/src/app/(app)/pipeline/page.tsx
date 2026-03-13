@@ -12,13 +12,12 @@ import {
   PIPELINE_PROPERTY_FILTER_FIELDS,
   PIPELINE_BUSINESS_FILTER_FIELDS,
 } from "@/lib/pipelineConfig";
-import { FitScoreBadge } from "@/components/shared/FitScoreBadge";
 import { ViewsBar } from "@/components/shared/ViewsBar";
 import { FilterBuilder } from "@/components/shared/FilterBuilder";
 import { FilterCondition, SavedViewData } from "@/lib/views";
 import {
   Search, X, ChevronDown, Building2, Landmark, SlidersHorizontal,
-  Phone, Mail, Star, MapPin, DollarSign, Check, GripVertical,
+  Phone, Mail, MapPin, DollarSign, Check, GripVertical,
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -248,15 +247,6 @@ function BusinessKanbanCard({
         </p>
       </Link>
       {card.city && <p className="text-[11px] text-gray-400 mt-0.5">{card.city}</p>}
-      <div className="flex items-center justify-between mt-2">
-        <FitScoreBadge score={card.acquisition_fit_score} size="sm" />
-        {card.cms_star_rating && (
-          <span className="text-[11px] text-amber-600 flex items-center gap-0.5">
-            <Star size={9} className="fill-amber-400 text-amber-400" />
-            {card.cms_star_rating}
-          </span>
-        )}
-      </div>
       {card.estimated_annual_profit && (
         <p className="text-[11px] font-semibold text-emerald-700 mt-1.5">
           {formatCurrency(Number(card.estimated_annual_profit))}

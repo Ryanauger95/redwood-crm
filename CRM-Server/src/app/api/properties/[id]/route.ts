@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { logAudit } from "@/lib/audit";
 
 const STRING_FIELDS = [
   "owner_name", "owner_phone", "relationship_status", "communication_status",
@@ -134,11 +135,24 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     }
   }
 
+  // assigned_user_id
+  if ("assigned_user_id" in body) {
+    data["assigned_user_id"] = body.assigned_user_id ? parseInt(body.assigned_user_id) : null;
+  }
+
   try {
     await prisma.property.update({
       where: { id: BigInt(id) },
       data: { ...data, updated_at: new Date() },
     });
+
+    const userId = parseInt((session.user as { id?: string })?.id || "0");
+    if (userId) {
+      for (const key of Object.keys(data)) {
+        await logAudit({ userId, action: "update", entityType: "property", entityId: id, fieldName: key, newValue: data[key] });
+      }
+    }
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("PATCH /api/properties/[id] error:", err);

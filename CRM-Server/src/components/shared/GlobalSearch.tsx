@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Building2, X, Gavel } from "lucide-react";
-import { FitScoreBadge } from "@/components/shared/FitScoreBadge";
 
 interface SearchBusiness {
   business_id: number;
@@ -121,7 +120,7 @@ export function GlobalSearch() {
   return (
     <div ref={containerRef} className="relative">
       {/* Inline search input — always visible */}
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 text-sm border border-gray-200 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 text-sm border border-gray-200 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-50 transition-all">
         <Search size={14} className="text-gray-400 flex-shrink-0" />
         <input
           ref={inputRef}
@@ -183,7 +182,9 @@ export function GlobalSearch() {
                         )}
                       </p>
                     </div>
-                    <FitScoreBadge score={b.acquisition_fit_score} size="sm" />
+                    {b.enrichment_status === "completed" && (
+                      <span className="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">Enriched</span>
+                    )}
                   </button>
                 ))}
               </div>

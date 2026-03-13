@@ -1,4 +1,4 @@
-const KEY_PREFIX = "homevale_last_view_";
+const KEY_PREFIX = "redwood_last_view_";
 
 export function getLastViewId(entity: string): number | null {
   if (typeof window === "undefined") return null;

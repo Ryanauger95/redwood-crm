@@ -16,6 +16,17 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
+  // Admin route protection
+  const isAdminRoute = req.nextUrl.pathname.startsWith("/admin") || req.nextUrl.pathname.startsWith("/api/admin");
+  if (isAdminRoute && isLoggedIn) {
+    const role = (req.auth?.user as { role?: string })?.role;
+    if (role !== "admin") {
+      return req.nextUrl.pathname.startsWith("/api/")
+        ? NextResponse.json({ error: "Forbidden" }, { status: 403 })
+        : NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+  }
+
   return NextResponse.next();
 });
 
